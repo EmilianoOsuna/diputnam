@@ -1,0 +1,61 @@
+---
+import { contact, homePanels } from '../data/home';
+import '../styles/global.css';
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Putnam desarrolla proyectos inmobiliarios residenciales con visión patrimonial." />
+    <link rel="icon" href="/assets/putnam-light.jpg" />
+    <title>Putnam | Desarrollos inmobiliarios</title>
+  </head>
+  <body>
+    <header class="site-header" data-site-header>
+      <a class="brand" href="#inicio" aria-label="Putnam, inicio">
+        <img src="/assets/putnam-light.jpg" alt="Putnam Desarrollos Inmobiliarios" />
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <a href="#eredita">Ereditá</a>
+        <a href="#putnam">Putnam</a>
+        <a href="#contacto">Contacto</a>
+        <span aria-label="Español">ES</span>
+      </nav>
+      <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" data-menu-toggle>
+        <span>menu</span>
+      </button>
+    </header>
+
+    <main class="home" data-home>
+      {homePanels.map((panel, index) => (
+        <section class:list={["panel", { "panel--intro": index === 0 }]} id={panel.id} data-panel>
+          <img class="panel-media" src={panel.image} alt={panel.alt} loading={index === 0 ? 'eager' : 'lazy'} />
+          <div class="panel-shade"></div>
+          <div class="panel-content">
+            <p class="panel-eyebrow">{panel.eyebrow}</p>
+            {index === 0 ? <h1>{panel.title}</h1> : <h2>{panel.title}</h2>}
+            <p class="panel-description">{panel.description}</p>
+            {panel.id === 'eredita' && <a class="panel-link" href="#contacto">Conocer el proyecto <span aria-hidden="true">↗</span></a>}
+            {panel.id === 'contacto' && <a class="panel-link" href={contact.whatsapp} target="_blank" rel="noreferrer">Escribir por WhatsApp <span aria-hidden="true">↗</span></a>}
+          </div>
+          <span class="panel-index" aria-hidden="true">0{index + 1}</span>
+        </section>
+      ))}
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-contact">
+        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+        <a href={`tel:${contact.phone.replaceAll(' ', '')}`}>{contact.phone}</a>
+      </div>
+      <div class="footer-address">
+        <span>{contact.city}</span>
+        <a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp ↗</a>
+      </div>
+      <span class="scroll-cue"><i aria-hidden="true"></i> Desplázate para explorar</span>
+    </footer>
+
+    <script src="../scripts/motion.ts"></script>
+  </body>
+</html>
