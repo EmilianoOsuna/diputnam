@@ -16,32 +16,44 @@ import '../styles/global.css';
       <a class="brand" href="#inicio" aria-label="Putnam, inicio">
         <img src="/assets/putnam-light.jpg" alt="Putnam Desarrollos Inmobiliarios" />
       </a>
-      <nav class="site-nav" aria-label="Navegación principal">
+      <nav class="site-nav" id="site-navigation" aria-label="Navegación principal">
         <a href="#eredita">Ereditá</a>
         <a href="#putnam">Putnam</a>
         <a href="#contacto">Contacto</a>
         <span aria-label="Español">ES</span>
+        <div class="mobile-menu-contact">
+          <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          <a href={`tel:${contact.phone.replaceAll(' ', '')}`}>{contact.phone}</a>
+          <span>{contact.city}</span>
+          <a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp ↗</a>
+        </div>
       </nav>
-      <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" data-menu-toggle>
-        <span>menu</span>
+      <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
       </button>
     </header>
 
     <main class="home" data-home>
-      {homePanels.map((panel, index) => (
-        <section class:list={["panel", { "panel--intro": index === 0 }]} id={panel.id} data-panel>
-          <img class="panel-media" src={panel.image} alt={panel.alt} loading={index === 0 ? 'eager' : 'lazy'} />
-          <div class="panel-shade"></div>
-          <div class="panel-content">
-            <p class="panel-eyebrow">{panel.eyebrow}</p>
-            {index === 0 ? <h1>{panel.title}</h1> : <h2>{panel.title}</h2>}
-            <p class="panel-description">{panel.description}</p>
-            {panel.id === 'eredita' && <a class="panel-link" href="#contacto">Conocer el proyecto <span aria-hidden="true">↗</span></a>}
-            {panel.id === 'contacto' && <a class="panel-link" href={contact.whatsapp} target="_blank" rel="noreferrer">Escribir por WhatsApp <span aria-hidden="true">↗</span></a>}
-          </div>
-          <span class="panel-index" aria-hidden="true">0{index + 1}</span>
-        </section>
-      ))}
+      <div class="home-experience" data-experience>
+        <div class="home-stage" data-stage>
+          {homePanels.map((panel, index) => (
+            <section class:list={["panel", { "panel--intro": index === 0, "is-active": index === 0, "is-visible": index === 0 }]} id={panel.id} data-panel data-index={index}>
+              <img class="panel-media" src={panel.image} alt={panel.alt} loading={index < 2 ? 'eager' : 'lazy'} />
+              <div class="panel-shade"></div>
+              <div class="panel-content">
+                {index === 0 ? <h1><a href={`#${panel.id}`}>{panel.title}</a></h1> : <h2><a href={`#${panel.id}`}>{panel.title}</a></h2>}
+              </div>
+            </section>
+          ))}
+        </div>
+        <div class="scene-markers" data-scene-markers aria-hidden="true">
+          {homePanels.map((panel, index) => (
+            <section class="scene-marker" data-scene-marker={panel.id} data-index={index}></section>
+          ))}
+        </div>
+      </div>
     </main>
 
     <footer class="site-footer">
@@ -53,8 +65,10 @@ import '../styles/global.css';
         <span>{contact.city}</span>
         <a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp ↗</a>
       </div>
-      <span class="scroll-cue"><i aria-hidden="true"></i> Desplázate para explorar</span>
     </footer>
+    <button class="scroll-cue" type="button" aria-label="Desplazarse a la siguiente sección" data-scroll-cue>
+      <span aria-hidden="true"></span>
+    </button>
 
     <script src="../scripts/motion.ts"></script>
   </body>

@@ -2,7 +2,7 @@ export const homePanels = [
   {
     id: 'inicio',
     eyebrow: 'Desarrollos inmobiliarios',
-    title: 'Proyectos con visión\npatrimonial',
+    title: 'Diseñamos\nespacios',
     description: 'Diseñamos y ejecutamos espacios residenciales con criterio técnico, claridad y visión de largo plazo.',
     image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=85&w=2200&auto=format&fit=crop',
     alt: 'Interior residencial con luz natural',
@@ -18,7 +18,7 @@ export const homePanels = [
   {
     id: 'putnam',
     eyebrow: 'La firma',
-    title: 'Diseño, planeamiento\ny ejecución',
+    title: 'Visión, diseño\ny ejecución',
     description: 'Putnam integra las decisiones del proyecto desde la factibilidad hasta la entrega para construir confianza desde el primer contacto.',
     image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=85&w=2200&auto=format&fit=crop',
     alt: 'Equipo técnico revisando una obra',
@@ -26,7 +26,7 @@ export const homePanels = [
   {
     id: 'contacto',
     eyebrow: 'Siguiente paso',
-    title: 'Conversemos sobre\ntu próximo proyecto',
+    title: 'Conversemos',
     description: 'Estamos listos para ayudarte a evaluar, diseñar o ejecutar una oportunidad residencial.',
     image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?q=85&w=2200&auto=format&fit=crop',
     alt: 'Estructura de un edificio en construcción',
