@@ -13,6 +13,7 @@ const scrollCue = document.querySelector<HTMLButtonElement>('[data-scroll-cue]')
 let scrollToTarget = (target: Element) => target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
 let cueFrame = 0;
 let queuedScroll = window.scrollY;
+let viewportHeight = window.innerHeight;
 
 const updateScrollCue = (scroll = window.scrollY) => {
   if (!scrollCue) return;
@@ -28,9 +29,14 @@ if (!reducedMotion && home && panels.length > 1 && markers.length === panels.len
   scrollToTarget = (target) => lenis.scrollTo(target, { offset: 0, duration: 1.2 });
 
   lenis.on('scroll', ({ scroll }) => {
-    if (scroll <= 1) resetToFirstScene();
-    updateScrollCue(scroll);
-    ScrollTrigger.update();
+    queuedScroll = scroll;
+    if (cueFrame) return;
+    cueFrame = window.requestAnimationFrame(() => {
+      cueFrame = 0;
+      if (queuedScroll <= 1) resetToFirstScene();
+      updateScrollCue(queuedScroll);
+      ScrollTrigger.update();
+    });
   });
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
@@ -84,7 +90,7 @@ if (!reducedMotion && home && panels.length > 1 && markers.length === panels.len
       const transitionProgress = sceneProgress - sceneIndex;
       const incomingIndex = sceneIndex + 1;
       const activeIndex = transitionProgress < 0.5 ? sceneIndex : incomingIndex;
-      const panelTravel = window.innerHeight;
+      const panelTravel = viewportHeight;
       const titleTravel = panelTravel - 60;
 
       setActive(activeIndex);
@@ -113,6 +119,7 @@ if (!reducedMotion && home && panels.length > 1 && markers.length === panels.len
   });
 
   const refresh = () => {
+    viewportHeight = window.innerHeight;
     if (window.scrollY <= 1) resetToFirstScene();
     ScrollTrigger.refresh();
     updateScrollCue();
@@ -157,5 +164,8 @@ const scheduleScrollCue = (scroll = window.scrollY) => {
 };
 
 window.addEventListener('scroll', () => scheduleScrollCue(), { passive: true });
-window.addEventListener('resize', () => scheduleScrollCue());
+window.addEventListener('resize', () => {
+  viewportHeight = window.innerHeight;
+  scheduleScrollCue();
+});
 updateScrollCue();
