@@ -9,9 +9,9 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 
 if (root && !reducedMotion) {
   document.body.classList.add('is-motion-ready');
-  const lenis = new Lenis({ anchors: true, autoRaf: false, lerp: 0.09 });
-  const tick = (time: number) => lenis.raf(time * 1000);
+  const lenis = new Lenis({ anchors: true, autoRaf: true, lerp: 0.09 });
   let scrollFrame = 0;
+  let refreshFrame = 0;
 
   lenis.on('scroll', () => {
     if (!scrollFrame) scrollFrame = window.requestAnimationFrame(() => {
@@ -19,7 +19,6 @@ if (root && !reducedMotion) {
       ScrollTrigger.update();
     });
   });
-  gsap.ticker.add(tick);
   gsap.ticker.lagSmoothing(0);
 
   const context = gsap.context(() => {
@@ -71,6 +70,20 @@ if (root && !reducedMotion) {
       });
     });
 
+    const refreshLayout = () => {
+      if (refreshFrame) return;
+      refreshFrame = window.requestAnimationFrame(() => {
+        refreshFrame = 0;
+        ScrollTrigger.refresh();
+      });
+    };
+    const heroImage = root.querySelector<HTMLImageElement>('.hero-frame img');
+    if (heroImage) {
+      if (heroImage.complete) refreshLayout();
+      else heroImage.addEventListener('load', refreshLayout, { once: true });
+    }
+    window.addEventListener('resize', refreshLayout, { passive: true });
+
     gsap.to('[data-line-progress]', {
       width: '100%',
       ease: 'none',
@@ -97,8 +110,8 @@ if (root && !reducedMotion) {
 
   window.addEventListener('pagehide', () => {
     if (scrollFrame) window.cancelAnimationFrame(scrollFrame);
+    if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
     context.revert();
     lenis.destroy();
-    gsap.ticker.remove(tick);
   }, { once: true });
 }

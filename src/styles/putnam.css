@@ -32,9 +32,9 @@
 .hero-copy h1 span + span { margin-top: 0.05em; }
 .hero-details { position: absolute; z-index: 2; bottom: 2.5rem; left: clamp(1.25rem, 3vw, 3.5rem); width: min(40rem, 70vw); }
 .hero-lead { width: auto; margin: 0; color: rgba(244, 238, 223, 0.82); font-size: clamp(0.95rem, 1.15vw, 1.15rem); line-height: 1.45; }
-.hero-frame { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--putnam-deep); }
+.hero-frame { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--putnam-deep); contain: paint; }
 .hero-frame::after { position: absolute; inset: 0; content: ''; background: linear-gradient(180deg, rgba(0, 25, 23, 0.28) 0%, transparent 42%, rgba(0, 25, 23, 0.82) 100%), linear-gradient(90deg, rgba(0, 25, 23, 0.28), transparent 64%); }
-.hero-frame img { width: 100%; height: 115%; object-fit: cover; filter: saturate(0.65) sepia(0.08); transform: scale(1.02); }
+.hero-frame img { width: 100%; height: 115%; object-fit: cover; filter: saturate(0.65) sepia(0.08); transform: scale(1.02); backface-visibility: hidden; }
 .hero-index { display: inline-flex; min-height: 2.75rem; margin-top: 1rem; padding: 0; align-items: center; gap: 1.2rem; color: var(--putnam-paper); font-size: 0.68rem; letter-spacing: 0.11em; text-transform: uppercase; }
 .hero-index span { transition: transform 180ms ease; }
 .hero-index:hover span { transform: translateX(0.2rem); }
@@ -48,6 +48,7 @@
 .process-visual { position: absolute; z-index: 0; top: 7rem; right: clamp(1.25rem, 3vw, 3.5rem); bottom: 2rem; left: clamp(1.25rem, 3vw, 3.5rem); width: auto; overflow: hidden; background: var(--putnam-sand); }
 .process-media { position: absolute; inset: 0; margin: 0; opacity: 0; visibility: hidden; transition: opacity 500ms ease, visibility 500ms ease; }
 .process-media.is-active { opacity: 1; visibility: visible; }
+.process-media.is-active img { will-change: opacity; }
 .process-media img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.62); }
 .process-shade { position: absolute; z-index: 1; inset: 0; background: linear-gradient(90deg, rgba(0, 42, 39, 0.78) 0%, rgba(0, 42, 39, 0.48) 38%, transparent 70%), linear-gradient(180deg, transparent 62%, rgba(0, 42, 39, 0.32)); }
 .media-placeholder { display: grid; width: 100%; height: 100%; padding: 2rem; align-content: space-between; color: rgba(0, 58, 54, 0.72); background: var(--putnam-sand); }
