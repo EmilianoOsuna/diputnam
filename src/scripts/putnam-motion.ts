@@ -11,8 +11,14 @@ if (root && !reducedMotion) {
   document.body.classList.add('is-motion-ready');
   const lenis = new Lenis({ anchors: true, autoRaf: false, lerp: 0.09 });
   const tick = (time: number) => lenis.raf(time * 1000);
+  let scrollFrame = 0;
 
-  lenis.on('scroll', ScrollTrigger.update);
+  lenis.on('scroll', () => {
+    if (!scrollFrame) scrollFrame = window.requestAnimationFrame(() => {
+      scrollFrame = 0;
+      ScrollTrigger.update();
+    });
+  });
   gsap.ticker.add(tick);
   gsap.ticker.lagSmoothing(0);
 
@@ -90,6 +96,7 @@ if (root && !reducedMotion) {
   }, root);
 
   window.addEventListener('pagehide', () => {
+    if (scrollFrame) window.cancelAnimationFrame(scrollFrame);
     context.revert();
     lenis.destroy();
     gsap.ticker.remove(tick);

@@ -11,6 +11,8 @@ const markers = gsap.utils.toArray<HTMLElement>('[data-scene-marker]');
 const markerTrack = document.querySelector<HTMLElement>('[data-scene-markers]');
 const scrollCue = document.querySelector<HTMLButtonElement>('[data-scroll-cue]');
 let scrollToTarget = (target: Element) => target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
+let cueFrame = 0;
+let queuedScroll = window.scrollY;
 
 const updateScrollCue = (scroll = window.scrollY) => {
   if (!scrollCue) return;
@@ -145,6 +147,15 @@ scrollCue?.addEventListener('click', () => {
   if (nextTarget) scrollToTarget(nextTarget);
 });
 
-window.addEventListener('scroll', () => updateScrollCue(), { passive: true });
-window.addEventListener('resize', () => updateScrollCue());
+const scheduleScrollCue = (scroll = window.scrollY) => {
+  queuedScroll = scroll;
+  if (cueFrame) return;
+  cueFrame = window.requestAnimationFrame(() => {
+    cueFrame = 0;
+    updateScrollCue(queuedScroll);
+  });
+};
+
+window.addEventListener('scroll', () => scheduleScrollCue(), { passive: true });
+window.addEventListener('resize', () => scheduleScrollCue());
 updateScrollCue();
