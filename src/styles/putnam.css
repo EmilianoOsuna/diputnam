@@ -48,7 +48,6 @@
 .process-visual { position: absolute; z-index: 0; top: 7rem; right: clamp(1.25rem, 3vw, 3.5rem); bottom: 2rem; left: clamp(1.25rem, 3vw, 3.5rem); width: auto; overflow: hidden; background: var(--putnam-sand); }
 .process-media { position: absolute; inset: 0; margin: 0; opacity: 0; visibility: hidden; transition: opacity 500ms ease, visibility 500ms ease; }
 .process-media.is-active { opacity: 1; visibility: visible; }
-.process-media.is-active img { will-change: opacity; }
 .process-media img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.62); }
 .process-shade { position: absolute; z-index: 1; inset: 0; background: linear-gradient(90deg, rgba(0, 42, 39, 0.78) 0%, rgba(0, 42, 39, 0.48) 38%, transparent 70%), linear-gradient(180deg, transparent 62%, rgba(0, 42, 39, 0.32)); }
 .media-placeholder { display: grid; width: 100%; height: 100%; padding: 2rem; align-content: space-between; color: rgba(0, 58, 54, 0.72); background: var(--putnam-sand); }
@@ -62,7 +61,7 @@
 .process-step p { grid-column: 2; max-width: 28rem; margin: 0; color: rgba(244, 238, 223, 0.8); font-size: 1.02rem; line-height: 1.55; }
 .process-counter { position: absolute; z-index: 4; right: clamp(2.5rem, 6vw, 7rem); bottom: 3rem; display: flex; gap: 0.35rem; color: var(--putnam-paper); font-size: 0.62rem; letter-spacing: 0.12em; }
 .process-rail { position: absolute; z-index: 4; right: clamp(6.5rem, 10vw, 11rem); bottom: 3.1rem; left: clamp(2.5rem, 6vw, 7rem); width: auto; height: 1px; background: rgba(244, 238, 223, 0.32); }
-.process-rail span { display: block; width: 0; height: 2px; background: var(--putnam-paper); }
+.process-rail span { display: block; width: 100%; height: 2px; background: var(--putnam-paper); transform: scaleX(0); transform-origin: left center; }
 .process-markers { position: relative; margin-top: -100dvh; pointer-events: none; }
 .process-marker { height: 100dvh; }
 
@@ -119,6 +118,7 @@
   .hero-lead { width: min(28rem, 92%); }
   .hero-index { margin-top: 1rem; }
   .hero-frame { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; }
+  .hero-frame img { height: 100%; filter: none; transform: none; }
   .structural-line--hero { right: 14%; bottom: 17rem; left: -2rem; transform: rotate(-9deg); }
   .process-stage, .process-marker { height: 100dvh; }
   .process-markers { margin-top: -100dvh; }
@@ -126,6 +126,8 @@
   .process-heading .section-kicker { margin-bottom: 1.25rem; }
   .process-heading h2 { max-width: 25rem; font-size: clamp(3rem, 14vw, 4.8rem); }
   .process-visual { top: 9rem; right: 1rem; bottom: 42%; left: 1rem; width: auto; }
+  .process-media { transition-duration: 220ms; }
+  .process-media img { filter: none; }
   .process-shade { display: none; }
   .process-overlays { top: auto; right: 1rem; bottom: 5.5rem; left: 1rem; width: auto; color: var(--putnam-deep); transform: none; }
   .process-step { grid-template-columns: 2.8rem minmax(0, 1fr); }
@@ -151,6 +153,7 @@
   .cta-actions { flex-direction: column; }
   .cta-mark { right: -4%; bottom: 8%; width: 72vw; }
   .site-footer--flow { display: grid; min-height: 18rem; padding: 4rem 1rem; }
+  .principles, .differences, .institutional-cta, .site-footer--flow { content-visibility: auto; contain-intrinsic-size: auto 50rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

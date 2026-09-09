@@ -5,6 +5,9 @@ import { contact } from '../data/home';
 import { putnamDifferences, putnamEditorialImage, putnamIntro, putnamPrinciples, putnamProcess } from '../data/putnam';
 import '../styles/global.css';
 import '../styles/putnam.css';
+
+const unsplashVariant = (src: string, width: number, quality: number) =>
+  src.replace(/q=\d+&w=\d+/, `q=${quality}&w=${width}`);
 ---
 <html lang="es">
   <head>
@@ -29,11 +32,21 @@ import '../styles/putnam.css';
           <a class="hero-index" href="#enfoque">Conoce nuestro enfoque <span aria-hidden="true">→</span></a>
         </div>
         <figure class="hero-frame">
-          <img src={putnamEditorialImage.src} alt={putnamEditorialImage.alt} width="1800" height="1200" loading="eager" decoding="async" fetchpriority="high" />
+          <img
+            src={unsplashVariant(putnamEditorialImage.src, 1280, 82)}
+            srcset={`${unsplashVariant(putnamEditorialImage.src, 640, 76)} 640w, ${unsplashVariant(putnamEditorialImage.src, 960, 80)} 960w, ${unsplashVariant(putnamEditorialImage.src, 1280, 82)} 1280w`}
+            sizes="100vw"
+            alt={putnamEditorialImage.alt}
+            width="1800"
+            height="1200"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
         </figure>
       </section>
 
-      <section class="process" aria-labelledby="process-title" data-process data-header-theme="dark">
+      <section class="process" id="enfoque" aria-labelledby="process-title" data-process data-header-theme="dark">
         <div class="process-stage">
           <header class="process-heading">
             <p class="section-kicker">Proceso Putnam</p>
@@ -42,7 +55,7 @@ import '../styles/putnam.css';
           <div class="process-visual">
             {putnamProcess.map((step, index) => (
               <figure class:list={["process-media", { "is-active": index === 0 }]} data-process-media={index} aria-hidden={index === 0 ? 'false' : 'true'}>
-                {step.image ? <img src={step.image} alt={step.alt} width="1800" height="1200" /> : <div class="media-placeholder" role="img" aria-label={`Imagen pendiente para la etapa ${step.title}`}><span>Imagen pendiente</span><b>{step.number}</b><small>{step.title}</small></div>}
+                {step.image ? <img src={unsplashVariant(step.image, 960, 78)} srcset={`${unsplashVariant(step.image, 640, 74)} 640w, ${unsplashVariant(step.image, 960, 78)} 960w, ${unsplashVariant(step.image, 1280, 80)} 1280w`} sizes="(max-width: 767px) calc(100vw - 2rem), calc(100vw - 7rem)" alt={step.alt} width="1800" height="1200" loading="lazy" decoding="async" fetchpriority="low" /> : <div class="media-placeholder" role="img" aria-label={`Imagen pendiente para la etapa ${step.title}`}><span>Imagen pendiente</span><b>{step.number}</b><small>{step.title}</small></div>}
               </figure>
             ))}
             <div class="process-shade" aria-hidden="true"></div>
