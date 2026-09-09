@@ -1,0 +1,27 @@
+---
+import { contact } from '../data/home';
+
+interface Props { home?: boolean; }
+const { home = false } = Astro.props;
+const links = home
+  ? [{ label: 'Ereditá', href: '/eredita/' }, { label: 'Putnam', href: '/putnam/' }, { label: 'Contacto', href: '#contacto' }]
+  : [{ label: 'Ereditá', href: '/eredita/' }, { label: 'Putnam', href: '#inicio' }, { label: 'Contacto', href: '#contacto' }];
+---
+<header class:list={["site-header", { "site-header--light": home }]} data-site-header data-auto-theme>
+  <a class="brand brand--mark" href={home ? '#inicio' : '/'} aria-label="Putnam, inicio">
+    <img src={home ? '/assets/putnam-light.png' : '/assets/putnam-dark.png'} data-logo-dark="/assets/putnam-dark.png" data-logo-light="/assets/putnam-light.png" alt="" />
+    <span class="brand-copy"><strong>Putnam</strong><small>Desarrollos inmobiliarios</small></span>
+  </a>
+  <nav class="site-nav" id="site-navigation" aria-label="Navegación principal">
+    {links.map((link) => <a href={link.href}>{link.label}</a>)}
+    <span aria-label="Español">ES</span>
+    <div class="mobile-menu-contact">
+      <a href={`mailto:${contact.email}`}>{contact.email}</a>
+      <a href={`tel:${contact.phone.replaceAll(' ', '')}`}>{contact.phone}</a>
+      <span>{contact.city}</span>
+      <a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp ↗</a>
+    </div>
+  </nav>
+  <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></button>
+</header>
+<script src="../scripts/menu.ts"></script>

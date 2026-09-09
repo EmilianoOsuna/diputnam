@@ -1,5 +1,7 @@
 ---
-import { contact, homePanels } from '../data/home';
+import { homePanels } from '../data/home';
+import ContactFooter from '../components/ContactFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import '../styles/global.css';
 ---
 
@@ -8,32 +10,11 @@ import '../styles/global.css';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content="Putnam desarrolla proyectos inmobiliarios residenciales con visión patrimonial." />
-    <link rel="icon" href="/assets/putnam-light.jpg" />
+    <link rel="icon" href="/assets/putnam-light.png" />
     <title>Putnam | Desarrollos inmobiliarios</title>
   </head>
-  <body>
-    <header class="site-header" data-site-header>
-      <a class="brand" href="#inicio" aria-label="Putnam, inicio">
-        <img src="/assets/putnam-light.jpg" alt="Putnam Desarrollos Inmobiliarios" />
-      </a>
-      <nav class="site-nav" id="site-navigation" aria-label="Navegación principal">
-        <a href="#eredita">Ereditá</a>
-        <a href="#putnam">Putnam</a>
-        <a href="#contacto">Contacto</a>
-        <span aria-label="Español">ES</span>
-        <div class="mobile-menu-contact">
-          <a href={`mailto:${contact.email}`}>{contact.email}</a>
-          <a href={`tel:${contact.phone.replaceAll(' ', '')}`}>{contact.phone}</a>
-          <span>{contact.city}</span>
-          <a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp ↗</a>
-        </div>
-      </nav>
-      <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </button>
-    </header>
+  <body class="home-page">
+    <SiteHeader home />
 
     <main class="home" data-home>
       <div class="home-experience" data-experience>
@@ -43,7 +24,7 @@ import '../styles/global.css';
               <img class="panel-media" src={panel.image} alt={panel.alt} loading={index < 2 ? 'eager' : 'lazy'} />
               <div class="panel-shade"></div>
               <div class="panel-content">
-                {index === 0 ? <h1><a href={`#${panel.id}`}>{panel.title}</a></h1> : <h2><a href={`#${panel.id}`}>{panel.title}</a></h2>}
+                {index === 0 ? <h1><a href={`#${panel.id}`}>{panel.title}</a></h1> : <h2><a href={panel.id === 'putnam' ? '/putnam/' : panel.id === 'eredita' ? '/eredita/' : `#${panel.id}`}>{panel.title}</a></h2>}
               </div>
             </section>
           ))}
@@ -56,16 +37,7 @@ import '../styles/global.css';
       </div>
     </main>
 
-    <footer class="site-footer">
-      <div class="footer-contact">
-        <a href={`mailto:${contact.email}`}>{contact.email}</a>
-        <a href={`tel:${contact.phone.replaceAll(' ', '')}`}>{contact.phone}</a>
-      </div>
-      <div class="footer-address">
-        <span>{contact.city}</span>
-        <a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp ↗</a>
-      </div>
-    </footer>
+    <ContactFooter fixed />
     <button class="scroll-cue" type="button" aria-label="Desplazarse a la siguiente sección" data-scroll-cue>
       <span aria-hidden="true"></span>
     </button>

@@ -148,33 +148,3 @@ scrollCue?.addEventListener('click', () => {
 window.addEventListener('scroll', () => updateScrollCue(), { passive: true });
 window.addEventListener('resize', () => updateScrollCue());
 updateScrollCue();
-
-const menuToggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
-const siteNav = document.querySelector<HTMLElement>('.site-nav');
-const mobileViewport = window.matchMedia('(max-width: 767px)');
-let menuOrigin: Element | null = null;
-
-const setMenuOpen = (open: boolean) => {
-  if (open && !mobileViewport.matches) return;
-  siteNav?.classList.toggle('is-open', open);
-  document.body.classList.toggle('menu-open', open);
-  menuToggle?.setAttribute('aria-expanded', String(open));
-  menuToggle?.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
-  document.body.style.overflow = open ? 'hidden' : '';
-  document.querySelectorAll<HTMLElement>('main, .site-footer, [data-scroll-cue]').forEach((element) => { element.inert = open; });
-
-  if (open) {
-    menuOrigin = document.activeElement;
-    siteNav?.querySelector<HTMLAnchorElement>('a')?.focus();
-  } else if (menuOrigin instanceof HTMLElement) {
-    menuOrigin.focus();
-    menuOrigin = null;
-  }
-};
-
-menuToggle?.addEventListener('click', () => setMenuOpen(menuToggle.getAttribute('aria-expanded') !== 'true'));
-siteNav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenuOpen(false)));
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && menuToggle?.getAttribute('aria-expanded') === 'true') setMenuOpen(false);
-});
-mobileViewport.addEventListener('change', ({ matches }) => { if (!matches) setMenuOpen(false); });

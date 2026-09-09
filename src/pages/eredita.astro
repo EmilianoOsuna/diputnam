@@ -1,0 +1,139 @@
+---
+import ContactFooter from '../components/ContactFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { contact } from '../data/home';
+import { erediteGallery, erediteHero, erediteIntro, erediteLegalDocs, erediteTypologies } from '../data/eredita';
+import '../styles/global.css';
+import '../styles/eredita.css';
+---
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Ereditá: tipologías de vivienda, áreas comunes y documentación pensadas para brindar transparencia y calidad de vida." />
+    <link rel="icon" href="/assets/putnam-light.png" />
+    <title>Ereditá | Putnam</title>
+  </head>
+  <body class="eredita-page">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <SiteHeader />
+
+    <main id="contenido" data-eredita>
+      <section class="ed-hero" aria-labelledby="ed-hero-title" data-header-theme="light">
+        <div class="ed-hero-media" data-parallax>
+          {erediteHero.video ? (
+            <video poster={erediteHero.poster} autoplay muted loop playsinline aria-hidden="true">
+              <source src={erediteHero.video} type="video/mp4" />
+            </video>
+          ) : (
+            <img src={erediteHero.poster} alt={erediteHero.alt} width="2200" height="1400" />
+          )}
+          <div class="ed-hero-shade"></div>
+        </div>
+        <img class="ed-hero-mark" src="/assets/eredita-logo.png" alt="Ereditá" width="900" height="900" />
+        <div class="ed-hero-content" data-reveal-group>
+          <p class="section-kicker">{erediteHero.kicker}</p>
+          <h1 id="ed-hero-title">{erediteHero.title}</h1>
+          <p class="ed-hero-sub">{erediteHero.sub}</p>
+        </div>
+      </section>
+
+      <section class="ed-intro" aria-labelledby="ed-intro-title" data-header-theme="dark">
+        <div class="ed-intro-copy" data-reveal-group>
+          <p class="section-kicker">{erediteIntro.eyebrow}</p>
+          <h2 id="ed-intro-title">{erediteIntro.title}</h2>
+          <p class="ed-lead">{erediteIntro.lead}</p>
+          <ul class="ed-bullets">
+            {erediteIntro.bullets.map((bullet) => <li>{bullet}</li>)}
+          </ul>
+        </div>
+        <dl class="ed-facts" data-reveal-group>
+          {erediteIntro.facts.map((fact) => (
+            <div class="ed-fact"><dt>{fact.label}</dt><dd>{fact.value}</dd></div>
+          ))}
+        </dl>
+      </section>
+
+      <section class="ed-gallery" aria-labelledby="ed-gallery-title" data-header-theme="light">
+        <header class="section-heading" data-reveal-group>
+          <p class="section-kicker">Galería</p>
+          <h2 id="ed-gallery-title">Fotografías y renders del proyecto.</h2>
+        </header>
+        <div class="ed-masonry" data-reveal-group>
+          {erediteGallery.map((item) => (
+            <figure class="ed-masonry-item">
+              <img src={item.src} alt={item.alt} loading="lazy" width="1200" height="900" />
+              <figcaption>{item.tag}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <section class="ed-typologies" aria-labelledby="ed-typologies-title" data-header-theme="dark" data-h-wrapper>
+        <div class="ed-h-track" data-h-track>
+          <div class="ed-h-panel ed-h-panel--intro" data-h-panel>
+            <p class="section-kicker">Tipologías</p>
+            <h2 id="ed-typologies-title">Cuatro formas<br />de vivir Ereditá.</h2>
+            <p class="ed-h-intro-copy">Cada tipología resuelve un estilo de vida distinto, desde el primer departamento hasta la vida en familia.</p>
+            <span class="ed-h-hint">Sigue bajando <span aria-hidden="true">↓</span></span>
+          </div>
+          {erediteTypologies.map((item, index) => (
+            <article class="ed-h-panel" data-h-panel>
+              <figure class="ed-h-media">
+                <img src={item.image} alt={item.alt} loading="lazy" width="1400" height="1400" />
+              </figure>
+              <div class:list={['ed-h-copy', `is-${item.tone}`]}>
+                <div class="ed-h-copy-head">
+                  <span class="ed-h-index">0{index + 1}<i>/</i>0{erediteTypologies.length}</span>
+                  <span class="ed-h-tag">{item.tag}</span>
+                </div>
+                <h3>{item.title}</h3>
+                <p class="ed-h-subtitle">{item.subtitle}</p>
+                <p class="ed-h-desc">{item.description}</p>
+                <ul class="ed-h-specs">
+                  {item.specs.map((spec) => (
+                    <li><span>{spec.key}</span><b>{spec.val}</b></li>
+                  ))}
+                </ul>
+                <a class="ed-cta-link" href={contact.whatsapp} target="_blank" rel="noreferrer">Solicitar información <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="ed-legal" aria-labelledby="ed-legal-title" data-header-theme="dark">
+        <header class="ed-legal-header" data-reveal-group>
+          <div>
+            <p class="section-kicker">{erediteLegalDocs.eyebrow}</p>
+            <h2 id="ed-legal-title">{erediteLegalDocs.title}</h2>
+          </div>
+          <p>{erediteLegalDocs.lead}</p>
+        </header>
+        <div class="ed-legal-grid" data-reveal-group>
+          {erediteLegalDocs.docs.map((doc) => (
+            <article class="ed-legal-card">
+              <strong>{doc.title}</strong>
+              <p>{doc.text}</p>
+              <span>Próximamente</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="ed-cta" aria-labelledby="ed-cta-title" data-reveal-group data-header-theme="light">
+        <div class="ed-cta-copy">
+          <p class="section-kicker">Siguiente paso</p>
+          <h2 id="ed-cta-title">Conoce Ereditá de cerca y resuelve tus dudas.</h2>
+          <div class="cta-actions">
+            <a href={`mailto:${contact.email}`}>Escríbenos <span aria-hidden="true">↗</span></a>
+            <a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <img class="cta-mark" src="/assets/eredita-logo.png" alt="" aria-hidden="true" width="800" height="800" />
+      </section>
+    </main>
+    <ContactFooter />
+    <script src="../scripts/eredita-motion.ts"></script>
+  </body>
+</html>

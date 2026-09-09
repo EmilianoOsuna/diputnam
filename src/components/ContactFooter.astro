@@ -1,0 +1,9 @@
+---
+import { contact } from '../data/home';
+interface Props { fixed?: boolean; }
+const { fixed = false } = Astro.props;
+---
+<footer class:list={["site-footer", { "site-footer--flow": !fixed }]} id={fixed ? undefined : 'contacto'}>
+  <div class="footer-contact"><a href={`mailto:${contact.email}`}>{contact.email}</a><a href={`tel:${contact.phone.replaceAll(' ', '')}`}>{contact.phone}</a></div>
+  <div class="footer-address"><span>{contact.city}</span><a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp ↗</a></div>
+</footer>

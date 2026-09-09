@@ -1,0 +1,108 @@
+---
+import ContactFooter from '../components/ContactFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { contact } from '../data/home';
+import { putnamDifferences, putnamEditorialImage, putnamIntro, putnamPrinciples, putnamProcess } from '../data/putnam';
+import '../styles/global.css';
+import '../styles/putnam.css';
+---
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Conoce cómo Putnam integra diseño, planificación y ejecución en desarrollos inmobiliarios residenciales." />
+    <link rel="icon" href="/assets/putnam-light.png" />
+    <title>La firma | Putnam</title>
+  </head>
+  <body class="putnam-page">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <SiteHeader />
+
+    <main id="contenido" data-putnam>
+      <section class="institutional-hero" id="inicio" aria-labelledby="putnam-title" data-header-theme="light">
+        <div class="hero-copy" data-reveal-group>
+          <p class="section-kicker">{putnamIntro.eyebrow}</p>
+          <h1 id="putnam-title"><span>Una visión.</span><span>Todo el proceso.</span></h1>
+        </div>
+        <div class="hero-details" data-reveal-group>
+          <p class="hero-lead">Integramos diseño, planificación y ejecución para construir valor a largo plazo.</p>
+          <a class="hero-index" href="#enfoque">Conoce nuestro enfoque <span aria-hidden="true">→</span></a>
+        </div>
+        <figure class="hero-frame">
+          <img src={putnamEditorialImage.src} alt={putnamEditorialImage.alt} width="1800" height="1200" />
+        </figure>
+      </section>
+
+      <section class="process" aria-labelledby="process-title" data-process data-header-theme="dark">
+        <div class="process-stage">
+          <header class="process-heading">
+            <p class="section-kicker">Proceso Putnam</p>
+            <h2 id="process-title" class="visually-hidden">Proceso Putnam</h2>
+          </header>
+          <div class="process-visual">
+            {putnamProcess.map((step, index) => (
+              <figure class:list={["process-media", { "is-active": index === 0 }]} data-process-media={index} aria-hidden={index === 0 ? 'false' : 'true'}>
+                {step.image ? <img src={step.image} alt={step.alt} width="1800" height="1200" /> : <div class="media-placeholder" role="img" aria-label={`Imagen pendiente para la etapa ${step.title}`}><span>Imagen pendiente</span><b>{step.number}</b><small>{step.title}</small></div>}
+              </figure>
+            ))}
+            <div class="process-shade" aria-hidden="true"></div>
+          </div>
+          <div class="process-overlays" aria-live="polite">
+            {putnamProcess.map((step, index) => (
+              <article class:list={["process-step", { "is-active": index === 0 }]} data-process-step={index} aria-hidden={index === 0 ? 'false' : 'true'}>
+                <span class="step-number">{step.number}</span><h3>{step.title}</h3><p>{step.text}</p>
+              </article>
+            ))}
+          </div>
+          <div class="process-counter"><span data-process-current>01</span><span aria-hidden="true">/</span><span>06</span></div>
+          <div class="process-rail" aria-hidden="true"><span data-line-progress></span></div>
+        </div>
+        <div class="process-markers" data-process-markers aria-hidden="true">{putnamProcess.map((_, index) => <div class="process-marker" data-process-marker={index}></div>)}</div>
+      </section>
+
+      <section class="principles" aria-labelledby="principles-title" data-header-theme="light">
+        <p class="section-kicker">Lo que nos guía</p>
+        <h2 id="principles-title" class="visually-hidden">Misión, visión y valores</h2>
+        <article class="principle principle--mission" data-reveal-group>
+          <span>{putnamPrinciples.mission.label}</span>
+          <h3>{putnamPrinciples.mission.title}</h3>
+          <p>{putnamPrinciples.mission.text}</p>
+        </article>
+        <article class="principle principle--vision" data-reveal-group>
+          <span>{putnamPrinciples.vision.label}</span>
+          <h3>{putnamPrinciples.vision.title}</h3>
+          <p>{putnamPrinciples.vision.text}</p>
+        </article>
+        <div class="values" data-reveal-group>
+          <span>Valores / 06</span>
+          <h3>Principios que atraviesan cada decisión.</h3>
+          <ol>{putnamPrinciples.values.map((value, index) => <li><b>{String(index + 1).padStart(2, '0')}</b>{value}</li>)}</ol>
+        </div>
+      </section>
+
+      <section class="differences" aria-labelledby="differences-title" data-header-theme="dark">
+        <header class="section-heading" data-reveal-group>
+          <p class="section-kicker">La diferencia Putnam</p>
+          <h2 id="differences-title">Rigor en lo invisible.<br />Claridad en el resultado.</h2>
+        </header>
+        <div class="difference-list">
+          {putnamDifferences.map((item) => (
+            <article class="difference" data-reveal-group><span>{item.number}</span><h3>{item.title}</h3><p>{item.text}</p></article>
+          ))}
+        </div>
+      </section>
+
+      <section class="institutional-cta" aria-labelledby="cta-title" data-reveal-group data-header-theme="light">
+        <p class="section-kicker">Siguiente paso</p>
+        <h2 id="cta-title">Una conversación puede ser el inicio de algo sólido.</h2>
+        <div class="cta-actions">
+          <a href={`mailto:${contact.email}`}>Escríbenos <span aria-hidden="true">↗</span></a>
+          <a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp <span aria-hidden="true">↗</span></a>
+        </div>
+        <img class="cta-mark" src="/assets/putnam-light.png" alt="" aria-hidden="true" width="800" height="800" />
+      </section>
+    </main>
+    <ContactFooter />
+    <script src="../scripts/putnam-motion.ts"></script>
+  </body>
+</html>
