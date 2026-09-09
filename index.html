@@ -10,6 +10,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     ::selection { background: #ff0; }
+    :focus-visible { outline: 2px solid var(--verde-estructural, #004B46); outline-offset: 3px; }
     html { font-size: 1.458vw; -webkit-text-size-adjust: 100%; }
     @media (max-width: 1199px) { html { font-size: 2.604vw; } }
     @media (max-width: 767px) { html { font-size: 14px; } }
@@ -1763,6 +1764,41 @@
       flex-shrink: 0;
     }
 
+    /* Legacy responsive safety net: the Astro app owns /; this file remains a
+       directly-served fallback and must also work without a build step. */
+    @media (max-width: 767px) {
+      html { font-size: 14px; }
+      body, .app { width: 100%; min-height: 100%; height: auto; overflow-x: hidden; }
+      .page { min-height: 100svh; height: auto; overflow: visible; }
+      .page.active { display: block; }
+      .sidebar { position: sticky; inset: 0 0 auto; width: 100%; height: auto; min-height: 4.5rem; padding: 0.85rem 1rem; flex-direction: row; align-items: center; justify-content: space-between; }
+      .logo { margin: 0; max-width: 9rem; }
+      .logo img { max-height: 2.5rem; }
+      .nav-links { margin: 0; gap: 0.35rem; flex-direction: row; align-items: center; }
+      .nav-item { min-height: 44px; display: inline-flex; align-items: center; padding: 0.5rem; font-size: 0.75rem; }
+      .nav-item:not(:first-child) { display: none; }
+      .sidebar::after { content: '☰ Menú'; display: inline-flex; align-items: center; min-height: 44px; padding: 0.5rem; color: var(--verde-oscuro); font-size: 0.75rem; }
+      .sidebar.menu-open::after { content: '× Cerrar'; }
+      .sidebar.menu-open .nav-links { position: fixed; z-index: 101; top: 4.5rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding: 0.75rem 1rem 1rem; background: #f7f1e4; border-bottom: 1px solid #e1d7c3; box-shadow: 0 8px 20px rgba(17,17,17,.08); }
+      .sidebar.menu-open .nav-item:not(:first-child) { display: inline-flex; }
+      .main-content, .nosotros-content, .project-detail-content, .news-content, .services-content { margin-left: 0; width: 100%; height: auto; min-height: calc(100svh - 4.5rem); overflow: visible; }
+      .hero-title, .nos-hero h1, .news-hero h1, .services-hero h1 { max-width: 100%; font-size: clamp(2rem, 9vw, 2.8rem); }
+      .grid-2, .footer-inner, .nos-intro, .mvv-section, .diff-grid, .pd-body, .news-shell, .services-intro, .contact-grid, .contact-cta, .home-grid-top, .home-featured-grid, .home-cta-row, .home-kpis, .legal-docs-grid { grid-template-columns: 1fr; }
+      .hero, .projects-section, .hero-images, .explore-more { padding-left: 1rem; padding-right: 1rem; }
+      .footer-inner, .nos-hero, .nos-intro-text, .diff-section, .pd-description, .pd-specs, .news-hero, .news-shell, .services-shell { padding-left: 1rem; padding-right: 1rem; }
+      .project-card .card-overlay, .project-card:focus-visible .card-overlay, .project-card:focus-within .card-overlay, .project-card:active .card-overlay { opacity: 1; }
+      .project-card:active img, .project-card:focus-visible img, .project-card:focus-within img { opacity: 0; transform: scale(1.035); }
+      .project-card .card-overlay { pointer-events: none; }
+      .footer-social a, .footer-address a, .footer-bottom a, .contact-link-btn, .contact-submit, .nos-cta-btn, .pd-cta-btn { min-height: 44px; display: inline-flex; align-items: center; }
+      .pd-hero { height: 60svh; min-height: 22rem; }
+      .news-card-link { grid-template-columns: 1fr; }
+      .news-card-media { min-height: 12rem; }
+      .news-card-top { flex-direction: column; align-items: flex-start; }
+      .news-tags { justify-content: flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
   </style>
 </head>
 <body>
@@ -3059,6 +3095,21 @@
 })();
 </script>
 
+
+<script>
+  // Mobile fallback navigation: the same nav links are reused, never cloned.
+  const legacySidebar = document.getElementById('shared-sidebar');
+  if (legacySidebar) {
+    legacySidebar.addEventListener('click', (event) => {
+      if (window.matchMedia('(max-width: 767px)').matches && event.target === legacySidebar) {
+        legacySidebar.classList.toggle('menu-open');
+      }
+    });
+    legacySidebar.querySelectorAll('.nav-item').forEach((link) => link.addEventListener('click', () => {
+      legacySidebar.classList.remove('menu-open');
+    }));
+  }
+</script>
 
 <script>
   // ===== WEB3FORMS CONTACT FORM =====
