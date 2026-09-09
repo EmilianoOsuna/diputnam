@@ -96,7 +96,9 @@
 .cta-actions a span { transition: transform 180ms ease; }
 .cta-actions a:hover span { transform: translate(0.2rem, -0.2rem); }
 .cta-mark { position: absolute; right: clamp(1rem, 4vw, 5rem); bottom: 9%; width: min(42vw, 42rem); height: auto; object-fit: contain; opacity: 0.2; pointer-events: none; }
-.is-motion-ready .cta-mark { will-change: transform; }
+@media (min-width: 768px) {
+  .is-motion-ready .cta-mark { will-change: transform; }
+}
 .site-footer--flow { position: relative; z-index: 1; min-height: 14rem; padding: 4rem clamp(1.25rem, 3vw, 3.5rem); color: var(--putnam-paper); background: var(--putnam-deep); text-shadow: none; }
 .site-footer--flow::before { display: none; }
 
