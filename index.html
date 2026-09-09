@@ -64,7 +64,7 @@
       display: flex;
       flex-direction: column;
       z-index: 100;
-      background: #f7f1e4;
+      background: transparent;
       border-right: 1px solid #e1d7c3;
     }
     .logo { line-height: 1; margin-bottom: 0.5rem; }
@@ -1779,7 +1779,7 @@
       .nav-item:not(:first-child) { display: none; }
       .sidebar::after { content: '☰ Menú'; display: inline-flex; align-items: center; min-height: 44px; padding: 0.5rem; color: var(--verde-oscuro); font-size: 0.75rem; }
       .sidebar.menu-open::after { content: '× Cerrar'; }
-      .sidebar.menu-open .nav-links { position: fixed; z-index: 101; top: 4.5rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding: 0.75rem 1rem 1rem; background: #f7f1e4; border-bottom: 1px solid #e1d7c3; box-shadow: 0 8px 20px rgba(17,17,17,.08); }
+      .sidebar.menu-open .nav-links { position: fixed; z-index: 101; top: 4.5rem; left: 0; right: 0; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding: 0.75rem 1rem 1rem; background: rgba(247, 241, 228, 0.92); border-bottom: 1px solid #e1d7c3; box-shadow: 0 8px 20px rgba(17,17,17,.08); }
       .sidebar.menu-open .nav-item:not(:first-child) { display: inline-flex; }
       .main-content, .nosotros-content, .project-detail-content, .news-content, .services-content { margin-left: 0; width: 100%; height: auto; min-height: calc(100svh - 4.5rem); overflow: visible; }
       .hero-title, .nos-hero h1, .news-hero h1, .services-hero h1 { max-width: 100%; font-size: clamp(2rem, 9vw, 2.8rem); }
