@@ -1,11 +1,11 @@
 # Graph Report - diputnam  (2026-09-11)
 
 ## Corpus Check
-- 77 files · ~2,206,947 words
+- 77 files · ~2,206,877 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 628 nodes · 615 edges · 62 communities (56 shown, 6 thin omitted)
+- 628 nodes · 614 edges · 62 communities (56 shown, 6 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
@@ -99,7 +99,7 @@ Nodes (42): contacto-page Specification, Decision needed: Cortes de línea de h2
 
 ### Community 2 - "eredita.astro"
 Cohesion: 0.08
-Nodes (38): ../data/eredita, ../data/home, ../data/noticias, ../data/putnam, ../data/unete, ../styles/contacto.css, ../styles/eredita.css, ../styles/global.css (+30 more)
+Nodes (37): ../data/eredita, ../data/home, ../data/noticias, ../data/putnam, ../data/unete, ../styles/contacto.css, ../styles/eredita.css, ../styles/global.css (+29 more)
 
 ### Community 3 - "package.json"
 Cohesion: 0.07
@@ -292,7 +292,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `Requirements` be split into smaller, more focused modules?**
   _Cohesion score 0.046511627906976744 - nodes in this community are weakly interconnected._
 - **Should `eredita.astro` be split into smaller, more focused modules?**
-  _Cohesion score 0.08078231292517007 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07993197278911565 - nodes in this community are weakly interconnected._
 - **Should `package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._
 - **Should `ADDED Requirements` be split into smaller, more focused modules?**

@@ -3,7 +3,7 @@ import { contact } from '../data/home';
 
 interface Props { home?: boolean; contacto?: boolean; }
 const { home = false, contacto = false } = Astro.props;
-const links = [{ label: 'Ereditá', href: '/eredita/' }, { label: 'Putnam', href: '/putnam/' }, { label: 'Noticias', href: '/noticias/' }, { label: 'Contacto', href: '/contacto/' }];
+const links = [{ label: 'Ereditá', href: '/eredita/' }, { label: 'Putnam', href: '/putnam/' }, { label: 'Noticias', href: '/noticias/' }, { label: 'Únete', href: '/unete/' }, { label: 'Contacto', href: '/contacto/' }];
 const path = Astro.url.pathname.replace(/\/?$/, '/');
 ---
 <header class:list={["site-header", { "site-header--light": home }]} data-site-header data-auto-theme>
