@@ -38,4 +38,9 @@ export const contact = {
   email: 'Desarrollos.Putnam@outlook.com',
   phone: '+591 75216110',
   whatsapp: 'https://wa.me/59175216110?text=Hola,%20quiero%20coordinar%20una%20consulta%20con%20Putnam%20Desarrollos%20Inmobiliarios',
+  address: 'San Miguel, Calle René Moreno #1339, Piso 2',
+  hours: 'Lunes a viernes · 08:30 a 18:30',
+  responseTime: '24 – 48 h',
+  mapsUrl: 'https://maps.app.goo.gl/uLKQ1rPhj3DSpW1U8',
+  coordinates: { latitude: -16.541498, longitude: -68.078775 },
 };

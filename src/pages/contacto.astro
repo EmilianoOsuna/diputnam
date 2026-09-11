@@ -1,0 +1,107 @@
+---
+import ContactFooter from '../components/ContactFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { contact } from '../data/home';
+import '../styles/global.css';
+import '../styles/contacto.css';
+
+const mapEmbed = `https://www.google.com/maps?q=${contact.coordinates.latitude},${contact.coordinates.longitude}&output=embed`;
+---
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Conversa con Putnam sobre proyectos residenciales, inversión y desarrollo inmobiliario en Bolivia." />
+    <link rel="icon" href="/assets/putnam-light.png" />
+    <title>Contacto | Putnam</title>
+  </head>
+  <body class="contacto-page">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <SiteHeader contacto />
+
+    <main id="contenido" data-contacto>
+      <section class="ct-hero" id="inicio" aria-labelledby="ct-hero-title" data-header-theme="light">
+        <div class="hero-copy">
+          <p class="section-kicker fade-up"><span>Contacto · {contact.city}</span></p>
+          <h1 id="ct-hero-title"><span class="line"><span>Conversemos</span></span><span class="line"><span>sobre tu próximo</span></span><span class="line"><span>proyecto.</span></span></h1>
+        </div>
+        <div class="hero-details fade-up">
+          <div><p class="hero-lead">Consultas comerciales, reuniones de evaluación, alianzas estratégicas y requerimientos de inversión en desarrollos residenciales.</p><a class="hero-index" href="#canales">Ver canales de contacto <span aria-hidden="true">↓</span></a></div>
+          <div class="hero-meta"><span>{contact.hours.replace('Lunes a viernes', 'Lun – Vie').replace(' a ', ' – ')}</span><span>Respuesta en {contact.responseTime}</span></div>
+        </div>
+        <figure class="hero-frame" data-parallax>
+          <img src="/assets/contacto-hero.jpg" alt="Interior residencial de un proyecto Putnam" width="1280" height="850" />
+        </figure>
+      </section>
+
+      <section class="ct-channels" id="canales" aria-labelledby="ct-channels-title" data-header-theme="dark">
+        <header class="ct-channels-head grid-12">
+          <div><p class="section-kicker">Canales principales</p><h2 id="ct-channels-title"><span class="line"><span>Estamos listos para ayudarte</span></span><span class="line"><span>a evaluar, diseñar o ejecutar.</span></span></h2></div>
+          <p data-reveal-group>Escríbenos por el canal que te resulte más cómodo: información sobre proyectos, coordinación de reuniones, alcance de servicios u oportunidades de colaboración. Priorizamos respuestas claras, serias y oportunas.</p>
+        </header>
+        <div class="index-list" data-reveal-group>
+          <a class="index-row" href={contact.whatsapp} target="_blank" rel="noreferrer"><span>01</span><div><small>WhatsApp</small><strong>{contact.phone}</strong></div><i aria-hidden="true">↗</i></a>
+          <a class="index-row" href={`mailto:${contact.email}`}><span>02</span><div><small>Correo</small><strong>{contact.email}</strong></div><i aria-hidden="true">↗</i></a>
+          <div class="index-row"><span>03</span><div><small>Oficina</small><strong>{contact.address}</strong></div><i aria-hidden="true"></i></div>
+          <div class="index-row"><span>04</span><div><small>Horario de atención</small><strong>{contact.hours}</strong></div><i aria-hidden="true"></i></div>
+        </div>
+        <div class="kpis" data-reveal-group>
+          <div class="kpi"><b>{contact.responseTime}</b><span>Tiempo objetivo de respuesta</span></div>
+          <div class="kpi"><b>Bolivia</b><span>Cobertura operativa principal</span></div>
+          <div class="kpi"><b>1 : 1</b><span>Atención directa y personalizada</span></div>
+        </div>
+      </section>
+
+      <section class="ct-reasons" id="motivos" aria-labelledby="ct-reasons-title" data-reasons data-header-theme="light">
+        <div class="pin-stage" data-pin-stage>
+          <div><p class="section-kicker">¿En qué podemos ayudarte?</p><h2 id="ct-reasons-title">Tres motivos frecuentes para escribirnos.</h2></div>
+          <div><div class="pin-counter"><b data-pin-current>01</b><span aria-hidden="true">/</span><span>03</span></div><div class="pin-rail" aria-hidden="true"><span data-pin-rail></span></div></div>
+        </div>
+        <div class="reasons">
+          <article class="reason is-active" data-reason="0"><span>01 — Comercial</span><h3>Información comercial</h3><p>Disponibilidad, alcance de servicios, presentación institucional y primera orientación sobre el proyecto que te interesa.</p><a href={contact.whatsapp} target="_blank" rel="noreferrer">Solicitar información <span aria-hidden="true">→</span></a></article>
+          <article class="reason" data-reason="1"><span>02 — Proyecto</span><h3>Reuniones de proyecto</h3><p>Coordinación de reuniones para evaluación técnica, diseño, ejecución o seguimiento de una obra en curso.</p><a href="#formulario">Agendar reunión <span aria-hidden="true">→</span></a></article>
+          <article class="reason" data-reason="2"><span>03 — Alianzas</span><h3>Alianzas y oportunidades</h3><p>Colaboraciones estratégicas, proveedores, inversionistas y propuestas conjuntas para nuevos desarrollos.</p><a href="#formulario">Proponer una alianza <span aria-hidden="true">→</span></a></article>
+        </div>
+      </section>
+
+      <section class="ct-location grid-12" id="ubicacion" aria-labelledby="ct-location-title" data-header-theme="dark">
+        <figure class="ct-map"><iframe src={mapEmbed} title="Mapa de la oficina de Putnam en San Miguel, La Paz" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></figure>
+        <div class="ct-location-copy">
+          <p class="section-kicker">Ubicación</p>
+          <h2 id="ct-location-title"><span class="line"><span>Visítanos o agenda</span></span><span class="line"><span>una reunión previa.</span></span></h2>
+          <p data-reveal-group>Nuestra oficina funciona como punto de contacto para reuniones comerciales y coordinación de proyectos. Para una mejor atención, sugerimos escribirnos antes de visitar.</p>
+          <dl data-reveal-group><div><dt>Dirección</dt><dd>{contact.address} · {contact.city}</dd></div><div><dt>Horario</dt><dd>{contact.hours}</dd></div></dl>
+          <div class="cta-actions"><a href={contact.mapsUrl} target="_blank" rel="noreferrer">Abrir en Google Maps <span aria-hidden="true">↗</span></a></div>
+        </div>
+      </section>
+
+      <section class="ct-form" id="formulario" aria-labelledby="ct-form-title" data-header-theme="dark">
+        <header class="ct-form-head grid-12">
+          <div><p class="section-kicker">Formulario de contacto</p><h2 id="ct-form-title"><span class="line"><span>Envíanos tu consulta.</span></span></h2></div>
+          <p data-reveal-group>Para consultas comerciales, reuniones, seguimiento de proyectos, cotizaciones o propuestas de colaboración. Te respondemos en {contact.responseTime}.</p>
+        </header>
+        <form action="#" aria-label="Formulario de contacto">
+          <div data-reveal-group>
+            <div class="f-row"><span>01</span><label for="ct-nombre">Nombre completo</label><input id="ct-nombre" name="nombre" type="text" autocomplete="name" placeholder="Tu nombre" /></div>
+            <div class="f-row"><span>02</span><label for="ct-empresa">Empresa</label><input id="ct-empresa" name="empresa" type="text" autocomplete="organization" placeholder="Empresa u organización" /></div>
+            <div class="f-row"><span>03</span><label for="ct-email">Correo electrónico</label><input id="ct-email" name="email" type="email" autocomplete="email" placeholder="nombre@correo.com" /></div>
+            <div class="f-row"><span>04</span><label for="ct-telefono">Teléfono</label><input id="ct-telefono" name="telefono" type="tel" autocomplete="tel" placeholder="+591 ..." /></div>
+            <div class="f-row"><span>05</span><label for="ct-motivo">Motivo de contacto</label><select id="ct-motivo" name="motivo" data-custom-select><option>Consulta general</option><option>Servicios de diseño y construcción</option><option>Proyecto residencial</option><option>Alianza o colaboración</option><option>Inversión / desarrollo</option><option>Postventa o seguimiento</option></select></div>
+            <div class="f-row f-row--text"><span>06</span><label for="ct-mensaje">Mensaje</label><textarea id="ct-mensaje" name="mensaje" placeholder="Cuéntanos brevemente qué necesitas y cómo podemos ayudarte."></textarea></div>
+          </div>
+          <div class="f-submit"><p>Al enviar, aceptas que te contactemos para responder esta consulta.</p><button type="button">Enviar consulta <span aria-hidden="true">→</span></button></div>
+        </form>
+      </section>
+
+      <section class="ct-cta" aria-labelledby="ct-cta-title" data-header-theme="light">
+        <p class="section-kicker">Siguiente paso</p>
+        <h2 id="ct-cta-title"><span class="line"><span>¿Prefieres escribirnos</span></span><span class="line"><span>de inmediato?</span></span></h2>
+        <p data-reveal-group>Envíanos un mensaje directo por WhatsApp para coordinar una conversación inicial, compartir tu requerimiento y definir el mejor canal de seguimiento.</p>
+        <div class="cta-actions" data-reveal-group><a href={contact.whatsapp} target="_blank" rel="noreferrer">Abrir WhatsApp <span aria-hidden="true">↗</span></a></div>
+        <img class="cta-mark" src="/assets/putnam-light.png" alt="" aria-hidden="true" width="800" height="800" />
+      </section>
+    </main>
+    <ContactFooter />
+    <script src="../scripts/contacto-motion.ts"></script>
+  </body>
+</html>
