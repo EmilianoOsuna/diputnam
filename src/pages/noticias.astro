@@ -1,0 +1,79 @@
+---
+import ContactFooter from '../components/ContactFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { contact } from '../data/home';
+import { notas } from '../data/noticias';
+import '../styles/global.css';
+import '../styles/noticias.css';
+
+const [destacada] = notas;
+const pad = (n: number) => String(n).padStart(2, '0');
+const categorias = ['Todas', ...new Set(notas.map((n) => n.category))].map((c) => ({ label: c, count: c === 'Todas' ? notas.length : notas.filter((n) => n.category === c).length }));
+---
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Noticias Putnam: hitos de proyectos, avances de obra y novedades corporativas en orden cronológico." />
+    <link rel="icon" href="/assets/putnam-light.png" />
+    <title>Noticias | Putnam</title>
+  </head>
+  <body class="noticias-page">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <SiteHeader />
+
+    <main id="contenido" data-noticias>
+      <section class="nw-hero" aria-labelledby="nw-hero-title" data-header-theme="light">
+        <div class="hero-copy">
+          <p class="section-kicker fade-up"><span>Noticias · Putnam</span></p>
+          <h1 id="nw-hero-title"><span class="line"><span>Actualidad,</span></span><span class="line"><span>avances de obra</span></span><span class="line"><span>y visión del negocio.</span></span></h1>
+        </div>
+        <div class="hero-details fade-up">
+          <div><p class="hero-lead">Hitos de proyectos, novedades corporativas y contenidos sobre diseño, ejecución y desarrollo inmobiliario, en orden cronológico.</p><a class="hero-index" href="#indice">Ver todas las notas <span aria-hidden="true">↓</span></a></div>
+          <div class="hero-meta"><span>{pad(notas.length)} notas publicadas</span><span>Última · {destacada.date}</span></div>
+        </div>
+        <figure class="hero-frame" data-parallax>
+          <img src="/assets/contacto-hero.jpg" alt="Interior residencial de un proyecto Putnam" width="1280" height="850" />
+        </figure>
+      </section>
+
+      <section class="nw-featured grid-12" aria-labelledby="nw-featured-title" data-header-theme="dark">
+        <figure class="nw-featured-media" data-reveal-group>
+          <div class="media-placeholder"><span>Fotografía de obra</span><b>01</b><small>Próximamente</small></div>
+        </figure>
+        <div class="nw-featured-copy">
+          <p class="section-kicker"><span>Destacado</span><span>{destacada.date}</span></p>
+          <h2 id="nw-featured-title" data-reveal-group>{destacada.title}</h2>
+          <p data-reveal-group>{destacada.excerpt}</p>
+          <dl data-reveal-group><div><dt>Categoría</dt><dd>{destacada.category}</dd></div><div><dt>Lectura</dt><dd>{destacada.readTime}</dd></div></dl>
+          <div class="cta-actions" data-reveal-group><a href={`#nota-${destacada.slug}`}>Leer nota <span aria-hidden="true">→</span></a></div>
+        </div>
+      </section>
+
+      <section class="nw-index" id="indice" aria-labelledby="nw-index-title" data-header-theme="light">
+        <header class="nw-index-head grid-12">
+          <div><p class="section-kicker"><span>Todas las notas</span></p><h2 id="nw-index-title"><span class="line"><span>Hitos, decisiones y avances,</span></span><span class="line"><span>en orden cronológico.</span></span></h2></div>
+          <ul class="nw-filters" data-reveal-group>
+            {categorias.map((c, i) => <li><a href="#indice" aria-current={i === 0 ? 'true' : undefined}>{c.label} <b>{pad(c.count)}</b></a></li>)}
+          </ul>
+        </header>
+        <div class="index-list" data-reveal-group>
+          {notas.map((nota, i) => (
+            <a class="index-row" id={`nota-${nota.slug}`} href={contact.whatsapp} target="_blank" rel="noreferrer"><span>{pad(i + 1)}</span><time>{nota.date}</time><div><small>{nota.tags.map((t) => <span>{t}</span>)}</small><strong>{nota.title}</strong><p>{nota.excerpt}</p></div><i aria-hidden="true">↗</i></a>
+          ))}
+        </div>
+        <div class="index-foot"><span>{pad(notas.length)} de {pad(notas.length)} notas</span><span>Archivo · 2026</span></div>
+      </section>
+
+      <section class="nw-cta" aria-labelledby="nw-cta-title" data-header-theme="light">
+        <p class="section-kicker"><span>Conversemos</span></p>
+        <h2 id="nw-cta-title"><span class="line"><span>¿Quieres comunicar</span></span><span class="line"><span>un proyecto o avance?</span></span></h2>
+        <p data-reveal-group>Escríbenos para coordinar la publicación de un hito, lanzamiento o novedad de Putnam con un enfoque institucional.</p>
+        <div class="cta-actions" data-reveal-group><a href={`mailto:${contact.email}`}>Escríbenos <span aria-hidden="true">↗</span></a><a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp <span aria-hidden="true">↗</span></a></div>
+        <img class="cta-mark" src="/assets/putnam-light.png" alt="" aria-hidden="true" width="800" height="800" />
+      </section>
+    </main>
+    <ContactFooter />
+    <script src="../scripts/noticias-motion.ts"></script>
+  </body>
+</html>
