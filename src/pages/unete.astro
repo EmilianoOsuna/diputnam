@@ -1,0 +1,115 @@
+---
+import ContactFooter from '../components/ContactFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { contact } from '../data/home';
+import { apply, culture, hero, openings, process, profile, profileMailto, profileWhatsapp, spontaneous } from '../data/unete';
+import '../styles/global.css';
+import '../styles/unete.css';
+
+const pad = (index: number) => String(index + 1).padStart(2, '0');
+const sendProfile = profileMailto('Perfil para futuras oportunidades');
+---
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Únete al equipo de Putnam: buscamos personas con disciplina técnica, sentido estético y compromiso real con la calidad." />
+    <link rel="icon" href="/assets/putnam-light.png" />
+    <title>Únete al equipo | Putnam</title>
+  </head>
+  <body class="unete-page">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <SiteHeader />
+
+    <main id="contenido" data-unete>
+      <section class="un-hero" id="inicio" aria-labelledby="un-hero-title" data-header-theme="light">
+        <div class="hero-copy">
+          <p class="section-kicker fade-up"><span>Talento Putnam · {contact.city}</span></p>
+          <h1 id="un-hero-title"><span class="line"><span>Únete a un equipo</span></span><span class="line"><span>que construye con criterio,</span></span><span class="line"><span>detalle y visión de largo plazo.</span></span></h1>
+        </div>
+        <div class="hero-details fade-up">
+          <div><p class="hero-lead">{hero.lead}</p><a class="hero-index" href="#cultura">Conoce cómo trabajamos <span aria-hidden="true">↓</span></a></div>
+          <div class="hero-meta"><span>Posiciones fijas · Colaboraciones por proyecto</span><span>Arquitectura · Obra · Coordinación · Soporte</span></div>
+        </div>
+        <figure class="hero-frame">
+          <img src="/assets/unete-hero.jpg" alt="Equipo de obra sobre la losa de un proyecto en construcción" width="1200" height="800" />
+        </figure>
+      </section>
+
+      <section class="un-culture" id="cultura" aria-labelledby="un-culture-title" data-culture data-header-theme="light">
+        <div class="pin-stage" data-pin-stage>
+          <div><p class="section-kicker">Nuestra cultura</p><h2 id="un-culture-title">{culture.title}</h2><p class="pin-lead">{culture.text}</p></div>
+          <div><div class="pin-counter"><b data-pin-current>01</b><span aria-hidden="true">/</span><span>{pad(culture.traits.length - 1)}</span></div><div class="pin-rail" aria-hidden="true"><span data-pin-rail></span></div></div>
+        </div>
+        <div class="traits">
+          {culture.traits.map((trait, index) => (
+            <article class:list={["trait", { "is-active": index === 0 }]} data-trait={index}><span>{pad(index)} — Valor</span><h3>{trait.title}</h3><p>{trait.text}</p></article>
+          ))}
+        </div>
+      </section>
+
+      <section class="un-profile" id="perfil" aria-labelledby="un-profile-title" data-header-theme="dark">
+        <header class="section-head grid-12">
+          <div><p class="section-kicker">Qué valoramos</p><h2 id="un-profile-title" class="h2-long"><span class="line"><span>Buscamos profesionales que quieran crecer</span></span><span class="line"><span>con una constructora enfocada en valor</span></span><span class="line"><span>patrimonial y ejecución rigurosa.</span></span></h2></div>
+          <p data-reveal-group>{profile.text}</p>
+        </header>
+        <div class="values" data-reveal-group>
+          {profile.values.map((value, index) => <article class="value"><span>{pad(index)}</span><h3>{value.title}</h3><p>{value.text}</p></article>)}
+        </div>
+        <div class="kpis" data-reveal-group>
+          {profile.kpis.map((kpi) => <div class="kpi"><b>{kpi.value}</b><span>{kpi.label}</span></div>)}
+        </div>
+      </section>
+
+      <section class="un-openings" id="oportunidades" aria-labelledby="un-openings-title" data-header-theme="dark">
+        <header class="section-head grid-12">
+          <div><p class="section-kicker">Oportunidades</p><h2 id="un-openings-title" class="h2-xl"><span class="line"><span>Actualmente</span></span><span class="line"><span>no estamos contratando.</span></span></h2></div>
+          <p data-reveal-group>{openings.text}</p>
+        </header>
+        <div class="empty-panel grid-12" data-reveal-group>
+          <div>
+            <p class="section-kicker">Sin vacantes abiertas</p>
+            <h3>{openings.emptyTitle}</h3>
+            {openings.emptyText.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+          <div class="empty-actions">
+            <a class="panel-button" href={sendProfile}>{openings.cta} <span aria-hidden="true">→</span></a>
+            <div class="cta-actions"><a href="/contacto/">Ir a contacto <span aria-hidden="true">↗</span></a></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="un-process" id="proceso" aria-labelledby="un-process-title" data-header-theme="dark">
+        <header class="section-head grid-12">
+          <div><p class="section-kicker">Proceso de selección</p><h2 id="un-process-title"><span class="line"><span>{process.title}</span></span></h2></div>
+          <p data-reveal-group>{process.text}</p>
+        </header>
+        <div class="steps" data-reveal-group>
+          {process.steps.map((step, index) => <article class="step"><span>{pad(index)}</span><h3>{step.title}</h3><p>{step.text}</p></article>)}
+        </div>
+      </section>
+
+      <section class="un-spontaneous" id="postulacion" aria-labelledby="un-spontaneous-title" data-header-theme="dark">
+        <header class="section-head grid-12">
+          <div><p class="section-kicker">Postulación espontánea</p><h2 id="un-spontaneous-title"><span class="line"><span>Aunque no veas una vacante exacta,</span></span><span class="line"><span>puedes escribirnos.</span></span></h2></div>
+          <p data-reveal-group>{spontaneous.text}</p>
+        </header>
+        <div class="index-list" data-reveal-group>
+          {spontaneous.fields.map((field, index) => (
+            <a class="index-row" href={profileMailto(`Postulación espontánea · ${field}`)}><span>{pad(index)}</span><div><small>Enviar perfil</small><strong>{field}</strong></div><i aria-hidden="true">↗</i></a>
+          ))}
+        </div>
+      </section>
+
+      <section class="un-cta" aria-labelledby="un-cta-title" data-header-theme="light">
+        <p class="section-kicker">Aplicar</p>
+        <h2 id="un-cta-title"><span class="line"><span>¿Quieres formar parte</span></span><span class="line"><span>de Putnam Desarrollos</span></span><span class="line"><span>Inmobiliarios?</span></span></h2>
+        <p data-reveal-group>{apply.text}</p>
+        <div class="cta-actions" data-reveal-group><a href={sendProfile}>Enviar perfil <span aria-hidden="true">↗</span></a><a href={profileWhatsapp} target="_blank" rel="noreferrer">WhatsApp <span aria-hidden="true">↗</span></a><a href="/contacto/">Ir a contacto <span aria-hidden="true">↗</span></a></div>
+        <img class="cta-mark" src="/assets/putnam-light.png" alt="" aria-hidden="true" width="800" height="800" />
+      </section>
+    </main>
+    <ContactFooter />
+    <script src="../scripts/unete-motion.ts"></script>
+  </body>
+</html>
