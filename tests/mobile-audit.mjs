@@ -110,37 +110,49 @@ try {
 
   // Home stage geometry with a phone address bar: "shown" (svh === innerHeight) and
   // "retracted" (innerHeight grows by URL_BAR_DELTA while svh-sized markers stay put).
-  for (const bar of ['shown', 'retracted']) {
-    console.log(`\n/ (home) stage coverage, address bar ${bar}`);
-    await page.goto(baseUrl + '/', { waitUntil: 'networkidle' });
-    const svh = 844 - URL_BAR_DELTA;
-    await page.addStyleTag({ content: bar === 'shown'
-      ? `.home.is-enhanced .home-stage, .home.is-enhanced .panel, .scene-marker { height: ${svh}px !important; min-height: 0 !important; }
-         .home.is-enhanced .scene-markers { margin-top: -${svh}px !important; }`
-      : `.scene-marker { height: ${svh}px !important; }` });
-    if (bar === 'shown') await page.setViewportSize({ width: 390, height: svh });
-    await page.waitForTimeout(400);
-    await page.evaluate(() => window.dispatchEvent(new Event('resize')));
-    await page.waitForTimeout(400);
-    const maxY = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight);
-    for (const y of [0.15, 0.3, 0.5, 0.7, 0.9, 1].map((f) => Math.round(maxY * f))) {
-      await page.evaluate((v) => scrollTo(0, v), y);
-      await page.waitForTimeout(350);
-      await check(`home stage covers viewport, panels contiguous (bar ${bar}, scrollY ${y})`, async () => {
-        const g = await page.evaluate(() => {
-          const stage = document.querySelector('.home-stage').getBoundingClientRect();
-          const visible = [...document.querySelectorAll('[data-panel]')]
-            .filter((p) => getComputedStyle(p).visibility === 'visible' && getComputedStyle(p).opacity !== '0')
-            .map((p) => p.getBoundingClientRect()).sort((a, b) => a.top - b.top);
-          return { top: stage.top, bottom: stage.bottom, vh: innerHeight, gap: visible.length === 2 ? visible[1].top - visible[0].bottom : 0,
-            covered: visible.length ? Math.min(...visible.map((r) => r.top)) <= 0 && Math.max(...visible.map((r) => r.bottom)) >= innerHeight : false };
+  // Run for both mobile modes: the CSS scroll-driven sweep and the stacked fallback used
+  // when `animation-timeline` is unsupported (forced here by stubbing CSS.supports).
+  for (const mode of ['sweep', 'stacked']) {
+    const stacked = await context.newPage();
+    if (mode === 'stacked') await stacked.addInitScript(() => {
+      const supports = CSS.supports.bind(CSS);
+      CSS.supports = (...args) => (String(args[0]).includes('animation-timeline') ? false : supports(...args));
+    });
+    for (const bar of ['shown', 'retracted']) {
+      console.log(`\n/ (home, ${mode}) stage coverage, address bar ${bar}`);
+      await stacked.goto(baseUrl + '/', { waitUntil: 'networkidle' });
+      const svh = 844 - URL_BAR_DELTA;
+      const home = await stacked.evaluate(() => document.querySelector('[data-home]').className);
+      await check(`home mode is ${mode}`, () => assert.ok(home.includes(mode === 'sweep' ? 'is-css-sweep' : 'is-stacked'), home));
+      await stacked.addStyleTag({ content: bar === 'shown'
+        ? `.home.is-enhanced .home-stage, .home.is-enhanced .panel, .home.is-stacked .panel, .scene-marker { height: ${svh}px !important; min-height: 0 !important; }
+           .home.is-enhanced .scene-markers { margin-top: -${svh}px !important; }`
+        : `.scene-marker { height: ${svh}px !important; } .home.is-stacked .panel { height: ${svh}px !important; min-height: 0 !important; }` });
+      if (bar === 'shown') await stacked.setViewportSize({ width: 390, height: svh });
+      await stacked.waitForTimeout(400);
+      await stacked.evaluate(() => window.dispatchEvent(new Event('resize')));
+      await stacked.waitForTimeout(400);
+      const maxY = await stacked.evaluate(() => document.documentElement.scrollHeight - innerHeight);
+      for (const y of [0.15, 0.3, 0.5, 0.7, 0.9, 1].map((f) => Math.round(maxY * f))) {
+        await stacked.evaluate((v) => scrollTo(0, v), y);
+        await stacked.waitForTimeout(350);
+        await check(`home ${mode} covers viewport, panels contiguous (bar ${bar}, scrollY ${y})`, async () => {
+          const g = await stacked.evaluate(() => {
+            const onScreen = [...document.querySelectorAll('[data-panel]')]
+              .filter((p) => getComputedStyle(p).visibility === 'visible' && getComputedStyle(p).opacity !== '0')
+              .map((p) => p.getBoundingClientRect()).filter((r) => r.bottom > 0 && r.top < innerHeight).sort((a, b) => a.top - b.top);
+            const gaps = onScreen.slice(1).map((r, i) => r.top - onScreen[i].bottom);
+            return { vh: innerHeight, count: onScreen.length, top: onScreen[0]?.top, bottom: onScreen.at(-1)?.bottom, maxGap: Math.max(0, ...gaps) };
+          });
+          assert.ok(g.count >= 1, 'no panel on screen');
+          assert.ok(g.top <= 0.5, `first panel top ${g.top}`);
+          assert.ok(g.bottom >= g.vh - 0.5, `last panel bottom ${g.bottom} vs viewport ${g.vh}`);
+          assert.ok(g.maxGap < 1, `gap ${g.maxGap}px between panels`);
         });
-        assert.ok(g.top <= 0.5 && g.bottom >= g.vh - 0.5, `stage ${Math.round(g.top)}..${Math.round(g.bottom)} vs viewport ${g.vh}`);
-        assert.ok(Math.abs(g.gap) < 1, `gap ${g.gap}px`);
-        assert.equal(g.covered, true, 'visible panels do not cover the viewport');
-      });
+      }
+      await stacked.setViewportSize({ width: 390, height: 844 });
     }
-    await page.setViewportSize({ width: 390, height: 844 });
+    await stacked.close();
   }
 
   console.log('\n/putnam/ hero entrance animation');

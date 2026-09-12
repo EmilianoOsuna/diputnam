@@ -5,6 +5,17 @@ import ContactFooter from '../components/ContactFooter.astro';
 import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import '../styles/global.css';
+
+// Mobile scene sweep is a CSS scroll-driven animation: each scene marker names a view
+// timeline and panel n plays its entrance on --scene-n and its exit on --scene-(n+1).
+// The first panel only exits and the last only enters (an animation without a timeline
+// would still apply its end state), so name and timeline lists are assigned per panel.
+const scene = (index: number) => `--scene-${index}`;
+const timelineScope = homePanels.map((_, index) => scene(index)).join(', ');
+const sweep = (index: number, enter: string, exit: string) => {
+  const parts = [index > 0 && [enter, scene(index)], index + 1 < homePanels.length && [exit, scene(index + 1)]].filter(Boolean) as [string, string][];
+  return `animation-name: ${parts.map(([name]) => name).join(', ')}; animation-timeline: ${parts.map(([, timeline]) => timeline).join(', ')}`;
+};
 ---
 
 <html lang="es">
@@ -15,13 +26,13 @@ import '../styles/global.css';
     <SiteHeader home />
 
     <main class="home" data-home>
-      <div class="home-experience" data-experience>
+      <div class="home-experience" data-experience style={`timeline-scope: ${timelineScope}`}>
         <div class="home-stage" data-stage>
           {homePanels.map((panel, index) => (
-            <section class:list={["panel", { "panel--intro": index === 0, "is-active": index === 0, "is-visible": index === 0 }]} id={panel.id} data-panel data-index={index}>
+            <section class:list={["panel", { "panel--intro": index === 0, "is-active": index === 0, "is-visible": index === 0 }]} id={panel.id} data-panel data-index={index} style={sweep(index, 'scene-enter', 'scene-exit')}>
               <img class="panel-media" src={remoteImage(panel.image, 1280, 75, SAT.panel)} srcset={remoteSrcset(panel.image, HERO_WIDTHS, 75, SAT.panel)} sizes="100vw" alt={panel.alt} width="2200" height="1467" loading={index < 2 ? 'eager' : 'lazy'} decoding="async" fetchpriority={index === 0 ? 'high' : undefined} />
               <div class="panel-shade"></div>
-              <div class="panel-content">
+              <div class="panel-content" style={sweep(index, 'title-in', 'title-out')}>
                 {index === 0 ? <h1><a href={`#${panel.id}`}>{panel.title}</a></h1> : <h2><a href={panel.id === 'putnam' ? '/putnam/' : panel.id === 'eredita' ? '/eredita/' : `#${panel.id}`}>{panel.title}</a></h2>}
               </div>
             </section>
@@ -29,10 +40,11 @@ import '../styles/global.css';
         </div>
         <div class="scene-markers" data-scene-markers aria-hidden="true">
           {homePanels.map((panel, index) => (
-            <section class="scene-marker" data-scene-marker={panel.id} data-index={index}></section>
+            <section class="scene-marker" data-scene-marker={panel.id} data-index={index} style={`view-timeline-name: ${scene(index)}`}></section>
           ))}
         </div>
       </div>
+      <div data-scroll-end aria-hidden="true"></div>
     </main>
 
     <ContactFooter fixed />
