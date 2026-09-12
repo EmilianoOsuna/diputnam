@@ -1,6 +1,6 @@
 ---
 import { homePanels } from '../data/home';
-import { HERO_WIDTHS, remoteImage, remoteSrcset } from '../lib/images';
+import { HERO_WIDTHS, SAT, remoteImage, remoteSrcset } from '../lib/images';
 import ContactFooter from '../components/ContactFooter.astro';
 import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
@@ -19,7 +19,7 @@ import '../styles/global.css';
         <div class="home-stage" data-stage>
           {homePanels.map((panel, index) => (
             <section class:list={["panel", { "panel--intro": index === 0, "is-active": index === 0, "is-visible": index === 0 }]} id={panel.id} data-panel data-index={index}>
-              <img class="panel-media" src={remoteImage(panel.image, 1280, 75)} srcset={remoteSrcset(panel.image, HERO_WIDTHS, 75)} sizes="100vw" alt={panel.alt} width="2200" height="1467" loading={index < 2 ? 'eager' : 'lazy'} decoding="async" fetchpriority={index === 0 ? 'high' : undefined} />
+              <img class="panel-media" src={remoteImage(panel.image, 1280, 75, SAT.panel)} srcset={remoteSrcset(panel.image, HERO_WIDTHS, 75, SAT.panel)} sizes="100vw" alt={panel.alt} width="2200" height="1467" loading={index < 2 ? 'eager' : 'lazy'} decoding="async" fetchpriority={index === 0 ? 'high' : undefined} />
               <div class="panel-shade"></div>
               <div class="panel-content">
                 {index === 0 ? <h1><a href={`#${panel.id}`}>{panel.title}</a></h1> : <h2><a href={panel.id === 'putnam' ? '/putnam/' : panel.id === 'eredita' ? '/eredita/' : `#${panel.id}`}>{panel.title}</a></h2>}

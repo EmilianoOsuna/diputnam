@@ -6,7 +6,7 @@ import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { contact } from '../data/home';
 import { erediteGallery, erediteHero, erediteIntro, erediteLegalDocs, erediteTypologies } from '../data/eredita';
-import { CARD_WIDTHS, HERO_WIDTHS, remoteImage, remoteSrcset } from '../lib/images';
+import { CARD_WIDTHS, HERO_WIDTHS, SAT, remoteImage, remoteSrcset } from '../lib/images';
 import '../styles/global.css';
 import '../styles/eredita.css';
 ---
@@ -62,7 +62,7 @@ import '../styles/eredita.css';
         <div class="ed-masonry" data-reveal-group>
           {erediteGallery.map((item) => (
             <figure class="ed-masonry-item">
-              <img src={remoteImage(item.src, 960, 75)} srcset={remoteSrcset(item.src, CARD_WIDTHS, 75)} sizes="(min-width: 900px) 50vw, 100vw" alt={item.alt} loading="lazy" decoding="async" width="1200" height="900" />
+              <img src={remoteImage(item.src, 960, 75, SAT.gallery)} srcset={remoteSrcset(item.src, CARD_WIDTHS, 75, SAT.gallery)} sizes="(min-width: 900px) 50vw, 100vw" alt={item.alt} loading="lazy" decoding="async" width="1200" height="900" />
               <figcaption>{item.tag}</figcaption>
             </figure>
           ))}
@@ -89,7 +89,7 @@ import '../styles/eredita.css';
           {erediteTypologies.map((item, index) => (
             <article class="ed-h-panel" data-h-panel>
               <figure class="ed-h-media">
-                <img src={remoteImage(item.image, 960, 75)} srcset={remoteSrcset(item.image, CARD_WIDTHS, 75)} sizes="(min-width: 900px) 50vw, 100vw" alt={item.alt} loading="lazy" decoding="async" width="1400" height="1400" />
+                <img src={remoteImage(item.image, 960, 75, SAT.card)} srcset={remoteSrcset(item.image, CARD_WIDTHS, 75, SAT.card)} sizes="(min-width: 900px) 50vw, 100vw" alt={item.alt} loading="lazy" decoding="async" width="1400" height="1400" />
               </figure>
               <div class:list={['ed-h-copy', `is-${item.tone}`]}>
                 <div class="ed-h-copy-head">

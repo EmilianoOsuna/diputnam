@@ -8,7 +8,8 @@
     "postbuild": "node tests/check-dist.mjs",
     "preview": "astro preview",
     "test:sweep": "node tests/home-sweep.mjs",
-    "test:mobile": "node tests/mobile-audit.mjs"
+    "test:mobile": "node tests/mobile-audit.mjs",
+    "test:perf": "node tests/mobile-perf.mjs"
   },
   "repository": {
     "type": "git",
