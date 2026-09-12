@@ -1,11 +1,38 @@
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { mountHorizontalTrack } from './horizontal-track';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const root = document.querySelector<HTMLElement>('[data-unete]');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Mobile culture traits: native swipe track. Independent of GSAP/reduced motion so the
+// counter and rail keep working even when every animation is off.
+if (root) {
+  const track = root.querySelector<HTMLElement>('[data-traits]');
+  const mobile = window.matchMedia('(max-width: 899px)');
+  let unmount: (() => void) | null = null;
+  const sync = () => {
+    if (mobile.matches && track && !unmount) {
+      unmount = mountHorizontalTrack({
+        track,
+        cards: Array.from(track.querySelectorAll<HTMLElement>('[data-trait]')),
+        current: root.querySelector<HTMLElement>('[data-track-current]'),
+        rail: root.querySelector<HTMLElement>('[data-track-rail]'),
+        label: 'Valor',
+        reducedMotion,
+      });
+    } else if (!mobile.matches && unmount) {
+      unmount();
+      unmount = null;
+    }
+    if (!reducedMotion) ScrollTrigger.refresh();
+  };
+  sync();
+  mobile.addEventListener('change', sync);
+}
 
 if (root && !reducedMotion) {
   document.body.classList.add('is-motion-ready');
@@ -57,19 +84,19 @@ if (root && !reducedMotion) {
         if (current) current.textContent = String(activeIndex + 1).padStart(2, '0');
         traits.forEach((trait, index) => trait.classList.toggle('is-active', index === activeIndex));
         gsap.to(traits.map((trait) => trait.querySelector('h3')), { opacity: (index) => index === activeIndex ? 1 : 0.42, duration: 0.25, overwrite: 'auto' });
-        if (rail) gsap.set(rail, { width: `${((activeIndex + 1) / traits.length) * 100}%` });
+        if (rail) rail.style.setProperty('--progress', String((activeIndex + 1) / traits.length));
       };
 
       setTrait(0);
       ScrollTrigger.create({ trigger: '.un-culture', start: 'top top', end: 'bottom bottom', pin: '.pin-stage', pinSpacing: false, invalidateOnRefresh: true });
       traits.forEach((trait, index) => ScrollTrigger.create({ trigger: trait, start: 'top 55%', end: 'bottom 45%', onEnter: () => setTrait(index), onEnterBack: () => setTrait(index) }));
-      gsap.fromTo('[data-pin-rail]', { width: `${100 / traits.length}%` }, { width: '100%', ease: 'none', scrollTrigger: { trigger: '.un-culture', start: 'top top', end: 'bottom bottom', scrub: 0.45 } });
+      gsap.fromTo('[data-pin-rail]', { '--progress': 1 / traits.length }, { '--progress': 1, ease: 'none', scrollTrigger: { trigger: '.un-culture', start: 'top top', end: 'bottom bottom', scrub: 0.45 } });
 
       return () => {
         traits.forEach((trait, index) => trait.classList.toggle('is-active', index === 0));
         if (current) current.textContent = '01';
         gsap.set(traits.map((trait) => trait.querySelector('h3')), { clearProps: 'opacity' });
-        gsap.set('[data-pin-stage], [data-pin-rail]', { clearProps: 'transform,width' });
+        gsap.set('[data-pin-stage], [data-pin-rail]', { clearProps: 'transform,width,--progress' });
       };
     });
   }, root);

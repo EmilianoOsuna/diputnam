@@ -8,12 +8,24 @@ interface Props { home?: boolean; contacto?: boolean; }
 const { home = false, contacto = false } = Astro.props;
 const links = [{ label: 'Ereditá', href: '/eredita/' }, { label: 'Putnam', href: '/putnam/' }, { label: 'Noticias', href: '/noticias/' }, { label: 'Únete', href: '/unete/' }, { label: 'Contacto', href: '/contacto/' }];
 const path = Astro.url.pathname.replace(/\/?$/, '/');
-const logoDark = await getImage({ src: logoDarkSrc, width: 120, format: 'webp' });
-const logoLight = await getImage({ src: logoLightSrc, width: 120, format: 'webp' });
+
+// The mark renders in a ~53px box; 360px covers 3x screens with room to spare. Each theme
+// ships a WebP source plus a PNG <img> fallback so the mark never depends on one derivative.
+const MARK_SIZE = 360;
+const mark = async (src: ImageMetadata) => ({
+  webp: (await getImage({ src, width: MARK_SIZE, format: 'webp' })).src,
+  png: (await getImage({ src, width: MARK_SIZE, format: 'png' })).src,
+});
+const marks = { dark: await mark(logoDarkSrc), light: await mark(logoLightSrc) };
 ---
 <header class:list={["site-header", { "site-header--light": home }]} data-site-header data-auto-theme>
   <a class="brand brand--mark" href="/" aria-label="Putnam, inicio">
-    <img src={home ? logoLight.src : logoDark.src} data-logo-dark={logoDark.src} data-logo-light={logoLight.src} width="120" height="120" alt="" />
+    {(['dark', 'light'] as const).map((theme) => (
+      <picture data-logo={theme} hidden={home ? theme === 'dark' : theme === 'light'}>
+        <source type="image/webp" srcset={marks[theme].webp} />
+        <img src={marks[theme].png} width={MARK_SIZE} height={MARK_SIZE} alt="" decoding="async" />
+      </picture>
+    ))}
     <span class="brand-copy"><strong>Putnam</strong><small>Desarrollos inmobiliarios</small></span>
   </a>
   <nav class="site-nav" id="site-navigation" aria-label="Navegación principal">

@@ -1,7 +1,8 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import erediteMark from '../assets/eredita-logo.png';
 import ContactFooter from '../components/ContactFooter.astro';
+import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { contact } from '../data/home';
 import { erediteGallery, erediteHero, erediteIntro, erediteLegalDocs, erediteTypologies } from '../data/eredita';
@@ -11,13 +12,7 @@ import '../styles/eredita.css';
 ---
 <html lang="es">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="Ereditá: tipologías de vivienda, áreas comunes y documentación pensadas para brindar transparencia y calidad de vida." />
-    <link rel="icon" href="/favicon.png" />
-    <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preconnect" href="https://images.unsplash.com" />
-    <title>Ereditá | Putnam</title>
+    <SiteHead title="Ereditá | Putnam" description="Ereditá: tipologías de vivienda, áreas comunes y documentación pensadas para brindar transparencia y calidad de vida." preconnectUnsplash />
   </head>
   <body class="eredita-page">
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -35,7 +30,7 @@ import '../styles/eredita.css';
           )}
           <div class="ed-hero-shade"></div>
         </div>
-        <Image class="ed-hero-mark" src={erediteMark} widths={[400, 800]} sizes="(max-width: 767px) 52vw, min(42vw, 38rem)" format="webp" alt="Ereditá" loading="eager" />
+        <Picture class="ed-hero-mark" src={erediteMark} widths={[320, 640, 960]} sizes="(max-width: 767px) 40vw, min(26vw, 24rem)" formats={['webp']} fallbackFormat="png" alt="Ereditá" loading="eager" />
         <div class="ed-hero-content" data-reveal-group>
           <p class="section-kicker">{erediteHero.kicker}</p>
           <h1 id="ed-hero-title">{erediteHero.title}</h1>
@@ -75,10 +70,19 @@ import '../styles/eredita.css';
       </section>
 
       <section class="ed-typologies" aria-labelledby="ed-typologies-title" data-header-theme="dark" data-h-wrapper>
+        <header class="ed-h-head">
+          <p class="section-kicker">Tipologías</p>
+          <h2 id="ed-typologies-title">Cuatro formas<br />de vivir Ereditá.</h2>
+          <p class="ed-h-intro-copy">Cada tipología resuelve un estilo de vida distinto, desde el primer departamento hasta la vida en familia.</p>
+          <div class="ed-h-progress">
+            <span class="ed-h-counter"><b data-track-current>01</b><i aria-hidden="true">/</i><span>0{erediteTypologies.length}</span></span>
+            <span class="ed-h-rail" aria-hidden="true"><span data-track-rail></span></span>
+          </div>
+        </header>
         <div class="ed-h-track" data-h-track>
           <div class="ed-h-panel ed-h-panel--intro" data-h-panel>
             <p class="section-kicker">Tipologías</p>
-            <h2 id="ed-typologies-title">Cuatro formas<br />de vivir Ereditá.</h2>
+            <h2>Cuatro formas<br />de vivir Ereditá.</h2>
             <p class="ed-h-intro-copy">Cada tipología resuelve un estilo de vida distinto, desde el primer departamento hasta la vida en familia.</p>
             <span class="ed-h-hint">Sigue bajando <span aria-hidden="true">↓</span></span>
           </div>
@@ -135,7 +139,7 @@ import '../styles/eredita.css';
             <a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp <span aria-hidden="true">↗</span></a>
           </div>
         </div>
-        <Image class="cta-mark" src={erediteMark} widths={[400, 800]} sizes="(max-width: 767px) min(70vw, 20rem), min(65%, 28rem)" format="webp" alt="" aria-hidden="true" />
+        <Picture class="cta-mark" src={erediteMark} widths={[320, 640]} sizes="(max-width: 767px) min(50vw, 14rem), min(45%, 18rem)" formats={['webp']} fallbackFormat="png" alt="" aria-hidden="true" />
       </section>
     </main>
     <ContactFooter />

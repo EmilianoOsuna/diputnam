@@ -9,11 +9,15 @@ const home = document.querySelector<HTMLElement>('[data-home]');
 const panels = gsap.utils.toArray<HTMLElement>('[data-panel]');
 const markers = gsap.utils.toArray<HTMLElement>('[data-scene-marker]');
 const markerTrack = document.querySelector<HTMLElement>('[data-scene-markers]');
+const stage = document.querySelector<HTMLElement>('[data-stage]');
 const scrollCue = document.querySelector<HTMLButtonElement>('[data-scroll-cue]');
 let scrollToTarget = (target: Element) => target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
 let cueFrame = 0;
 let queuedScroll = window.scrollY;
-let viewportHeight = window.innerHeight;
+// Panels travel exactly the stage's height (100svh). window.innerHeight is larger while a
+// phone's address bar is retracted, and that difference showed as a gap between panels.
+const measureStage = () => stage?.getBoundingClientRect().height || window.innerHeight;
+let viewportHeight = measureStage();
 
 const updateScrollCue = (scroll = window.scrollY) => {
   if (!scrollCue) return;
@@ -63,7 +67,7 @@ if (!reducedMotion && home && panels.length > 1 && markers.length === panels.len
       gsap.set(panel, {
         autoAlpha: visible ? 1 : 0,
         clipPath: 'none',
-        y: visible ? 0 : window.innerHeight,
+        y: visible ? 0 : viewportHeight,
         zIndex: visible ? 2 : 0,
       });
     });
@@ -119,12 +123,20 @@ if (!reducedMotion && home && panels.length > 1 && markers.length === panels.len
   });
 
   const refresh = () => {
-    viewportHeight = window.innerHeight;
+    viewportHeight = measureStage();
     if (window.scrollY <= 1) resetToFirstScene();
     ScrollTrigger.refresh();
+    ScrollTrigger.update();
     updateScrollCue();
   };
   window.addEventListener('load', refresh, { once: true });
+  if (stage && 'ResizeObserver' in window) {
+    let stageFrame = 0;
+    new ResizeObserver(() => {
+      if (stageFrame) return;
+      stageFrame = window.requestAnimationFrame(() => { stageFrame = 0; refresh(); });
+    }).observe(stage);
+  }
   panels.forEach((panel) => panel.querySelector('img')?.addEventListener('load', refresh, { once: true }));
   refresh();
 
@@ -165,7 +177,7 @@ const scheduleScrollCue = (scroll = window.scrollY) => {
 
 window.addEventListener('scroll', () => scheduleScrollCue(), { passive: true });
 window.addEventListener('resize', () => {
-  viewportHeight = window.innerHeight;
+  viewportHeight = measureStage();
   scheduleScrollCue();
 });
 updateScrollCue();

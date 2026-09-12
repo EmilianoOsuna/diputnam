@@ -1,0 +1,13 @@
+---
+interface Props { title: string; description: string; preconnectUnsplash?: boolean; }
+const { title, description, preconnectUnsplash = false } = Astro.props;
+---
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="description" content={description} />
+<meta name="theme-color" content="#f4eedf" />
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#003a36" />
+<link rel="icon" href="/favicon.png" />
+<link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+{preconnectUnsplash && <link rel="preconnect" href="https://images.unsplash.com" />}
+<title>{title}</title>

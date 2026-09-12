@@ -32,6 +32,8 @@
 .hero-copy h1 span + span { margin-top: 0.05em; }
 .hero-details { position: absolute; z-index: 2; bottom: 2.5rem; left: clamp(1.25rem, 3vw, 3.5rem); width: min(40rem, 70vw); }
 .hero-lead { width: auto; margin: 0; color: rgba(244, 238, 223, 0.82); font-size: clamp(0.95rem, 1.15vw, 1.15rem); line-height: 1.45; }
+/* Hidden from first paint until GSAP takes over, so the entrance never flashes the copy. */
+.motion-pending .institutional-hero :is(.section-kicker, h1, .hero-lead) { opacity: 0; visibility: hidden; }
 .hero-frame { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--putnam-deep); contain: paint; }
 .hero-frame::after { position: absolute; inset: 0; content: ''; background: linear-gradient(180deg, rgba(0, 25, 23, 0.28) 0%, transparent 42%, rgba(0, 25, 23, 0.82) 100%), linear-gradient(90deg, rgba(0, 25, 23, 0.28), transparent 64%); }
 .hero-frame img { width: 100%; height: 115%; object-fit: cover; filter: saturate(0.65) sepia(0.08); transform: scale(1.02); backface-visibility: hidden; }
@@ -95,7 +97,7 @@
 .cta-actions a { display: flex; justify-content: space-between; width: min(18rem, 100%); padding: 1rem 0; border-top: 1px solid currentColor; font-size: 0.83rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .cta-actions a span { transition: transform 180ms ease; }
 .cta-actions a:hover span { transform: translate(0.2rem, -0.2rem); }
-.cta-mark { position: absolute; right: clamp(1rem, 4vw, 5rem); bottom: 9%; width: min(42vw, 42rem); height: auto; object-fit: contain; opacity: 0.2; pointer-events: none; }
+.cta-mark { position: absolute; right: clamp(1rem, 4vw, 5rem); bottom: 9%; width: min(42vw, 42rem); height: auto; object-fit: contain; opacity: 0.32; pointer-events: none; }
 @media (min-width: 768px) {
   .is-motion-ready .cta-mark { will-change: transform; }
 }

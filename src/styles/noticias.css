@@ -75,7 +75,7 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 .nw-cta { position: relative; display: flex; min-height: 100dvh; overflow: hidden; padding: 8rem var(--gutter) 6rem; flex-direction: column; justify-content: flex-end; color: var(--putnam-paper); background: var(--putnam-green); }
 .nw-cta h2 { position: relative; z-index: 1; max-width: 62rem; margin: 3rem 0 2rem; font-size: clamp(3.4rem, 7vw, 7.2rem); font-weight: 500; line-height: 0.89; letter-spacing: -0.06em; }
 .nw-cta > p:not(.section-kicker) { position: relative; z-index: 1; max-width: 30rem; margin: 0 0 3.5rem; color: rgba(244, 238, 223, 0.72); font-size: 1rem; line-height: 1.65; }
-.nw-cta .cta-mark { position: absolute; right: clamp(1rem, 4vw, 5rem); bottom: 9%; width: min(42vw, 42rem); height: auto; object-fit: contain; opacity: 0.2; pointer-events: none; }
+.nw-cta .cta-mark { position: absolute; right: clamp(1rem, 4vw, 5rem); bottom: 9%; width: min(42vw, 42rem); height: auto; object-fit: contain; opacity: 0.32; pointer-events: none; }
 .noticias-page .site-footer--flow { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 2rem; min-height: 14rem; padding: 4rem var(--gutter); color: var(--putnam-paper); background: var(--putnam-deep); font-size: 0.9rem; line-height: 1.45; text-shadow: none; }
 .noticias-page .site-footer--flow::before { display: none; }
 .noticias-page .menu-toggle { min-width: 44px; min-height: 44px; }

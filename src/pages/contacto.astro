@@ -3,6 +3,7 @@ import { Image, Picture } from 'astro:assets';
 import putnamMark from '../assets/putnam-light.png';
 import contactoHero from '../assets/contacto-hero.jpg';
 import ContactFooter from '../components/ContactFooter.astro';
+import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { contact } from '../data/home';
 import '../styles/global.css';
@@ -12,12 +13,7 @@ const mapEmbed = `https://www.google.com/maps?q=${contact.coordinates.latitude},
 ---
 <html lang="es">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="Conversa con Putnam sobre proyectos residenciales, inversión y desarrollo inmobiliario en Bolivia." />
-    <link rel="icon" href="/favicon.png" />
-    <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <title>Contacto | Putnam</title>
+    <SiteHead title="Contacto | Putnam" description="Conversa con Putnam sobre proyectos residenciales, inversión y desarrollo inmobiliario en Bolivia." />
   </head>
   <body class="contacto-page">
     <a class="skip-link" href="#contenido">Saltar al contenido</a>

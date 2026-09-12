@@ -3,6 +3,7 @@ import { Image, Picture } from 'astro:assets';
 import putnamMark from '../assets/putnam-light.png';
 import uneteHero from '../assets/unete-hero.jpg';
 import ContactFooter from '../components/ContactFooter.astro';
+import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { contact } from '../data/home';
 import { apply, culture, hero, openings, process, profile, profileMailto, profileWhatsapp, spontaneous } from '../data/unete';
@@ -14,12 +15,7 @@ const sendProfile = profileMailto('Perfil para futuras oportunidades');
 ---
 <html lang="es">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="Únete al equipo de Putnam: buscamos personas con disciplina técnica, sentido estético y compromiso real con la calidad." />
-    <link rel="icon" href="/favicon.png" />
-    <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <title>Únete al equipo | Putnam</title>
+    <SiteHead title="Únete al equipo | Putnam" description="Únete al equipo de Putnam: buscamos personas con disciplina técnica, sentido estético y compromiso real con la calidad." />
   </head>
   <body class="unete-page">
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -43,9 +39,9 @@ const sendProfile = profileMailto('Perfil para futuras oportunidades');
       <section class="un-culture" id="cultura" aria-labelledby="un-culture-title" data-culture data-header-theme="light">
         <div class="pin-stage" data-pin-stage>
           <div><p class="section-kicker">Nuestra cultura</p><h2 id="un-culture-title">{culture.title}</h2><p class="pin-lead">{culture.text}</p></div>
-          <div><div class="pin-counter"><b data-pin-current>01</b><span aria-hidden="true">/</span><span>{pad(culture.traits.length - 1)}</span></div><div class="pin-rail" aria-hidden="true"><span data-pin-rail></span></div></div>
+          <div><div class="pin-counter"><b data-pin-current data-track-current>01</b><span aria-hidden="true">/</span><span>{pad(culture.traits.length - 1)}</span></div><div class="pin-rail" aria-hidden="true"><span data-pin-rail data-track-rail></span></div></div>
         </div>
-        <div class="traits">
+        <div class="traits" data-traits>
           {culture.traits.map((trait, index) => (
             <article class:list={["trait", { "is-active": index === 0 }]} data-trait={index}><span>{pad(index)} — Valor</span><h3>{trait.title}</h3><p>{trait.text}</p></article>
           ))}
