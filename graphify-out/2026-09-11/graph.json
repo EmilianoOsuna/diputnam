@@ -589,92 +589,103 @@
       "norm_label": "unete.ts"
     },
     {
-      "label": "noteBody",
+      "label": "profileBody",
       "file_type": "code",
       "source_file": "src/data/unete.ts",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "src_data_unete_notebody",
+      "id": "src_data_unete_profilebody",
       "community": 2,
       "community_name": "eredita.astro",
-      "norm_label": "notebody"
+      "norm_label": "profilebody"
     },
     {
-      "label": "noteMailto()",
+      "label": "profileMailto()",
       "file_type": "code",
       "source_file": "src/data/unete.ts",
-      "source_location": "L16",
+      "source_location": "L14",
       "_origin": "ast",
-      "id": "src_data_unete_notemailto",
+      "id": "src_data_unete_profilemailto",
       "community": 2,
       "community_name": "eredita.astro",
-      "norm_label": "notemailto()"
+      "norm_label": "profilemailto()"
     },
     {
-      "label": "traits",
+      "label": "hero",
       "file_type": "code",
       "source_file": "src/data/unete.ts",
-      "source_location": "L19",
+      "source_location": "L17",
       "_origin": "ast",
-      "id": "src_data_unete_traits",
+      "id": "src_data_unete_hero",
       "community": 2,
       "community_name": "eredita.astro",
-      "norm_label": "traits"
+      "norm_label": "hero"
     },
     {
-      "label": "fronts",
+      "label": "culture",
       "file_type": "code",
       "source_file": "src/data/unete.ts",
-      "source_location": "L27",
+      "source_location": "L22",
       "_origin": "ast",
-      "id": "src_data_unete_fronts",
+      "id": "src_data_unete_culture",
       "community": 2,
       "community_name": "eredita.astro",
-      "norm_label": "fronts"
+      "norm_label": "culture"
     },
     {
-      "label": "teamQuote",
+      "label": "profile",
       "file_type": "code",
       "source_file": "src/data/unete.ts",
-      "source_location": "L35",
+      "source_location": "L33",
       "_origin": "ast",
-      "id": "src_data_unete_teamquote",
+      "id": "src_data_unete_profile",
       "community": 2,
       "community_name": "eredita.astro",
-      "norm_label": "teamquote"
+      "norm_label": "profile"
     },
     {
-      "label": "steps",
+      "label": "openings",
       "file_type": "code",
       "source_file": "src/data/unete.ts",
-      "source_location": "L40",
+      "source_location": "L48",
       "_origin": "ast",
-      "id": "src_data_unete_steps",
+      "id": "src_data_unete_openings",
       "community": 2,
       "community_name": "eredita.astro",
-      "norm_label": "steps"
+      "norm_label": "openings"
     },
     {
-      "label": "notePrompts",
+      "label": "process",
       "file_type": "code",
       "source_file": "src/data/unete.ts",
-      "source_location": "L47",
+      "source_location": "L59",
       "_origin": "ast",
-      "id": "src_data_unete_noteprompts",
+      "id": "src_data_unete_process",
       "community": 2,
       "community_name": "eredita.astro",
-      "norm_label": "noteprompts"
+      "norm_label": "process"
     },
     {
-      "label": "fields",
+      "label": "spontaneous",
       "file_type": "code",
       "source_file": "src/data/unete.ts",
-      "source_location": "L49",
+      "source_location": "L70",
       "_origin": "ast",
-      "id": "src_data_unete_fields",
+      "id": "src_data_unete_spontaneous",
       "community": 2,
       "community_name": "eredita.astro",
-      "norm_label": "fields"
+      "norm_label": "spontaneous"
+    },
+    {
+      "label": "apply",
+      "file_type": "code",
+      "source_file": "src/data/unete.ts",
+      "source_location": "L76",
+      "_origin": "ast",
+      "id": "src_data_unete_apply",
+      "community": 2,
+      "community_name": "eredita.astro",
+      "norm_label": "apply"
     },
     {
       "label": "contacto.astro",
@@ -829,17 +840,6 @@
       "community": 2,
       "community_name": "eredita.astro",
       "norm_label": "unete.astro"
-    },
-    {
-      "label": "pad()",
-      "file_type": "code",
-      "source_file": "src/pages/unete.astro",
-      "source_location": "L59",
-      "_origin": "ast",
-      "id": "src_pages_unete_pad",
-      "community": 2,
-      "community_name": "eredita.astro",
-      "norm_label": "pad()"
     },
     {
       "label": "../data/unete",
@@ -7909,22 +7909,66 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/data/unete.ts",
-      "source_location": "L49",
+      "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_data_unete",
-      "target": "src_data_unete_fields",
+      "target": "src_data_unete_apply",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/data/unete.ts",
-      "source_location": "L27",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_data_unete",
-      "target": "src_data_unete_fronts",
+      "target": "src_data_unete_culture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/unete.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_data_unete",
+      "target": "src_data_unete_hero",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/unete.ts",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_data_unete",
+      "target": "src_data_unete_openings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/unete.ts",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_data_unete",
+      "target": "src_data_unete_process",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/unete.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_data_unete",
+      "target": "src_data_unete_profile",
       "confidence_score": 1.0
     },
     {
@@ -7935,62 +7979,29 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_data_unete",
-      "target": "src_data_unete_notebody",
+      "target": "src_data_unete_profilebody",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/data/unete.ts",
-      "source_location": "L16",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_data_unete",
-      "target": "src_data_unete_notemailto",
+      "target": "src_data_unete_profilemailto",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/data/unete.ts",
-      "source_location": "L47",
+      "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_data_unete",
-      "target": "src_data_unete_noteprompts",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/unete.ts",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_data_unete",
-      "target": "src_data_unete_steps",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/unete.ts",
-      "source_location": "L35",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_data_unete",
-      "target": "src_data_unete_teamquote",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/data/unete.ts",
-      "source_location": "L19",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_data_unete",
-      "target": "src_data_unete_traits",
+      "target": "src_data_unete_spontaneous",
       "confidence_score": 1.0
     },
     {
@@ -8014,7 +8025,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_pages_unete",
-      "target": "src_data_unete_notemailto",
+      "target": "src_data_unete_profilemailto",
       "confidence_score": 1.0
     },
     {
@@ -8026,7 +8037,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_pages_unete",
-      "target": "src_data_unete_traits",
+      "target": "src_data_unete_hero",
       "confidence_score": 1.0
     },
     {
@@ -8038,7 +8049,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_pages_unete",
-      "target": "src_data_unete_fronts",
+      "target": "src_data_unete_culture",
       "confidence_score": 1.0
     },
     {
@@ -8050,7 +8061,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_pages_unete",
-      "target": "src_data_unete_teamquote",
+      "target": "src_data_unete_profile",
       "confidence_score": 1.0
     },
     {
@@ -8062,7 +8073,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_pages_unete",
-      "target": "src_data_unete_steps",
+      "target": "src_data_unete_openings",
       "confidence_score": 1.0
     },
     {
@@ -8074,7 +8085,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_pages_unete",
-      "target": "src_data_unete_noteprompts",
+      "target": "src_data_unete_process",
       "confidence_score": 1.0
     },
     {
@@ -8086,7 +8097,19 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_pages_unete",
-      "target": "src_data_unete_fields",
+      "target": "src_data_unete_spontaneous",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/unete.astro",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_pages_unete",
+      "target": "src_data_unete_apply",
       "confidence_score": 1.0
     },
     {
@@ -8255,17 +8278,6 @@
       "_origin": "ast",
       "source": "src_pages_unete",
       "target": "home_emiliano_osuna_projects_chambas_diputnam_src_styles_unete_css",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/unete.astro",
-      "source_location": "L59",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_pages_unete",
-      "target": "src_pages_unete_pad",
       "confidence_score": 1.0
     },
     {

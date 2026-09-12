@@ -1,14 +1,19 @@
 ---
+import { getImage } from 'astro:assets';
 import { contact } from '../data/home';
+import logoDarkSrc from '../assets/putnam-dark.png';
+import logoLightSrc from '../assets/putnam-light.png';
 
 interface Props { home?: boolean; contacto?: boolean; }
 const { home = false, contacto = false } = Astro.props;
 const links = [{ label: 'Ereditá', href: '/eredita/' }, { label: 'Putnam', href: '/putnam/' }, { label: 'Noticias', href: '/noticias/' }, { label: 'Únete', href: '/unete/' }, { label: 'Contacto', href: '/contacto/' }];
 const path = Astro.url.pathname.replace(/\/?$/, '/');
+const logoDark = await getImage({ src: logoDarkSrc, width: 120, format: 'webp' });
+const logoLight = await getImage({ src: logoLightSrc, width: 120, format: 'webp' });
 ---
 <header class:list={["site-header", { "site-header--light": home }]} data-site-header data-auto-theme>
   <a class="brand brand--mark" href="/" aria-label="Putnam, inicio">
-    <img src={home ? '/assets/putnam-light.png' : '/assets/putnam-dark.png'} data-logo-dark="/assets/putnam-dark.png" data-logo-light="/assets/putnam-light.png" alt="" />
+    <img src={home ? logoLight.src : logoDark.src} data-logo-dark={logoDark.src} data-logo-light={logoLight.src} width="120" height="120" alt="" />
     <span class="brand-copy"><strong>Putnam</strong><small>Desarrollos inmobiliarios</small></span>
   </a>
   <nav class="site-nav" id="site-navigation" aria-label="Navegación principal">
