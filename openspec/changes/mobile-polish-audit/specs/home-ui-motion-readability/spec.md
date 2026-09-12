@@ -19,6 +19,10 @@ La home SHALL conservar el stage, el orden de lectura, la navegación y la legib
 - **WHEN** la persona hace scroll en un navegador móvil y la barra de direcciones se retrae, haciendo que `window.innerHeight` supere la altura del stage
 - **THEN** el panel saliente y el entrante permanecen contiguos (sin franja del color de fondo entre ellos) en cualquier punto de la transición
 
+#### Scenario: Stage cubre el viewport en ambos estados de la barra
+- **WHEN** la barra de direcciones se retrae o se muestra en cualquier punto del recorrido de la home
+- **THEN** el stage cubre todo el alto visible: no aparece ninguna franja del color del documento entre el stage y el borde inferior o superior del viewport
+
 #### Scenario: Cambio de altura del viewport a mitad de transición
 
 - **WHEN** la altura del viewport cambia mientras una transición está a medio camino

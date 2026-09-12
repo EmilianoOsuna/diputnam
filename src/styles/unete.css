@@ -118,11 +118,11 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
   .pin-stage { position: static; height: auto; min-height: 0; padding: 6rem var(--gutter) 2rem; }
   .pin-stage h2 { width: 26rem; max-width: 100%; }
   .pin-stage > div:last-child { margin-top: 2.5rem; }
-  .traits { display: flex; gap: 1rem; padding: 0 var(--gutter); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .traits { --track-gutter: var(--gutter); display: flex; gap: 0.75rem; padding: 0 var(--track-gutter); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--track-gutter); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .traits::-webkit-scrollbar { display: none; }
-  .traits::after { content: ''; flex: 0 0 0.25rem; }
+  .traits::after { content: ''; flex: 0 0 0.01px; }
   .traits:focus-visible { outline: 1px solid var(--putnam-paper); outline-offset: 4px; }
-  .trait { flex: 0 0 min(84vw, 24rem); min-height: 0; padding: 1.8rem 1.4rem 2rem; align-content: start; border: 1px solid rgba(244, 238, 223, 0.18); border-bottom: 1px solid rgba(244, 238, 223, 0.18); scroll-snap-align: center; scroll-snap-stop: always; }
+  .trait { flex: 0 0 calc(100vw - 2 * var(--track-gutter)); min-height: 0; padding: 1.8rem 1.4rem 2rem; align-content: start; border: 1px solid rgba(244, 238, 223, 0.18); scroll-snap-align: start; scroll-snap-stop: always; }
   .trait:last-child { border-bottom: 1px solid rgba(244, 238, 223, 0.18); }
   .trait h3 { font-size: clamp(2.2rem, 9vw, 3rem); }
   .trait:not(.is-active) h3 { opacity: 0.55; }

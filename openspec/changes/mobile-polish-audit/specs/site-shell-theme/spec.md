@@ -27,3 +27,15 @@ Cada página SHALL declarar `theme-color` con un color de la paleta, con una var
 #### Scenario: Safari iOS
 - **WHEN** cualquier ruta del sitio se abre en Safari para iOS
 - **THEN** las barras superior e inferior se tiñen con un color de la paleta y no con café
+
+### Requirement: Controles táctiles sin resaltado del navegador
+
+Enlaces, botones, selects y controles del menú no SHALL mostrar el resaltado azul/gris de toque del navegador móvil al pulsarse; el estado de foco SHALL seguir siendo visible con teclado (`:focus-visible`). La X de cierre del menú móvil SHALL estar formada por dos líneas que se cruzan en su centro.
+
+#### Scenario: Toque en un enlace o botón
+- **WHEN** la persona toca un enlace, botón, dropdown o la hamburguesa en Chrome Android o Safari iOS
+- **THEN** no aparece el destello de resaltado del sistema y el control responde con su propia transición
+
+#### Scenario: Menú abierto
+- **WHEN** el menú móvil está abierto
+- **THEN** el icono de cierre es una X simétrica cuyas dos líneas se cruzan en el centro del botón

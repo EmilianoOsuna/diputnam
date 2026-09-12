@@ -29,6 +29,8 @@
 }
 
 * { box-sizing: border-box; }
+/* No system tap flash on touch; focus stays visible via :focus-visible. */
+a, button, input, select, textarea, summary, [role='button'], [tabindex] { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 html { background: var(--putnam-cream); }
 body { margin: 0; min-width: 320px; background: var(--putnam-cream); }
 a { color: inherit; text-decoration: none; }
@@ -199,11 +201,14 @@ button { font: inherit; }
 .scroll-cue:focus-visible { outline: 1px solid currentColor; outline-offset: 0.25rem; }
 @keyframes scroll-cue-bob { 0%, 100% { translate: 0 -0.15rem; } 50% { translate: 0 0.15rem; } }
 
+/* The stage is sized to the largest viewport so it still covers the screen when a phone's
+   address bar retracts; scene markers keep 100svh so the scroll length does not change. */
 .home.is-enhanced .home-stage {
   position: sticky;
   top: 0;
   z-index: 1;
   height: 100svh;
+  height: 100lvh;
   overflow: hidden;
 }
 
@@ -236,6 +241,7 @@ button { font: inherit; }
   z-index: 2;
   display: block;
   margin-top: -100svh;
+  margin-top: -100lvh;
   pointer-events: none;
 }
 
@@ -293,12 +299,13 @@ button { font: inherit; }
   .site-nav > span { margin-top: 0.25rem; font-size: 0.72rem; letter-spacing: 0.16em; }
   .mobile-menu-contact { display: grid; gap: 0.25rem; margin-top: auto; padding-top: 3rem; font-size: 0.78rem; line-height: 1.45; letter-spacing: 0.02em; }
   .mobile-menu-contact a:last-child { margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.14em; }
-  .menu-toggle { display: grid; gap: 0.27rem; width: 2rem; }
+  .menu-toggle { display: grid; gap: 0.27rem; width: 2rem; align-content: center; justify-content: center; }
   .menu-toggle span { display: block; width: 1.6rem; height: 1px; background: currentColor; transition: transform 180ms ease, opacity 180ms ease; }
   body.menu-open .menu-toggle { color: var(--putnam-ink); }
-  body.menu-open .menu-toggle span:first-child { transform: translateY(0.38rem) rotate(45deg); }
+  /* Outer lines travel exactly one gap + one line thickness so the X crosses at its centre. */
+  body.menu-open .menu-toggle span:first-child { transform: translateY(calc(0.27rem + 1px)) rotate(45deg); }
   body.menu-open .menu-toggle span:nth-child(2) { opacity: 0; }
-  body.menu-open .menu-toggle span:last-child { transform: translateY(-0.38rem) rotate(-45deg); }
+  body.menu-open .menu-toggle span:last-child { transform: translateY(calc(-0.27rem - 1px)) rotate(-45deg); }
   .panel-content { padding: 6rem 1rem; }
   .panel h1, .panel h2 { max-width: 24rem; font-size: clamp(3rem, 14vw, 4.6rem); line-height: 0.94; }
   .site-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; padding-bottom: 1rem; font-size: 0.8rem; }

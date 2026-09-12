@@ -53,7 +53,7 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 .pin-counter { display: flex; align-items: baseline; gap: 0.5rem; font-size: 0.68rem; letter-spacing: 0.12em; }
 .pin-counter b { font-size: clamp(4rem, 7vw, 7rem); font-weight: 500; line-height: 0.85; letter-spacing: -0.06em; }
 .pin-rail { width: 100%; height: 1px; margin-top: 1.6rem; background: rgba(244, 238, 223, 0.32); }
-.pin-rail span { display: block; width: 33.3%; height: 2px; background: var(--putnam-paper); }
+.pin-rail span { display: block; width: 100%; height: 2px; background: var(--putnam-paper); transform: scaleX(var(--progress, 0.3333)); transform-origin: left center; }
 .reasons { grid-column: 7 / 13; }
 .reason { display: grid; min-height: 100dvh; padding: 4rem 0; align-content: center; gap: 1.2rem; border-bottom: 1px solid rgba(244, 238, 223, 0.16); }
 .reason:last-child { border-bottom: 0; }
@@ -119,11 +119,20 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 @media (max-width: 899px) {
   .ct-channels-head > div, .ct-channels-head > p, .ct-map, .ct-location-copy, .ct-form-head > div, .ct-form-head > p { grid-column: 1 / 13; }
   .ct-channels-head > p, .ct-form-head > p { margin-top: 1.5rem; }
-  .ct-reasons { display: block; }
-  .pin-stage { position: static; height: auto; min-height: 0; padding: 6rem 0 2rem; }
-  .pin-stage h2 { width: 26rem; }
-  .reason { min-height: 0; padding: 3rem 0; }
-  .reason:not(.is-active) h3 { opacity: 1; }
+  /* Mobile: the pin stage is a plain header and the reasons become a native swipe track. */
+  .ct-reasons { display: block; padding: 0 0 3rem; }
+  .pin-stage { position: static; height: auto; min-height: 0; padding: 6rem var(--gutter) 2rem; }
+  .pin-stage h2 { width: 26rem; max-width: 100%; }
+  .pin-stage > div:last-child { margin-top: 2.5rem; }
+  .reasons { --track-gutter: var(--gutter); display: flex; gap: 0.75rem; padding: 0 var(--track-gutter); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--track-gutter); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .reasons::-webkit-scrollbar { display: none; }
+  .reasons::after { content: ''; flex: 0 0 0.01px; }
+  .reasons:focus-visible { outline: 1px solid var(--putnam-paper); outline-offset: 4px; }
+  .reason { flex: 0 0 calc(100vw - 2 * var(--track-gutter)); min-height: 0; padding: 1.8rem 1.4rem 2rem; align-content: start; border: 1px solid rgba(244, 238, 223, 0.18); scroll-snap-align: start; scroll-snap-stop: always; }
+  .reason:last-child { border-bottom: 1px solid rgba(244, 238, 223, 0.18); }
+  .reason h3 { font-size: clamp(2.2rem, 9vw, 3rem); }
+  .reason:not(.is-active) h3 { opacity: 0.55; }
+  .index-row strong { overflow-wrap: anywhere; }
   .ct-location-copy { margin-top: 3rem; }
 }
 
@@ -135,9 +144,9 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
   .hero-lead { width: min(28rem, 92%); }
   .hero-meta { text-align: left; }
   .ct-channels, .ct-location, .ct-form { padding: 6rem 1rem; }
-  .ct-reasons { padding: 0 1rem 3rem; }
   .index-list, .kpis, .ct-form form { margin-left: 0; }
   .index-row { grid-template-columns: 2.5rem 1fr 2rem; gap: 0.8rem; }
+  .index-row strong { font-size: clamp(1.25rem, 5.6vw, 1.6rem); }
   .kpis { grid-template-columns: 1fr; gap: 1.4rem; }
   .pin-counter b { font-size: 4rem; }
   .f-row, .f-submit { grid-template-columns: 2.5rem 1fr; gap: 0.8rem; }
@@ -153,7 +162,10 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .contacto-page [data-parallax], .contacto-page [data-reveal-group], .contacto-page .line > span, .contacto-page .fade-up, .contacto-page [data-pin-stage], .contacto-page [data-pin-rail] { opacity: 1 !important; transform: none !important; }
+  .contacto-page [data-parallax], .contacto-page [data-reveal-group], .contacto-page .line > span, .contacto-page .fade-up, .contacto-page [data-pin-stage] { opacity: 1 !important; transform: none !important; }
+}
+@media (prefers-reduced-motion: reduce) and (min-width: 900px) {
+  .contacto-page [data-pin-rail] { transform: none !important; }
   .contacto-page .ct-reasons { display: block; }
   .contacto-page .pin-stage { position: static !important; height: auto; min-height: 0; padding-bottom: 2rem; }
   .contacto-page .reason { min-height: 0; padding: 3rem 0; }

@@ -1,11 +1,38 @@
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { mountHorizontalTrack } from './horizontal-track';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const root = document.querySelector<HTMLElement>('[data-contacto]');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Mobile reasons: native swipe track. Independent of GSAP/reduced motion so the
+// counter and rail keep working even when every animation is off.
+if (root) {
+  const track = root.querySelector<HTMLElement>('[data-reasons-track]');
+  const mobile = window.matchMedia('(max-width: 899px)');
+  let unmount: (() => void) | null = null;
+  const sync = () => {
+    if (mobile.matches && track && !unmount) {
+      unmount = mountHorizontalTrack({
+        track,
+        cards: Array.from(track.querySelectorAll<HTMLElement>('[data-reason]')),
+        current: root.querySelector<HTMLElement>('[data-track-current]'),
+        rail: root.querySelector<HTMLElement>('[data-track-rail]'),
+        label: 'Motivo',
+        reducedMotion,
+      });
+    } else if (!mobile.matches && unmount) {
+      unmount();
+      unmount = null;
+    }
+    if (!reducedMotion) ScrollTrigger.refresh();
+  };
+  sync();
+  mobile.addEventListener('change', sync);
+}
 
 if (root && !reducedMotion) {
   document.body.classList.add('is-motion-ready');
@@ -56,19 +83,19 @@ if (root && !reducedMotion) {
         if (current) current.textContent = String(activeIndex + 1).padStart(2, '0');
         reasons.forEach((reason, index) => reason.classList.toggle('is-active', index === activeIndex));
         gsap.to(reasons.map((reason) => reason.querySelector('h3')), { opacity: (index) => index === activeIndex ? 1 : 0.42, duration: 0.25, overwrite: 'auto' });
-        if (rail) gsap.set(rail, { width: `${((activeIndex + 1) / reasons.length) * 100}%` });
+        if (rail) rail.style.setProperty('--progress', String((activeIndex + 1) / reasons.length));
       };
 
       setReason(0);
       ScrollTrigger.create({ trigger: '.ct-reasons', start: 'top top', end: 'bottom bottom', pin: '.pin-stage', pinSpacing: false, invalidateOnRefresh: true });
       reasons.forEach((reason, index) => ScrollTrigger.create({ trigger: reason, start: 'top 55%', end: 'bottom 45%', onEnter: () => setReason(index), onEnterBack: () => setReason(index) }));
-      gsap.fromTo('[data-pin-rail]', { width: '33.333%' }, { width: '100%', ease: 'none', scrollTrigger: { trigger: '.ct-reasons', start: 'top top', end: 'bottom bottom', scrub: 0.45 } });
+      gsap.fromTo('[data-pin-rail]', { '--progress': 1 / reasons.length }, { '--progress': 1, ease: 'none', scrollTrigger: { trigger: '.ct-reasons', start: 'top top', end: 'bottom bottom', scrub: 0.45 } });
 
       return () => {
         reasons.forEach((reason, index) => reason.classList.toggle('is-active', index === 0));
         if (current) current.textContent = '01';
         gsap.set(reasons.map((reason) => reason.querySelector('h3')), { clearProps: 'opacity' });
-        gsap.set('[data-pin-stage], [data-pin-rail]', { clearProps: 'transform,width' });
+        gsap.set('[data-pin-stage], [data-pin-rail]', { clearProps: 'transform,width,--progress' });
       };
     });
   }, root);
