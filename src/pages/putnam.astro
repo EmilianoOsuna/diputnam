@@ -1,20 +1,23 @@
 ---
+import { Image, Picture } from 'astro:assets';
+import putnamMark from '../assets/putnam-light.png';
 import ContactFooter from '../components/ContactFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { contact } from '../data/home';
 import { putnamDifferences, putnamEditorialImage, putnamIntro, putnamPrinciples, putnamProcess } from '../data/putnam';
+import { remoteImage as unsplashVariant } from '../lib/images';
 import '../styles/global.css';
 import '../styles/putnam.css';
 
-const unsplashVariant = (src: string, width: number, quality: number) =>
-  src.replace(/q=\d+&w=\d+/, `q=${quality}&w=${width}`);
 ---
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content="Conoce cómo Putnam integra diseño, planificación y ejecución en desarrollos inmobiliarios residenciales." />
-    <link rel="icon" href="/assets/putnam-light.png" />
+    <link rel="icon" href="/favicon.png" />
+    <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
     <title>La firma | Putnam</title>
   </head>
   <body class="putnam-page">
@@ -112,7 +115,7 @@ const unsplashVariant = (src: string, width: number, quality: number) =>
           <a href={`mailto:${contact.email}`}>Escríbenos <span aria-hidden="true">↗</span></a>
           <a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp <span aria-hidden="true">↗</span></a>
         </div>
-        <img class="cta-mark" src="/assets/putnam-light.png" alt="" aria-hidden="true" width="800" height="800" />
+        <Image class="cta-mark" src={putnamMark} widths={[400, 800]} sizes="(max-width: 767px) 72vw, min(42vw, 42rem)" format="webp" alt="" aria-hidden="true" />
       </section>
     </main>
     <ContactFooter />

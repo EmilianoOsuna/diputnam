@@ -1,8 +1,11 @@
 ---
+import { Image } from 'astro:assets';
+import erediteMark from '../assets/eredita-logo.png';
 import ContactFooter from '../components/ContactFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { contact } from '../data/home';
 import { erediteGallery, erediteHero, erediteIntro, erediteLegalDocs, erediteTypologies } from '../data/eredita';
+import { CARD_WIDTHS, HERO_WIDTHS, remoteImage, remoteSrcset } from '../lib/images';
 import '../styles/global.css';
 import '../styles/eredita.css';
 ---
@@ -11,7 +14,9 @@ import '../styles/eredita.css';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content="Ereditá: tipologías de vivienda, áreas comunes y documentación pensadas para brindar transparencia y calidad de vida." />
-    <link rel="icon" href="/assets/putnam-light.png" />
+    <link rel="icon" href="/favicon.png" />
+    <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
     <title>Ereditá | Putnam</title>
   </head>
   <body class="eredita-page">
@@ -26,11 +31,11 @@ import '../styles/eredita.css';
               <source src={erediteHero.video} type="video/mp4" />
             </video>
           ) : (
-            <img src={erediteHero.poster} alt={erediteHero.alt} width="2200" height="1400" />
+            <img src={remoteImage(erediteHero.poster, 1280, 78)} srcset={remoteSrcset(erediteHero.poster, HERO_WIDTHS, 78)} sizes="100vw" alt={erediteHero.alt} width="2200" height="1400" decoding="async" fetchpriority="high" />
           )}
           <div class="ed-hero-shade"></div>
         </div>
-        <img class="ed-hero-mark" src="/assets/eredita-logo.png" alt="Ereditá" width="900" height="900" />
+        <Image class="ed-hero-mark" src={erediteMark} widths={[400, 800]} sizes="(max-width: 767px) 52vw, min(42vw, 38rem)" format="webp" alt="Ereditá" loading="eager" />
         <div class="ed-hero-content" data-reveal-group>
           <p class="section-kicker">{erediteHero.kicker}</p>
           <h1 id="ed-hero-title">{erediteHero.title}</h1>
@@ -62,7 +67,7 @@ import '../styles/eredita.css';
         <div class="ed-masonry" data-reveal-group>
           {erediteGallery.map((item) => (
             <figure class="ed-masonry-item">
-              <img src={item.src} alt={item.alt} loading="lazy" width="1200" height="900" />
+              <img src={remoteImage(item.src, 960, 75)} srcset={remoteSrcset(item.src, CARD_WIDTHS, 75)} sizes="(min-width: 900px) 50vw, 100vw" alt={item.alt} loading="lazy" decoding="async" width="1200" height="900" />
               <figcaption>{item.tag}</figcaption>
             </figure>
           ))}
@@ -80,7 +85,7 @@ import '../styles/eredita.css';
           {erediteTypologies.map((item, index) => (
             <article class="ed-h-panel" data-h-panel>
               <figure class="ed-h-media">
-                <img src={item.image} alt={item.alt} loading="lazy" width="1400" height="1400" />
+                <img src={remoteImage(item.image, 960, 75)} srcset={remoteSrcset(item.image, CARD_WIDTHS, 75)} sizes="(min-width: 900px) 50vw, 100vw" alt={item.alt} loading="lazy" decoding="async" width="1400" height="1400" />
               </figure>
               <div class:list={['ed-h-copy', `is-${item.tone}`]}>
                 <div class="ed-h-copy-head">
@@ -130,7 +135,7 @@ import '../styles/eredita.css';
             <a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp <span aria-hidden="true">↗</span></a>
           </div>
         </div>
-        <img class="cta-mark" src="/assets/eredita-logo.png" alt="" aria-hidden="true" width="800" height="800" />
+        <Image class="cta-mark" src={erediteMark} widths={[400, 800]} sizes="(max-width: 767px) min(70vw, 20rem), min(65%, 28rem)" format="webp" alt="" aria-hidden="true" />
       </section>
     </main>
     <ContactFooter />

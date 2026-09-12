@@ -1,16 +1,16 @@
 # Graph Report - diputnam  (2026-09-11)
 
 ## Corpus Check
-- 77 files · ~2,206,947 words
+- 88 files · ~2,210,615 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 628 nodes · 615 edges · 62 communities (56 shown, 6 thin omitted)
+- 709 nodes · 712 edges · 72 communities (66 shown, 6 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `65d0a3b8`
+- Built from commit: `882985c8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -68,16 +68,25 @@
 - noticias-motion.ts
 - putnam-motion.ts
 - unete-motion.ts
+- ADDED Requirements
+- Requirement: Experiencia responsive y movimiento reducido
+- proposal.md
+- proposal.md
+- design.md
+- design.md
+- Mobile 60fps validation notes
+- tasks.md
+- tasks.md
 
 ## God Nodes (most connected - your core abstractions)
 1. `ADDED Requirements` - 17 edges
 2. `Requirements` - 17 edges
-3. `Product` - 12 edges
-4. `../components/SiteHeader.astro` - 9 edges
-5. `Decisions` - 8 edges
-6. `Requirements` - 8 edges
-7. `../components/ContactFooter.astro` - 7 edges
-8. `contact` - 7 edges
+3. `../components/SiteHeader.astro` - 14 edges
+4. `Product` - 12 edges
+5. `contact` - 8 edges
+6. `Decisions` - 8 edges
+7. `Requirements` - 8 edges
+8. `../components/ContactFooter.astro` - 7 edges
 9. `ADDED Requirements` - 7 edges
 10. `Decisions` - 7 edges
 
@@ -87,7 +96,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (62 total, 6 thin omitted)
+## Communities (72 total, 6 thin omitted)
 
 ### Community 0 - "ADDED Requirements"
 Cohesion: 0.05
@@ -98,8 +107,8 @@ Cohesion: 0.05
 Nodes (42): contacto-page Specification, Decision needed: Cortes de línea de h2, Decision needed: Envío del formulario, Decision needed: URL embed de Google Maps, Purpose, Requirement: Accesibilidad y reducción de movimiento, Requirement: Aceptación visual, responsive y de movimiento, Requirement: Altura real del viewport, sin clamp del canvas (+34 more)
 
 ### Community 2 - "eredita.astro"
-Cohesion: 0.08
-Nodes (38): ../data/eredita, ../data/home, ../data/noticias, ../data/putnam, ../data/unete, ../styles/contacto.css, ../styles/eredita.css, ../styles/global.css (+30 more)
+Cohesion: 0.07
+Nodes (48): ../assets/contacto-hero.jpg, ../assets/eredita-logo.png, ../assets/putnam-dark.png, ../assets/putnam-light.png, ../assets/unete-hero.jpg, ../data/eredita, ../data/home, ../data/noticias (+40 more)
 
 ### Community 3 - "package.json"
 Cohesion: 0.07
@@ -191,7 +200,7 @@ Nodes (7): MODIFIED Requirements, Requirement: Movimiento premium y controlado, 
 
 ### Community 25 - "motion.ts"
 Cohesion: 0.25
-Nodes (5): home, markers, markerTrack, panels, scrollCue
+Nodes (7): home, markers, markerTrack, panels, scheduleScrollCue(), scrollCue, updateScrollCue()
 
 ### Community 26 - "proposal.md"
 Cohesion: 0.29
@@ -277,8 +286,44 @@ Nodes (3): 1. Contenido y navegación, 2. Control direccional de scroll, 3. Veri
 Cohesion: 0.50
 Nodes (3): 1. Estructura y estilos mobile, 2. Comportamiento accesible, 3. Verificación
 
+### Community 62 - "ADDED Requirements"
+Cohesion: 0.12
+Nodes (15): ADDED Requirements, Purpose, Requirement: Mobile fallback SHALL preserve usability, Requirement: Mobile motion SHALL target stable frame pacing, Requirement: Motion updates SHALL avoid forced synchronous layout, Requirement: Performance verification SHALL cover the Putnam route, Scenario: Animated layers remain compositor-friendly, Scenario: Lenis and ScrollTrigger scheduling (+7 more)
+
+### Community 63 - "Requirement: Experiencia responsive y movimiento reducido"
+Cohesion: 0.18
+Nodes (10): MODIFIED Requirements, Requirement: Experiencia responsive y movimiento reducido, Requirement: Navegación y contacto legibles, Scenario: Cambio de orientación o tamaño, Scenario: Contacto legible, Scenario: Interacción de tarjeta en touch, Scenario: Movimiento reducido, Scenario: Navbar legible (+2 more)
+
+### Community 64 - "proposal.md"
+Cohesion: 0.29
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+
+### Community 65 - "proposal.md"
+Cohesion: 0.29
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+
+### Community 66 - "design.md"
+Cohesion: 0.33
+Nodes (5): Context, Decisions, Goals / Non-Goals, Migration Plan, Risks / Trade-offs
+
+### Community 67 - "design.md"
+Cohesion: 0.33
+Nodes (5): Context, Decisions, Goals / Non-Goals, Migration Plan, Risks / Trade-offs
+
+### Community 68 - "Mobile 60fps validation notes"
+Cohesion: 0.40
+Nodes (4): Blocked measurements, Matrix, Mobile 60fps validation notes, Static validation
+
+### Community 69 - "tasks.md"
+Cohesion: 0.40
+Nodes (4): 1. Baseline y observabilidad, 2. Actualizaciones de movimiento, 3. CSS y composición, 4. Validación
+
+### Community 70 - "tasks.md"
+Cohesion: 0.50
+Nodes (3): 1. Diagnóstico y alcance, 2. Responsive y accesibilidad, 3. Rendimiento y verificación
+
 ## Knowledge Gaps
-- **386 isolated node(s):** `name`, `version`, `description`, `dev`, `build` (+381 more)
+- **436 isolated node(s):** `name`, `version`, `description`, `dev`, `build` (+431 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -286,13 +331,13 @@ Nodes (3): 1. Estructura y estilos mobile, 2. Comportamiento accesible, 3. Verif
 _Questions this graph is uniquely positioned to answer:_
 
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _386 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _436 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ADDED Requirements` be split into smaller, more focused modules?**
   _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
 - **Should `Requirements` be split into smaller, more focused modules?**
   _Cohesion score 0.046511627906976744 - nodes in this community are weakly interconnected._
 - **Should `eredita.astro` be split into smaller, more focused modules?**
-  _Cohesion score 0.08078231292517007 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07213114754098361 - nodes in this community are weakly interconnected._
 - **Should `package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._
 - **Should `ADDED Requirements` be split into smaller, more focused modules?**
