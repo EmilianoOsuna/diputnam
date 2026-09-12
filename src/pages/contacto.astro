@@ -55,9 +55,9 @@ const mapEmbed = `https://www.google.com/maps?q=${contact.coordinates.latitude},
       <section class="ct-reasons" id="motivos" aria-labelledby="ct-reasons-title" data-reasons data-header-theme="light">
         <div class="pin-stage" data-pin-stage>
           <div><p class="section-kicker">¿En qué podemos ayudarte?</p><h2 id="ct-reasons-title">Tres motivos frecuentes para escribirnos.</h2></div>
-          <div><div class="pin-counter"><b data-pin-current>01</b><span aria-hidden="true">/</span><span>03</span></div><div class="pin-rail" aria-hidden="true"><span data-pin-rail></span></div></div>
+          <div><div class="pin-counter"><b data-pin-current data-track-current>01</b><span aria-hidden="true">/</span><span>03</span></div><div class="pin-rail" aria-hidden="true"><span data-pin-rail data-track-rail></span></div></div>
         </div>
-        <div class="reasons">
+        <div class="reasons" data-reasons-track>
           <article class="reason is-active" data-reason="0"><span>01 — Comercial</span><h3>Información comercial</h3><p>Disponibilidad, alcance de servicios, presentación institucional y primera orientación sobre el proyecto que te interesa.</p><a href={contact.whatsapp} target="_blank" rel="noreferrer">Solicitar información <span aria-hidden="true">→</span></a></article>
           <article class="reason" data-reason="1"><span>02 — Proyecto</span><h3>Reuniones de proyecto</h3><p>Coordinación de reuniones para evaluación técnica, diseño, ejecución o seguimiento de una obra en curso.</p><a href="#formulario">Agendar reunión <span aria-hidden="true">→</span></a></article>
           <article class="reason" data-reason="2"><span>03 — Alianzas</span><h3>Alianzas y oportunidades</h3><p>Colaboraciones estratégicas, proveedores, inversionistas y propuestas conjuntas para nuevos desarrollos.</p><a href="#formulario">Proponer una alianza <span aria-hidden="true">→</span></a></article>

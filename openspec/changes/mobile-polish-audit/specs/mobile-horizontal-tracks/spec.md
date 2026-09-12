@@ -1,12 +1,12 @@
 ## Purpose
 
-Definir cómo se comportan en móvil las secciones Tipologías (Ereditá) y Nuestra cultura (Únete): una pista horizontal navegable con el dedo cuyo contador y barra de progreso reflejan siempre la tarjeta activa.
+Definir cómo se comportan en móvil las secciones Tipologías (Ereditá), Nuestra cultura (Únete) y Motivos (Contacto): una pista horizontal navegable con el dedo cuyo contador y barra de progreso reflejan siempre la tarjeta activa.
 
 ## ADDED Requirements
 
 ### Requirement: Pista horizontal con swipe nativo en móvil
 
-En viewports menores de 900 px, las tarjetas de Tipologías (Ereditá) y de Nuestra cultura (Únete) SHALL presentarse en una pista horizontal desplazable con el gesto nativo de swipe, con encaje (`scroll-snap`) por tarjeta. El scroll vertical de la página no SHALL quedar bloqueado ni secuestrado por la pista, y la pista no SHALL provocar desbordamiento horizontal del documento.
+En viewports menores de 900 px, las tarjetas de Tipologías (Ereditá), de Nuestra cultura (Únete) y de Motivos (Contacto) SHALL presentarse en una pista horizontal desplazable con el gesto nativo de swipe, con encaje (`scroll-snap`) por tarjeta. El scroll vertical de la página no SHALL quedar bloqueado ni secuestrado por la pista, y la pista no SHALL provocar desbordamiento horizontal del documento.
 
 #### Scenario: Swipe entre tipologías
 - **WHEN** la persona desliza horizontalmente sobre la pista de Tipologías en un viewport de 390 px
@@ -16,9 +16,25 @@ En viewports menores de 900 px, las tarjetas de Tipologías (Ereditá) y de Nues
 - **WHEN** la persona desliza horizontalmente sobre la pista de Nuestra cultura
 - **THEN** la pista encaja en el siguiente valor y el resto de la página sigue desplazándose verticalmente con normalidad
 
+#### Scenario: Swipe entre motivos de contacto
+- **WHEN** la persona desliza horizontalmente sobre la pista de Motivos en `/contacto/`
+- **THEN** la pista encaja en el siguiente motivo y el contador/barra se actualizan igual que en las otras dos secciones
+
 #### Scenario: Sin desbordamiento del documento
 - **WHEN** se mide `document.documentElement.scrollWidth` en `/eredita/` y `/unete/` a 320, 390 y 768 px
 - **THEN** es igual al ancho del viewport
+
+### Requirement: Tarjeta completa en pantalla y alturas uniformes
+
+En móvil, cada tarjeta de una pista SHALL caber completa a lo ancho del viewport (ancho del viewport menos los gutters laterales), de modo que al encajar se vea una tarjeta entera y la siguiente sólo asome por el espacio entre tarjetas. Todas las tarjetas de una misma pista SHALL tener la misma altura, con su contenido alineado al inicio.
+
+#### Scenario: Tarjeta encajada
+- **WHEN** una tarjeta de Tipologías está encajada a 390 px
+- **THEN** sus bordes izquierdo y derecho quedan dentro del viewport y a la distancia del gutter, y la siguiente tarjeta asoma como máximo el ancho del `gap`
+
+#### Scenario: Alturas
+- **WHEN** se miden las cuatro tarjetas de Tipologías a 390 px
+- **THEN** todas tienen la misma altura, y en cada una la imagen y el bloque de texto empiezan a la misma coordenada vertical
 
 ### Requirement: Contador y barra de progreso sincronizados con la tarjeta activa
 
