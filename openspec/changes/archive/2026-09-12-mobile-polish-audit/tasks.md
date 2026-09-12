@@ -13,7 +13,7 @@
 
 - [x] 2.1 Crear `src/components/SiteHead.astro` (charset, viewport `width=device-width, initial-scale=1, viewport-fit=cover`, icon, preload de fuente, `theme-color` claro `#f4eedf` y oscuro `#003a36` con `media`) y usarlo en las seis páginas; verificar con `grep -c theme-color dist/**/index.html` = 2 por página tras build
 - [x] 2.2 Sustituir `#594037` en `:root`, `html` y `body` de `global.css` por `var(--putnam-cream)` y añadir `background: #0d1116` a `.home-stage`/`.home.is-enhanced .home-stage`; verificar con Playwright que `getComputedStyle(html|body).backgroundColor` ≠ `rgb(89, 64, 55)` en las seis rutas y que el overscroll superior de `/putnam/` (captura con `scrollTo(0,-1)` no aplica; usar captura del top del documento) no muestra café
-- [ ] 2.3 Verificar en el Android del usuario que la barra de direcciones/sistema de Chrome adopta crema (o verde en modo oscuro) en home y en `/putnam/`
+- [x] 2.3 Verificar en el Android del usuario que la barra de direcciones/sistema de Chrome adopta crema (o verde en modo oscuro) en home y en `/putnam/`
 
 ## 3. Home: franja entre paneles (`home-ui-motion-readability`)
 
@@ -41,8 +41,8 @@
 
 ## 7. Cierre
 
-- [ ] 7.1 Completar `tests/mobile-audit.mjs` con todos los checks de D6 (fondo, theme-color, header ≥ 300 px o SVG, `.ed-hero-mark` dentro del viewport, franja de home, hero de Putnam, pistas) y verificar que `npm run build` (incluye `postbuild`) + `npm run preview` + `npm run test:mobile` + `npm run test:sweep` pasan en verde; correr `BASE_URL=https://diputnam.project0-0s.workers.dev npm run test:mobile` contra el deploy de preview y que pase
-- [ ] 7.2 Revisión manual del usuario en su Android y escritorio, contra el deploy de Cloudflare, de las seis rutas (logos, heros de Únete/Contacto, barras del navegador, scroll de la home con barra retraída, hero de Putnam, swipe de Tipologías y Nuestra cultura) y registro de hallazgos pendientes, si los hay, como follow-ups en `design.md › Open Questions`
+- [x] 7.1 Completar `tests/mobile-audit.mjs` con todos los checks de D6 (fondo, theme-color, header ≥ 300 px o SVG, `.ed-hero-mark` dentro del viewport, franja de home, hero de Putnam, pistas) y verificar que `npm run build` (incluye `postbuild`) + `npm run preview` + `npm run test:mobile` + `npm run test:sweep` pasan en verde; correr `BASE_URL=https://diputnam.project0-0s.workers.dev npm run test:mobile` contra el deploy de preview y que pase
+- [x] 7.2 Revisión manual del usuario en su Android y escritorio, contra el deploy de Cloudflare, de las seis rutas (logos, heros de Únete/Contacto, barras del navegador, scroll de la home con barra retraída, hero de Putnam, swipe de Tipologías y Nuestra cultura) y registro de hallazgos pendientes, si los hay, como follow-ups en `design.md › Open Questions`
 
 ## 8. Hallazgos de la revisión en Android (deploy `1feb27b`)
 
