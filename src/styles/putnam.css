@@ -66,6 +66,17 @@
 .process-rail span { display: block; width: 100%; height: 2px; background: var(--putnam-paper); transform: scaleX(0); transform-origin: left center; }
 .process-markers { position: relative; margin-top: -100dvh; pointer-events: none; }
 .process-marker { height: 100dvh; }
+/* Rail progress without JavaScript (mobile/native branch): the markers block is taller than
+   the viewport, so `contain 0%→100%` runs from its top at the viewport top to its bottom
+   at the viewport bottom — the same fraction the desktop scrub animates. */
+.process { timeline-scope: --process; }
+.process-markers { view-timeline-name: --process; view-timeline-axis: block; }
+@keyframes rail-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+/* Two rules on purpose: the CSS minifier would fold `animation-timeline` into the
+   `animation` shorthand, which browsers reject. */
+.has-scroll-timeline .process-rail span { animation: rail-grow linear both; }
+.has-scroll-timeline .process-rail > span { animation-timeline: --process; animation-range: contain 0% contain 100%; }
+
 .principles { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2rem; padding: 8rem clamp(1.25rem, 3vw, 3.5rem) 9rem; color: var(--putnam-paper); background: var(--putnam-deep); }
 .principles > .section-kicker { grid-column: 1 / 4; }
 .principle { border-top: 1px solid rgba(244, 238, 223, 0.28); }
@@ -160,3 +171,9 @@
   .putnam-page [data-parallax], .putnam-page [data-reveal-group], .putnam-page [data-process-step], .putnam-page [data-line-progress] { transform: none !important; opacity: 1 !important; }
 }
 
+/* Mobile hero entrance without a motion library (keyframes in global.css). */
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .institutional-hero :is(.section-kicker, h1, .hero-lead) { animation: m-fade-up 1.15s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .institutional-hero h1 { animation-delay: 90ms; }
+  .institutional-hero .hero-lead { animation-delay: 180ms; }
+}

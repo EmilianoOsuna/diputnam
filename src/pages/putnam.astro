@@ -16,7 +16,7 @@ import '../styles/putnam.css';
     <SiteHead title="La firma | Putnam" description="Conoce cómo Putnam integra diseño, planificación y ejecución en desarrollos inmobiliarios residenciales." preconnectUnsplash />
   </head>
   <body class="putnam-page">
-    <script is:inline>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion-pending');</script>
+    <script is:inline>if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(min-width: 768px)').matches) document.documentElement.classList.add('motion-pending');</script>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
     <SiteHeader />
 

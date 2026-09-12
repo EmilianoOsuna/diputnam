@@ -1,8 +1,11 @@
+import { mountAnchors, mountReveals, supportsScrollTimeline } from './mobile-motion';
+
 const root = document.querySelector<HTMLElement>('[data-putnam]');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-// Mobile keeps the browser's native scroll (no Lenis) but runs the same entrance
-// and reveal animations as the other pages; Lenis smoothing stays desktop-only.
-const nativeScroll = window.matchMedia('(max-width: 767px)').matches;
+// Phones get the CSS/IntersectionObserver runtime (hero entrance and reveals are CSS,
+// the process rail is a scroll-driven animation); the Lenis/GSAP engine is desktop-only
+// and loaded on demand. Crossing the breakpoint after load needs a reload.
+const desktop = window.matchMedia('(min-width: 768px)').matches;
 
 if (root) {
   const processSteps = Array.from(root.querySelectorAll<HTMLElement>('[data-process-step]'));
@@ -28,33 +31,16 @@ if (root) {
 
   setProcessStep(0);
 
-  if (reducedMotion) {
-    document.body.classList.add('is-native-motion');
-    let progressFrame = 0;
-    let trackTop = 0;
-    let trackRange = 1;
-
-    const measureTrack = () => {
-      if (!processTrack) return;
-      const rect = processTrack.getBoundingClientRect();
-      trackTop = rect.top + window.scrollY;
-      trackRange = Math.max(1, processTrack.offsetHeight - window.innerHeight);
-    };
-    const updateProgress = () => {
-      progressFrame = 0;
-      if (!lineProgress) return;
-      const progress = Math.min(1, Math.max(0, (window.scrollY - trackTop) / trackRange));
-      lineProgress.style.transform = `scaleX(${progress})`;
-    };
-    const scheduleProgress = () => {
-      if (progressFrame) return;
-      progressFrame = window.requestAnimationFrame(updateProgress);
-    };
-    const refreshGeometry = () => {
-      measureTrack();
-      scheduleProgress();
-    };
-
+  if (desktop && !reducedMotion) {
+    // The hero copy is pre-hidden by `.motion-pending` (inline script in putnam.astro).
+    // Whatever happens to the motion bundle, never leave it hidden.
+    const releaseHero = () => document.documentElement.classList.remove('motion-pending');
+    const heroFailsafe = window.setTimeout(releaseHero, 3000);
+    import('./desktop/putnam')
+      .then(({ mount }) => { window.clearTimeout(heroFailsafe); mount(root, setProcessStep, releaseHero); })
+      .catch((error) => { window.clearTimeout(heroFailsafe); releaseHero(); throw error; });
+  } else {
+    // Active step flips only when a marker crosses the middle of the viewport.
     const observer = new IntersectionObserver((entries) => {
       const visible = entries
         .filter((entry) => entry.isIntersecting)
@@ -63,122 +49,53 @@ if (root) {
       const index = processMarkers.indexOf(visible.target as HTMLElement);
       if (index >= 0) setProcessStep(index);
     }, { rootMargin: '-45% 0px -45%', threshold: 0 });
-
     processMarkers.forEach((marker) => observer.observe(marker));
-    window.addEventListener('scroll', scheduleProgress, { passive: true });
-    window.addEventListener('resize', refreshGeometry, { passive: true });
-    refreshGeometry();
 
-    window.addEventListener('pagehide', () => {
-      if (progressFrame) window.cancelAnimationFrame(progressFrame);
-      observer.disconnect();
-    }, { once: true });
-  } else {
-    // The hero copy is pre-hidden by `.motion-pending` (inline script in putnam.astro).
-    // Whatever happens to the motion bundle, never leave it hidden.
-    const releaseHero = () => document.documentElement.classList.remove('motion-pending');
-    const heroFailsafe = window.setTimeout(releaseHero, 3000);
-    void (async () => {
-    const [{ gsap }, { ScrollTrigger }, lenisModule] = await Promise.all([
-      import('gsap'),
-      import('gsap/ScrollTrigger'),
-      nativeScroll ? Promise.resolve(null) : import('lenis'),
-    ]).catch((error) => { window.clearTimeout(heroFailsafe); releaseHero(); throw error; });
-    gsap.registerPlugin(ScrollTrigger);
-    document.body.classList.add('is-motion-ready');
-    const lenis = lenisModule ? new lenisModule.default({ anchors: true, autoRaf: true, lerp: 0.09 }) : null;
-    let scrollFrame = 0;
-    let refreshFrame = 0;
+    if (!reducedMotion) {
+      mountReveals(root, { hero: '.institutional-hero' });
+      mountAnchors(false);
+    }
 
-    lenis?.on('scroll', () => {
-      if (scrollFrame) return;
-      scrollFrame = window.requestAnimationFrame(() => {
-        scrollFrame = 0;
-        ScrollTrigger.update();
-      });
-    });
-    gsap.ticker.lagSmoothing(0);
-
-    const context = gsap.context(() => {
-      const heroTargets = '.institutional-hero .section-kicker, .institutional-hero h1, .institutional-hero .hero-lead';
-      gsap.set(heroTargets, { autoAlpha: 0, y: 34, willChange: 'transform, opacity' });
-      window.clearTimeout(heroFailsafe);
-      releaseHero();
-      gsap.to(heroTargets, {
-        autoAlpha: 1,
-        y: 0,
-        duration: 1.15,
-        stagger: 0.09,
-        ease: 'power3.out',
-        onComplete: () => gsap.set(heroTargets, { clearProps: 'willChange' }),
-      });
-      gsap.utils.toArray<HTMLElement>('[data-reveal-group]').forEach((group) => {
-        if (group.closest('.institutional-hero')) return;
-        gsap.from(Array.from(group.children), {
-          autoAlpha: 0,
-          y: 28,
-          duration: 0.9,
-          stagger: 0.07,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: group, start: 'top 82%', toggleActions: 'play none none reverse' },
-        });
-      });
-
-      processMarkers.forEach((marker, index) => {
-        ScrollTrigger.create({
-          trigger: marker,
-          start: 'top 55%',
-          end: 'bottom 45%',
-          onEnter: () => setProcessStep(index),
-          onEnterBack: () => setProcessStep(index),
-        });
-      });
-
-      const refreshLayout = () => {
-        if (refreshFrame) return;
-        refreshFrame = window.requestAnimationFrame(() => {
-          refreshFrame = 0;
-          ScrollTrigger.refresh();
-        });
+    // Rail progress: CSS `animation-timeline` (putnam.css) when available; otherwise one
+    // coalesced rAF with geometry cached until resize.
+    let cleanupRail = () => {};
+    if (supportsScrollTimeline()) {
+      document.documentElement.classList.add('has-scroll-timeline');
+    } else if (lineProgress && processTrack) {
+      let progressFrame = 0;
+      let trackTop = 0;
+      let trackRange = 1;
+      const measureTrack = () => {
+        const rect = processTrack.getBoundingClientRect();
+        trackTop = rect.top + window.scrollY;
+        trackRange = Math.max(1, processTrack.offsetHeight - window.innerHeight);
       };
-      const heroImage = root.querySelector<HTMLImageElement>('.hero-frame img');
-      if (heroImage) {
-        if (heroImage.complete) refreshLayout();
-        else heroImage.addEventListener('load', refreshLayout, { once: true });
-      }
-      window.addEventListener('resize', refreshLayout, { passive: true });
-
-      gsap.to(lineProgress, {
-        scaleX: 1,
-        transformOrigin: 'left center',
-        ease: 'none',
-        scrollTrigger: { trigger: processTrack, start: 'top top', end: 'bottom bottom', scrub: 0.45 },
-      });
-
-      const media = gsap.matchMedia();
-      media.add('(min-width: 768px)', () => {
-        gsap.utils.toArray<HTMLElement>('[data-parallax]').forEach((element) => {
-          gsap.fromTo(element, { yPercent: -4 }, {
-            yPercent: 4,
-            ease: 'none',
-            scrollTrigger: { trigger: element, start: 'top bottom', end: 'bottom top', scrub: 0.7 },
-          });
-        });
-        gsap.to('.cta-mark', {
-          yPercent: -9,
-          ease: 'none',
-          scrollTrigger: { trigger: '.institutional-cta', start: 'top bottom', end: 'bottom bottom', scrub: 0.8 },
-        });
-        return () => gsap.set('[data-parallax], .cta-mark', { clearProps: 'transform' });
-      });
-    }, root);
+      const updateProgress = () => {
+        progressFrame = 0;
+        const progress = Math.min(1, Math.max(0, (window.scrollY - trackTop) / trackRange));
+        lineProgress.style.transform = `scaleX(${progress})`;
+      };
+      const scheduleProgress = () => {
+        if (progressFrame) return;
+        progressFrame = window.requestAnimationFrame(updateProgress);
+      };
+      const refreshGeometry = () => {
+        measureTrack();
+        scheduleProgress();
+      };
+      window.addEventListener('scroll', scheduleProgress, { passive: true });
+      window.addEventListener('resize', refreshGeometry, { passive: true });
+      refreshGeometry();
+      cleanupRail = () => {
+        if (progressFrame) window.cancelAnimationFrame(progressFrame);
+        window.removeEventListener('scroll', scheduleProgress);
+        window.removeEventListener('resize', refreshGeometry);
+      };
+    }
 
     window.addEventListener('pagehide', () => {
-      if (scrollFrame) window.cancelAnimationFrame(scrollFrame);
-      if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
-      context.revert();
-      lenis?.destroy();
+      observer.disconnect();
+      cleanupRail();
     }, { once: true });
-    })();
   }
 }
