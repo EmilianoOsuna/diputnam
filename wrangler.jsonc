@@ -1,0 +1,11 @@
+{
+  // Static assets only: keeps `wrangler deploy` from auto-configuring the project
+  // with `astro add cloudflare`, which rebuilds with the adapter and drops the
+  // build-time optimized images (see openspec/changes/mobile-polish-audit/design.md, D7).
+  "name": "diputnam",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

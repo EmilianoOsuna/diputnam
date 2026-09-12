@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "postbuild": "node tests/check-dist.mjs",
     "preview": "astro preview",
     "test:sweep": "node tests/home-sweep.mjs"
   },
