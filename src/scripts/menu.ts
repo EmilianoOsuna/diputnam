@@ -8,29 +8,34 @@ const header = document.querySelector<HTMLElement>('[data-auto-theme]');
 const logos = Array.from(header?.querySelectorAll<HTMLElement>('[data-logo]') ?? []);
 const showLogo = (light: boolean) => logos.forEach((logo) => { logo.hidden = logo.dataset.logo !== (light ? 'light' : 'dark'); });
 const themedSections = Array.from(document.querySelectorAll<HTMLElement>('[data-header-theme]'));
-let themeFrame = 0;
 
-const updateHeaderTheme = () => {
-  themeFrame = 0;
-  if (!header || logos.length === 0 || themedSections.length === 0) return;
-  const sampleY = header.getBoundingClientRect().bottom / 2;
-  const activeSection = themedSections.find((section) => {
-    const rect = section.getBoundingClientRect();
-    return rect.top <= sampleY && rect.bottom > sampleY;
-  });
-  if (!activeSection) return;
-  const light = activeSection.dataset.headerTheme === 'light';
+// The header takes the theme of whichever section sits behind its centre line. A thin
+// observation band there (3%–4% of the viewport) means the callback only runs when a
+// section boundary crosses it, never per scroll frame.
+let themeObserver: IntersectionObserver | null = null;
+const applyTheme = (section: HTMLElement) => {
+  if (!header || logos.length === 0) return;
+  const light = section.dataset.headerTheme === 'light';
   header.classList.toggle('site-header--light', light);
   showLogo(light);
 };
-
-const scheduleThemeUpdate = () => {
-  if (!themeFrame) themeFrame = window.requestAnimationFrame(updateHeaderTheme);
+const observeTheme = () => {
+  themeObserver?.disconnect();
+  if (!header || logos.length === 0 || themedSections.length === 0) return;
+  themeObserver = new IntersectionObserver((entries) => {
+    const active = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.boundingClientRect.top - a.boundingClientRect.top)[0];
+    if (active) applyTheme(active.target as HTMLElement);
+  }, { rootMargin: '-3% 0px -96% 0px', threshold: 0 });
+  themedSections.forEach((section) => themeObserver!.observe(section));
+};
+// One-off re-sample (menu close), not scroll-driven.
+const syncTheme = () => {
+  const sampleY = window.innerHeight * 0.035;
+  const section = themedSections.find((candidate) => { const rect = candidate.getBoundingClientRect(); return rect.top <= sampleY && rect.bottom > sampleY; });
+  if (section) applyTheme(section);
 };
 
-window.addEventListener('scroll', scheduleThemeUpdate, { passive: true });
-window.addEventListener('resize', scheduleThemeUpdate);
-updateHeaderTheme();
+observeTheme();
 
 const setMenuOpen = (open: boolean) => {
   if (open && !mobileViewport.matches) return;
@@ -55,7 +60,7 @@ const setMenuOpen = (open: boolean) => {
   if (!open && header) {
     header.classList.toggle('site-header--light', themeBeforeMenuLight);
     showLogo(themeBeforeMenuLight);
-    scheduleThemeUpdate();
+    syncTheme();
   }
 };
 

@@ -158,6 +158,26 @@ try {
     assert.equal(settled.opacity, 1);
   });
 
+  console.log('\n/putnam/ header theme follows the section behind it');
+  const headerTheme = () => page.evaluate(() => ({
+    light: document.querySelector('[data-site-header]').classList.contains('site-header--light'),
+    logo: [...document.querySelectorAll('[data-logo]')].find((el) => !el.hidden)?.dataset.logo,
+  }));
+  await page.evaluate(() => scrollTo(0, 0));
+  await page.waitForTimeout(300);
+  const onHero = await headerTheme();
+  await page.evaluate(() => scrollTo(0, document.querySelector('.process').offsetTop + 200));
+  await page.waitForTimeout(400);
+  const onProcess = await headerTheme();
+  await page.evaluate(() => scrollTo(0, 0));
+  await page.waitForTimeout(400);
+  const backOnHero = await headerTheme();
+  await check('putnam header switches light → dark → light across hero/process', () => {
+    assert.deepEqual(onHero, { light: true, logo: 'light' }, 'hero');
+    assert.deepEqual(onProcess, { light: false, logo: 'dark' }, 'process');
+    assert.deepEqual(backOnHero, { light: true, logo: 'light' }, 'back on hero');
+  });
+
   console.log('\n/eredita/ hero mark placement');
   await page.goto(baseUrl + '/eredita/', { waitUntil: 'networkidle' });
   await check('eredita hero mark fully inside viewport with ≥16px side margin', async () => {
