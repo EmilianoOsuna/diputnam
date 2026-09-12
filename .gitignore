@@ -5,3 +5,4 @@ dist/
 .impeccable/live/
 .impeccable/config.local.json
 .wrangler/
+tests/.artifacts/
