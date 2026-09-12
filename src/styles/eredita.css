@@ -25,7 +25,7 @@
 .ed-hero-media { position: absolute; inset: 0; z-index: 0; }
 .ed-hero-media img, .ed-hero-media video { width: 100%; height: 100%; object-fit: cover; transform: scale(1.04); }
 .ed-hero-shade { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(6, 10, 9, 0.82) 0%, rgba(6, 10, 9, 0.28) 46%, rgba(6, 10, 9, 0.12) 70%); }
-.ed-hero-mark { position: absolute; z-index: 1; top: 50vh; right: clamp(2rem, 7vw, 7rem); width: min(42vw, 38rem); height: auto; transform: translateY(-50%); filter: drop-shadow(0 0.5rem 2rem rgba(0, 0, 0, 0.35)); pointer-events: none; }
+.ed-hero-mark { position: absolute; z-index: 1; top: 50vh; right: clamp(2rem, 7vw, 7rem); width: min(26vw, 24rem); height: auto; transform: translateY(-50%); filter: drop-shadow(0 0.5rem 2rem rgba(0, 0, 0, 0.35)); pointer-events: none; }
 .ed-hero-content { position: relative; z-index: 1; width: min(52rem, 100%); color: var(--ed-paper); }
 .ed-hero-content .section-kicker { margin-bottom: 1.1rem; color: rgba(244, 238, 223, 0.82); }
 .ed-hero-content h1 { margin: 0; font-size: clamp(2.4rem, 5vw, 4.4rem); font-weight: 500; line-height: 1.05; letter-spacing: -0.03em; }
@@ -57,6 +57,7 @@
 
 /* Typologies — horizontal scroll */
 .ed-typologies { position: relative; height: 100dvh; overflow: hidden; background: var(--ed-paper); }
+.ed-h-head { display: none; }
 .ed-h-track { display: flex; height: 100%; width: max-content; }
 @media (min-width: 900px) {
   .is-motion-ready .ed-h-track { will-change: transform; }
@@ -105,38 +106,53 @@
 .cta-actions a { display: flex; justify-content: space-between; width: min(18rem, 100%); padding: 1rem 0; border-top: 1px solid currentColor; font-size: 0.83rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .cta-actions a span { transition: transform 180ms ease; }
 .cta-actions a:hover span { transform: translate(0.2rem, -0.2rem); }
-.cta-mark { grid-column: 7 / 13; align-self: center; justify-self: center; width: min(65%, 28rem); height: auto; object-fit: contain; opacity: 1; pointer-events: none; }
+.cta-mark { grid-column: 7 / 13; align-self: center; justify-self: center; width: min(45%, 18rem); height: auto; object-fit: contain; opacity: 1; pointer-events: none; }
 .eredita-page .site-footer--flow { position: relative; z-index: 1; min-height: 14rem; padding: 4rem clamp(1.25rem, 3vw, 3.5rem); color: var(--ed-paper); background: var(--ed-ink); text-shadow: none; }
 .eredita-page .site-footer--flow::before { display: none; }
 
 @media (max-width: 899px) {
-  .ed-intro-copy { grid-column: 1 / 13; }
-  .ed-facts { grid-column: 1 / 13; margin-top: 2.5rem; }
+  .ed-intro { display: block; }
+  .ed-facts { margin-top: 2.5rem; }
   .ed-legal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .ed-typologies { height: auto; overflow: visible; }
-  .ed-h-track { display: block; width: auto; transform: none !important; }
-  .ed-h-panel { display: block; width: auto; height: auto; }
-  .ed-h-panel--intro { padding: clamp(4rem, 12vw, 6rem) 1.25rem; }
-  .ed-h-panel--intro h2 { font-size: clamp(2.6rem, 11vw, 4rem); }
-  .ed-h-media { height: 60vh; }
-  .ed-h-copy { padding: clamp(2rem, 8vw, 3rem) 1.25rem clamp(3rem, 10vw, 4rem); }
+  /* Mobile: intro becomes a header; the cards become a native swipe track with scroll-snap. */
+  .ed-typologies { height: auto; overflow: visible; padding: clamp(4rem, 12vw, 6rem) 0 clamp(3rem, 10vw, 4.5rem); }
+  .ed-h-head { display: block; padding: 0 1.25rem 2rem; }
+  .ed-h-head h2 { margin: 1.2rem 0 1rem; font-size: clamp(2.6rem, 11vw, 4rem); font-weight: 500; line-height: 0.96; letter-spacing: -0.045em; }
+  .ed-h-head .ed-h-intro-copy { max-width: 28rem; margin: 0 0 1.6rem; }
+  .ed-h-progress { display: grid; gap: 0.9rem; }
+  .ed-h-counter { display: flex; align-items: baseline; gap: 0.4rem; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; color: rgba(0, 58, 54, 0.6); }
+  .ed-h-counter b { font-size: 2.6rem; font-weight: 500; line-height: 0.85; letter-spacing: -0.05em; color: var(--ed-ink); }
+  .ed-h-counter i { font-style: normal; }
+  .ed-h-rail { display: block; height: 1px; background: rgba(0, 58, 54, 0.22); }
+  .ed-h-rail span { display: block; height: 2px; margin-top: -0.5px; background: var(--ed-ink); transform: scaleX(var(--progress, 0.25)); transform-origin: left center; }
+  .ed-h-track .ed-h-panel--intro { display: none; }
+  .ed-h-track { display: flex; gap: 1rem; width: auto; height: auto; padding: 0 1.25rem; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: 1.25rem; scrollbar-width: none; -webkit-overflow-scrolling: touch; transform: none !important; }
+  .ed-h-track::-webkit-scrollbar { display: none; }
+  .ed-h-track::after { content: ''; flex: 0 0 0.25rem; }
+  .ed-h-track:focus-visible { outline: 1px solid var(--ed-ink); outline-offset: 4px; }
+  .ed-h-panel { display: grid; grid-template-columns: 1fr; flex: 0 0 min(86vw, 26rem); width: auto; height: auto; scroll-snap-align: center; scroll-snap-stop: always; }
+  .ed-h-media { height: 52vw; max-height: 22rem; }
+  .ed-h-copy { padding: clamp(1.6rem, 6vw, 2.4rem) 1.25rem clamp(2rem, 8vw, 2.8rem); }
 }
 
 @media (max-width: 767px) {
   .eredita-page .site-header { color: var(--ed-ink); }
   .eredita-page .site-header--light { color: var(--ed-paper); }
   .ed-hero { padding: 0 1rem 3.5rem; }
-  .ed-hero-mark { top: 38vh; right: 1rem; width: 52vw; transform: translateY(-50%); }
+  .ed-hero-mark { top: 38vh; right: 1rem; width: 40vw; transform: translateY(-50%); }
   .ed-legal-header > div, .ed-legal-header > p { grid-column: 1 / 13; }
   .ed-legal-header > p { max-width: none; }
   .ed-legal-grid { grid-template-columns: 1fr; }
   .ed-cta { display: block; }
-  .ed-cta .cta-mark { width: min(70%, 20rem); margin: 3rem auto 0; }
+  .ed-cta .cta-mark { width: min(50%, 14rem); margin: 3rem auto 0; }
   .cta-actions { flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .eredita-page [data-parallax], .eredita-page [data-reveal-group] { transform: none !important; opacity: 1 !important; }
+}
+/* Reduced motion on desktop stacks the pinned track; the mobile swipe track stays as is. */
+@media (prefers-reduced-motion: reduce) and (min-width: 900px) {
   .ed-typologies { height: auto; overflow: visible; }
   .ed-h-track { display: block; width: auto; transform: none !important; }
   .ed-h-panel { display: block; width: auto; height: auto; }

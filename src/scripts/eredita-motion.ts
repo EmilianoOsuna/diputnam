@@ -1,11 +1,38 @@
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { mountHorizontalTrack } from './horizontal-track';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const root = document.querySelector<HTMLElement>('[data-eredita]');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Mobile typologies: native swipe track. Independent of GSAP/reduced motion so the
+// counter and rail keep working even when every animation is off.
+if (root) {
+  const track = root.querySelector<HTMLElement>('[data-h-track]');
+  const mobile = window.matchMedia('(max-width: 899px)');
+  let unmount: (() => void) | null = null;
+  const sync = () => {
+    if (mobile.matches && track && !unmount) {
+      unmount = mountHorizontalTrack({
+        track,
+        cards: Array.from(track.querySelectorAll<HTMLElement>('[data-h-panel]:not(.ed-h-panel--intro)')),
+        current: root.querySelector<HTMLElement>('[data-track-current]'),
+        rail: root.querySelector<HTMLElement>('[data-track-rail]'),
+        label: 'Tipología',
+        reducedMotion,
+      });
+    } else if (!mobile.matches && unmount) {
+      unmount();
+      unmount = null;
+    }
+    if (!reducedMotion) ScrollTrigger.refresh();
+  };
+  sync();
+  mobile.addEventListener('change', sync);
+}
 
 if (root && !reducedMotion) {
   document.body.classList.add('is-motion-ready');

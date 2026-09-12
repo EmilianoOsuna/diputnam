@@ -106,7 +106,7 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 .contacto-page .cta-actions a { display: flex; justify-content: space-between; width: min(18rem, 100%); min-height: 2.75rem; padding: 1rem 0; border-top: 1px solid currentColor; font-size: 0.83rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .contacto-page .cta-actions a span { transition: transform 180ms ease; }
 .contacto-page .cta-actions a:hover span, .contacto-page .cta-actions a:focus-visible span { transform: translate(0.2rem, -0.2rem); }
-.ct-cta .cta-mark { position: absolute; right: clamp(1rem, 4vw, 5rem); bottom: 9%; width: min(42vw, 42rem); height: auto; object-fit: contain; opacity: 0.2; pointer-events: none; }
+.ct-cta .cta-mark { position: absolute; right: clamp(1rem, 4vw, 5rem); bottom: 9%; width: min(42vw, 42rem); height: auto; object-fit: contain; opacity: 0.32; pointer-events: none; }
 .contacto-page .site-footer--flow { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 2rem; min-height: 14rem; padding: 4rem var(--gutter); color: var(--putnam-paper); background: var(--putnam-deep); font-size: 0.9rem; line-height: 1.45; text-shadow: none; }
 .contacto-page .site-footer--flow::before { display: none; }
 

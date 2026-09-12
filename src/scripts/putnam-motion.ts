@@ -1,6 +1,8 @@
 const root = document.querySelector<HTMLElement>('[data-putnam]');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const mobileViewport = window.matchMedia('(max-width: 767px)').matches;
+// Mobile keeps the browser's native scroll (no Lenis) but runs the same entrance
+// and reveal animations as the other pages; Lenis smoothing stays desktop-only.
+const nativeScroll = window.matchMedia('(max-width: 767px)').matches;
 
 if (root) {
   const processSteps = Array.from(root.querySelectorAll<HTMLElement>('[data-process-step]'));
@@ -26,7 +28,7 @@ if (root) {
 
   setProcessStep(0);
 
-  if (mobileViewport || reducedMotion) {
+  if (reducedMotion) {
     document.body.classList.add('is-native-motion');
     let progressFrame = 0;
     let trackTop = 0;
@@ -72,19 +74,23 @@ if (root) {
       observer.disconnect();
     }, { once: true });
   } else {
+    // The hero copy is pre-hidden by `.motion-pending` (inline script in putnam.astro).
+    // Whatever happens to the motion bundle, never leave it hidden.
+    const releaseHero = () => document.documentElement.classList.remove('motion-pending');
+    const heroFailsafe = window.setTimeout(releaseHero, 3000);
     void (async () => {
-    const [{ default: Lenis }, { gsap }, { ScrollTrigger }] = await Promise.all([
-      import('lenis'),
+    const [{ gsap }, { ScrollTrigger }, lenisModule] = await Promise.all([
       import('gsap'),
       import('gsap/ScrollTrigger'),
-    ]);
+      nativeScroll ? Promise.resolve(null) : import('lenis'),
+    ]).catch((error) => { window.clearTimeout(heroFailsafe); releaseHero(); throw error; });
     gsap.registerPlugin(ScrollTrigger);
     document.body.classList.add('is-motion-ready');
-    const lenis = new Lenis({ anchors: true, autoRaf: true, lerp: 0.09 });
+    const lenis = lenisModule ? new lenisModule.default({ anchors: true, autoRaf: true, lerp: 0.09 }) : null;
     let scrollFrame = 0;
     let refreshFrame = 0;
 
-    lenis.on('scroll', () => {
+    lenis?.on('scroll', () => {
       if (scrollFrame) return;
       scrollFrame = window.requestAnimationFrame(() => {
         scrollFrame = 0;
@@ -94,12 +100,17 @@ if (root) {
     gsap.ticker.lagSmoothing(0);
 
     const context = gsap.context(() => {
-      gsap.from('.institutional-hero .section-kicker, .institutional-hero h1, .institutional-hero .hero-lead', {
-        autoAlpha: 0,
-        y: 34,
+      const heroTargets = '.institutional-hero .section-kicker, .institutional-hero h1, .institutional-hero .hero-lead';
+      gsap.set(heroTargets, { autoAlpha: 0, y: 34, willChange: 'transform, opacity' });
+      window.clearTimeout(heroFailsafe);
+      releaseHero();
+      gsap.to(heroTargets, {
+        autoAlpha: 1,
+        y: 0,
         duration: 1.15,
         stagger: 0.09,
         ease: 'power3.out',
+        onComplete: () => gsap.set(heroTargets, { clearProps: 'willChange' }),
       });
       gsap.utils.toArray<HTMLElement>('[data-reveal-group]').forEach((group) => {
         if (group.closest('.institutional-hero')) return;
@@ -144,17 +155,21 @@ if (root) {
         scrollTrigger: { trigger: processTrack, start: 'top top', end: 'bottom bottom', scrub: 0.45 },
       });
 
-      gsap.utils.toArray<HTMLElement>('[data-parallax]').forEach((element) => {
-        gsap.fromTo(element, { yPercent: -4 }, {
-          yPercent: 4,
-          ease: 'none',
-          scrollTrigger: { trigger: element, start: 'top bottom', end: 'bottom top', scrub: 0.7 },
+      const media = gsap.matchMedia();
+      media.add('(min-width: 768px)', () => {
+        gsap.utils.toArray<HTMLElement>('[data-parallax]').forEach((element) => {
+          gsap.fromTo(element, { yPercent: -4 }, {
+            yPercent: 4,
+            ease: 'none',
+            scrollTrigger: { trigger: element, start: 'top bottom', end: 'bottom top', scrub: 0.7 },
+          });
         });
-      });
-      gsap.to('.cta-mark', {
-        yPercent: -9,
-        ease: 'none',
-        scrollTrigger: { trigger: '.institutional-cta', start: 'top bottom', end: 'bottom bottom', scrub: 0.8 },
+        gsap.to('.cta-mark', {
+          yPercent: -9,
+          ease: 'none',
+          scrollTrigger: { trigger: '.institutional-cta', start: 'top bottom', end: 'bottom bottom', scrub: 0.8 },
+        });
+        return () => gsap.set('[data-parallax], .cta-mark', { clearProps: 'transform' });
       });
     }, root);
 
@@ -162,7 +177,7 @@ if (root) {
       if (scrollFrame) window.cancelAnimationFrame(scrollFrame);
       if (refreshFrame) window.cancelAnimationFrame(refreshFrame);
       context.revert();
-      lenis.destroy();
+      lenis?.destroy();
     }, { once: true });
     })();
   }

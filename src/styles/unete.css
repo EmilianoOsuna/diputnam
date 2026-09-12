@@ -36,7 +36,7 @@
 .pin-counter { display: flex; align-items: baseline; gap: 0.5rem; font-size: 0.68rem; letter-spacing: 0.12em; }
 .pin-counter b { font-size: clamp(4rem, 7vw, 7rem); font-weight: 500; line-height: 0.85; letter-spacing: -0.06em; }
 .pin-rail { width: 100%; height: 1px; margin-top: 1.6rem; background: rgba(244, 238, 223, 0.32); }
-.pin-rail span { display: block; width: 25%; height: 2px; background: var(--putnam-paper); }
+.pin-rail span { display: block; width: 100%; height: 2px; background: var(--putnam-paper); transform: scaleX(var(--progress, 0.25)); transform-origin: left center; }
 .traits { grid-column: 7 / 13; }
 .trait { display: grid; min-height: 100dvh; padding: 4rem 0; align-content: center; gap: 1.2rem; border-bottom: 1px solid rgba(244, 238, 223, 0.16); }
 .trait:last-child { border-bottom: 0; }
@@ -97,7 +97,7 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 .unete-page .cta-actions a { display: flex; justify-content: space-between; width: min(18rem, 100%); min-height: 2.75rem; padding: 1rem 0; border-top: 1px solid currentColor; font-size: 0.83rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .unete-page .cta-actions a span { transition: transform 180ms ease; }
 .unete-page .cta-actions a:hover span, .unete-page .cta-actions a:focus-visible span { transform: translate(0.2rem, -0.2rem); }
-.un-cta .cta-mark { position: absolute; right: clamp(1rem, 4vw, 5rem); bottom: 9%; width: min(42vw, 42rem); height: auto; object-fit: contain; opacity: 0.2; pointer-events: none; }
+.un-cta .cta-mark { position: absolute; right: clamp(1rem, 4vw, 5rem); bottom: 9%; width: min(42vw, 42rem); height: auto; object-fit: contain; opacity: 0.32; pointer-events: none; }
 .unete-page .site-footer--flow { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 2rem; min-height: 14rem; padding: 4rem var(--gutter); color: var(--putnam-paper); background: var(--putnam-deep); font-size: 0.9rem; line-height: 1.45; text-shadow: none; }
 .unete-page .site-footer--flow::before { display: none; }
 
@@ -113,11 +113,19 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 @media (max-width: 899px) {
   .section-head > div, .section-head > p { grid-column: 1 / 13; }
   .section-head > p { margin-top: 1.5rem; }
-  .un-culture { display: block; }
-  .pin-stage { position: static; height: auto; min-height: 0; padding: 6rem 0 2rem; }
+  /* Mobile: the pin stage is a plain header and the traits become a native swipe track. */
+  .un-culture { display: block; padding: 0 0 3rem; }
+  .pin-stage { position: static; height: auto; min-height: 0; padding: 6rem var(--gutter) 2rem; }
   .pin-stage h2 { width: 26rem; max-width: 100%; }
-  .trait { min-height: 0; padding: 3rem 0; }
-  .trait:not(.is-active) h3 { opacity: 1; }
+  .pin-stage > div:last-child { margin-top: 2.5rem; }
+  .traits { display: flex; gap: 1rem; padding: 0 var(--gutter); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .traits::-webkit-scrollbar { display: none; }
+  .traits::after { content: ''; flex: 0 0 0.25rem; }
+  .traits:focus-visible { outline: 1px solid var(--putnam-paper); outline-offset: 4px; }
+  .trait { flex: 0 0 min(84vw, 24rem); min-height: 0; padding: 1.8rem 1.4rem 2rem; align-content: start; border: 1px solid rgba(244, 238, 223, 0.18); border-bottom: 1px solid rgba(244, 238, 223, 0.18); scroll-snap-align: center; scroll-snap-stop: always; }
+  .trait:last-child { border-bottom: 1px solid rgba(244, 238, 223, 0.18); }
+  .trait h3 { font-size: clamp(2.2rem, 9vw, 3rem); }
+  .trait:not(.is-active) h3 { opacity: 0.55; }
 }
 
 @media (max-width: 767px) {
@@ -127,7 +135,6 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
   .un-hero .hero-details { flex-direction: column; align-items: flex-start; }
   .hero-lead { width: min(28rem, 92%); }
   .hero-meta { text-align: left; }
-  .un-culture { padding: 0 1rem 3rem; }
   .un-profile, .un-openings, .un-process, .un-spontaneous { padding: 6rem 1rem; }
   .section-head .h2-xl { font-size: clamp(3.3rem, 14vw, 5rem); }
   .values, .steps, .kpis { grid-template-columns: 1fr; gap: 1.5rem; margin-left: 0; }
@@ -144,7 +151,10 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .unete-page [data-reveal-group], .unete-page .line > span, .unete-page .fade-up, .unete-page [data-pin-stage], .unete-page [data-pin-rail] { opacity: 1 !important; transform: none !important; }
+  .unete-page [data-reveal-group], .unete-page .line > span, .unete-page .fade-up, .unete-page [data-pin-stage] { opacity: 1 !important; transform: none !important; }
+}
+@media (prefers-reduced-motion: reduce) and (min-width: 900px) {
+  .unete-page [data-pin-rail] { transform: none !important; }
   .unete-page .un-culture { display: block; }
   .unete-page .pin-stage { position: static !important; height: auto; min-height: 0; padding-bottom: 2rem; }
   .unete-page .trait { min-height: 0; padding: 3rem 0; }

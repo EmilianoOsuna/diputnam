@@ -5,13 +5,14 @@ let menuOrigin: Element | null = null;
 let themeBeforeMenuLight = false;
 
 const header = document.querySelector<HTMLElement>('[data-auto-theme]');
-const logo = header?.querySelector<HTMLImageElement>('[data-logo-dark]');
+const logos = Array.from(header?.querySelectorAll<HTMLElement>('[data-logo]') ?? []);
+const showLogo = (light: boolean) => logos.forEach((logo) => { logo.hidden = logo.dataset.logo !== (light ? 'light' : 'dark'); });
 const themedSections = Array.from(document.querySelectorAll<HTMLElement>('[data-header-theme]'));
 let themeFrame = 0;
 
 const updateHeaderTheme = () => {
   themeFrame = 0;
-  if (!header || !logo || themedSections.length === 0) return;
+  if (!header || logos.length === 0 || themedSections.length === 0) return;
   const sampleY = header.getBoundingClientRect().bottom / 2;
   const activeSection = themedSections.find((section) => {
     const rect = section.getBoundingClientRect();
@@ -20,7 +21,7 @@ const updateHeaderTheme = () => {
   if (!activeSection) return;
   const light = activeSection.dataset.headerTheme === 'light';
   header.classList.toggle('site-header--light', light);
-  logo.src = light ? logo.dataset.logoLight ?? logo.src : logo.dataset.logoDark ?? logo.src;
+  showLogo(light);
 };
 
 const scheduleThemeUpdate = () => {
@@ -33,10 +34,10 @@ updateHeaderTheme();
 
 const setMenuOpen = (open: boolean) => {
   if (open && !mobileViewport.matches) return;
-  if (open && header && logo) {
+  if (open && header) {
     themeBeforeMenuLight = header.classList.contains('site-header--light');
     header.classList.remove('site-header--light');
-    logo.src = logo.dataset.logoDark ?? logo.src;
+    showLogo(false);
   }
   siteNav?.classList.toggle('is-open', open);
   document.body.classList.toggle('menu-open', open);
@@ -51,9 +52,9 @@ const setMenuOpen = (open: boolean) => {
     menuOrigin.focus();
     menuOrigin = null;
   }
-  if (!open && header && logo) {
+  if (!open && header) {
     header.classList.toggle('site-header--light', themeBeforeMenuLight);
-    logo.src = themeBeforeMenuLight ? logo.dataset.logoLight ?? logo.src : logo.dataset.logoDark ?? logo.src;
+    showLogo(themeBeforeMenuLight);
     scheduleThemeUpdate();
   }
 };

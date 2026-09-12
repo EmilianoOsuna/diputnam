@@ -12,7 +12,7 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   const menuToggle = page.locator('[data-menu-toggle]');
   assert.equal(await menuToggle.getAttribute('aria-expanded'), 'false');
-  assert.equal(await page.locator('.site-nav > a').count(), 3);
+  assert.equal(await page.locator('.site-nav > a').count(), 5);
   await menuToggle.click();
   assert.equal(await menuToggle.getAttribute('aria-expanded'), 'true');
   assert.equal(await page.locator('.site-nav.is-open').count(), 1);
@@ -25,7 +25,7 @@ try {
   await page.setViewportSize({ width: 1440, height: 900 });
 
   assert.deepEqual(await page.locator('[data-panel] h1 a, [data-panel] h2 a').evaluateAll((links) => links.map((link) => link.getAttribute('href'))), [
-    '#inicio', '#eredita', '#putnam', '#contacto',
+    '#inicio', '/eredita/', '/putnam/', '#contacto',
   ]);
   assert.equal(await page.locator('.panel-eyebrow, .panel-description, .panel-link, .panel-index').count(), 0);
   assert.equal(await page.locator('[data-scroll-cue]').count(), 1);

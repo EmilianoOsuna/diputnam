@@ -23,14 +23,14 @@
   --putnam-muted: rgba(244, 238, 223, 0.76);
   font-family: 'DM Sans', sans-serif;
   color: var(--putnam-cream);
-  background: #594037;
+  background: var(--putnam-cream);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
 
 * { box-sizing: border-box; }
-html { background: #594037; }
-body { margin: 0; min-width: 320px; background: #594037; }
+html { background: var(--putnam-cream); }
+body { margin: 0; min-width: 320px; background: var(--putnam-cream); }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; }
 
@@ -99,6 +99,8 @@ button { font: inherit; }
 
 .brand img { display: block; width: 100%; height: auto; }
 .brand--mark { display: inline-flex; width: auto; height: 3.25rem; padding: 0; align-items: center; gap: 0.8rem; background: transparent; box-shadow: none; }
+.brand--mark picture { display: block; }
+.brand--mark picture[hidden] { display: none; }
 .brand--mark img { width: 3.05rem; height: 3.45rem; object-fit: contain; transform: scale(1.08); transform-origin: center; }
 .brand-copy { display: grid; gap: 0.14rem; font-family: 'Josefin Sans', sans-serif; line-height: 1; transform: translateY(0.12rem); }
 .brand-copy strong { font-size: 1.42rem; font-weight: 600; letter-spacing: 0.045em; text-transform: uppercase; }
@@ -127,7 +129,7 @@ button { font: inherit; }
 
 .home { width: 100%; }
 .home-experience { position: relative; }
-.home-stage { position: relative; }
+.home-stage { position: relative; background: #0d1116; }
 .scene-markers { display: none; }
 .scene-marker { height: 100svh; }
 
@@ -208,6 +210,7 @@ button { font: inherit; }
 .home.is-enhanced .panel {
   position: absolute;
   inset: 0;
+  height: 100%;
   min-height: 100%;
   margin: 0;
 }
