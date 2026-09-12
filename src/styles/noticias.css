@@ -109,3 +109,11 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
   .noticias-page [data-parallax], .noticias-page [data-reveal-group], .noticias-page .line > span, .noticias-page .fade-up { opacity: 1 !important; transform: none !important; }
 }
 
+/* Mobile hero entrance without a motion library (keyframes in global.css). */
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .nw-hero h1 .line > span { animation: m-line-up 900ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .nw-hero h1 .line:nth-child(2) > span { animation-delay: 90ms; }
+  .nw-hero h1 .line:nth-child(3) > span { animation-delay: 180ms; }
+  .nw-hero .fade-up { animation: m-fade-up 800ms cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 400ms; }
+  .nw-hero .hero-details.fade-up { animation-delay: 480ms; }
+}
