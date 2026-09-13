@@ -25,7 +25,7 @@ const sendProfile = profileMailto('Perfil para futuras oportunidades');
       <section class="un-hero" id="inicio" aria-labelledby="un-hero-title" data-header-theme="light">
         <div class="hero-copy">
           <p class="section-kicker fade-up"><span>Talento Putnam · {contact.city}</span></p>
-          <h1 id="un-hero-title"><span class="line"><span>Únete a un equipo</span></span><span class="line"><span>que construye con criterio,</span></span><span class="line"><span>detalle y visión de largo plazo.</span></span></h1>
+          <h1 id="un-hero-title">Únete a un equipo <br class="cut" />que construye con criterio, <br class="cut" />detalle y visión de largo plazo.</h1>
         </div>
         <div class="hero-details fade-up">
           <div><p class="hero-lead">{hero.lead}</p><a class="hero-index" href="#cultura">Conoce cómo trabajamos <span aria-hidden="true">↓</span></a></div>
@@ -50,7 +50,7 @@ const sendProfile = profileMailto('Perfil para futuras oportunidades');
 
       <section class="un-profile" id="perfil" aria-labelledby="un-profile-title" data-header-theme="dark">
         <header class="section-head grid-12">
-          <div><p class="section-kicker">Qué valoramos</p><h2 id="un-profile-title" class="h2-long"><span class="line"><span>Buscamos profesionales que quieran crecer</span></span><span class="line"><span>con una constructora enfocada en valor</span></span><span class="line"><span>patrimonial y ejecución rigurosa.</span></span></h2></div>
+          <div><p class="section-kicker">Qué valoramos</p><h2 id="un-profile-title" class="h2-long">Buscamos profesionales que quieran crecer <br class="cut" />con una constructora enfocada en valor <br class="cut" />patrimonial y ejecución rigurosa.</h2></div>
           <p data-reveal-group>{profile.text}</p>
         </header>
         <div class="values" data-reveal-group>
@@ -63,7 +63,7 @@ const sendProfile = profileMailto('Perfil para futuras oportunidades');
 
       <section class="un-openings" id="oportunidades" aria-labelledby="un-openings-title" data-header-theme="dark">
         <header class="section-head grid-12">
-          <div><p class="section-kicker">Oportunidades</p><h2 id="un-openings-title" class="h2-xl"><span class="line"><span>Actualmente</span></span><span class="line"><span>no estamos contratando.</span></span></h2></div>
+          <div><p class="section-kicker">Oportunidades</p><h2 id="un-openings-title" class="h2-xl">Actualmente <br class="cut" />no estamos contratando.</h2></div>
           <p data-reveal-group>{openings.text}</p>
         </header>
         <div class="empty-panel grid-12" data-reveal-group>
@@ -81,7 +81,7 @@ const sendProfile = profileMailto('Perfil para futuras oportunidades');
 
       <section class="un-process" id="proceso" aria-labelledby="un-process-title" data-header-theme="dark">
         <header class="section-head grid-12">
-          <div><p class="section-kicker">Proceso de selección</p><h2 id="un-process-title"><span class="line"><span>{process.title}</span></span></h2></div>
+          <div><p class="section-kicker">Proceso de selección</p><h2 id="un-process-title">{process.title}</h2></div>
           <p data-reveal-group>{process.text}</p>
         </header>
         <div class="steps" data-reveal-group>
@@ -91,7 +91,7 @@ const sendProfile = profileMailto('Perfil para futuras oportunidades');
 
       <section class="un-spontaneous" id="postulacion" aria-labelledby="un-spontaneous-title" data-header-theme="dark">
         <header class="section-head grid-12">
-          <div><p class="section-kicker">Postulación espontánea</p><h2 id="un-spontaneous-title"><span class="line"><span>Aunque no veas una vacante exacta,</span></span><span class="line"><span>puedes escribirnos.</span></span></h2></div>
+          <div><p class="section-kicker">Postulación espontánea</p><h2 id="un-spontaneous-title">Aunque no veas una vacante exacta, <br class="cut" />puedes escribirnos.</h2></div>
           <p data-reveal-group>{spontaneous.text}</p>
         </header>
         <div class="index-list" data-reveal-group>
@@ -103,7 +103,7 @@ const sendProfile = profileMailto('Perfil para futuras oportunidades');
 
       <section class="un-cta" aria-labelledby="un-cta-title" data-header-theme="light">
         <p class="section-kicker">Aplicar</p>
-        <h2 id="un-cta-title"><span class="line"><span>¿Quieres formar parte</span></span><span class="line"><span>de Putnam Desarrollos</span></span><span class="line"><span>Inmobiliarios?</span></span></h2>
+        <h2 id="un-cta-title">¿Quieres formar parte <br class="cut" />de Putnam Desarrollos <br class="cut" />Inmobiliarios?</h2>
         <p data-reveal-group>{apply.text}</p>
         <div class="cta-actions" data-reveal-group><a href={sendProfile}>Enviar perfil <span aria-hidden="true">↗</span></a><a href={profileWhatsapp} target="_blank" rel="noreferrer">WhatsApp <span aria-hidden="true">↗</span></a><a href="/contacto/">Ir a contacto <span aria-hidden="true">↗</span></a></div>
         <Image class="cta-mark" src={putnamMark} widths={[400, 800]} sizes="(max-width: 767px) 72vw, min(42vw, 42rem)" format="webp" alt="" aria-hidden="true" />

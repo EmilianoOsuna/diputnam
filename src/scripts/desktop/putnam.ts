@@ -5,6 +5,8 @@ import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { groupTargets, revealHeroLines, revealTitles } from './lines';
+
 gsap.registerPlugin(ScrollTrigger);
 
 export const mount = (root: HTMLElement, setProcessStep: (index: number) => void, releaseHero: () => void) => {
@@ -27,20 +29,24 @@ export const mount = (root: HTMLElement, setProcessStep: (index: number) => void
   gsap.ticker.lagSmoothing(0);
 
   const context = gsap.context(() => {
-    const heroTargets = '.institutional-hero .section-kicker, .institutional-hero h1, .institutional-hero .hero-lead';
+    const heroTargets = '.institutional-hero .section-kicker, .institutional-hero .hero-lead';
     gsap.set(heroTargets, { autoAlpha: 0, y: 34, willChange: 'transform, opacity' });
     releaseHero();
+    revealHeroLines(gsap, root.querySelector('.institutional-hero h1'), { delay: 0.1 });
     gsap.to(heroTargets, {
       autoAlpha: 1,
       y: 0,
       duration: 1.15,
-      stagger: 0.09,
+      stagger: 0.36,
       ease: 'power3.out',
       onComplete: () => gsap.set(heroTargets, { clearProps: 'willChange' }),
     });
+    revealTitles(gsap, root, '.institutional-hero', 'top 82%');
     gsap.utils.toArray<HTMLElement>('[data-reveal-group]').forEach((group) => {
       if (group.closest('.institutional-hero')) return;
-      gsap.from(Array.from(group.children), {
+      const targets = groupTargets(group);
+      if (!targets.length) return;
+      gsap.from(targets, {
         autoAlpha: 0,
         y: 28,
         duration: 0.9,

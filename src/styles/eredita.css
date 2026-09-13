@@ -170,7 +170,6 @@
 
 /* Mobile hero entrance without a motion library (keyframes in global.css). */
 @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
-  .ed-hero-content > * { animation: m-fade-up 1.15s cubic-bezier(0.22, 1, 0.36, 1) both; }
-  .ed-hero-content > :nth-child(2) { animation-delay: 90ms; }
-  .ed-hero-content > :nth-child(3) { animation-delay: 180ms; }
+  .ed-hero-content > :not(h1) { animation: m-fade-up 1.15s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .ed-hero-content > .ed-hero-sub { animation-delay: 360ms; }
 }

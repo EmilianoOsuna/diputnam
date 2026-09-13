@@ -157,20 +157,73 @@ try {
 
   console.log('\n/putnam/ hero entrance animation');
   await page.goto(baseUrl + '/putnam/', { waitUntil: 'commit' });
-  await page.waitForTimeout(80);
-  const early = await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector('.institutional-hero h1')).opacity));
+  await page.waitForTimeout(120);
+  const lineY = () => page.evaluate(() => [...document.querySelectorAll('.institutional-hero h1 .line > span')].map((span) => Math.round(new DOMMatrix(getComputedStyle(span).transform).m42)));
+  const early = await lineY();
   await page.waitForTimeout(1500);
   const settled = await page.evaluate(() => ({
+    lines: [...document.querySelectorAll('.institutional-hero h1 .line > span')].map((span) => Math.round(new DOMMatrix(getComputedStyle(span).transform).m42)),
     opacity: parseFloat(getComputedStyle(document.querySelector('.institutional-hero h1')).opacity),
     nativeMotion: document.body.classList.contains('is-native-motion'),
   }));
-  await check('putnam hero animates in on mobile', () => {
+  await check('putnam hero title enters line by line on mobile', () => {
     assert.equal(settled.nativeMotion, false, 'body has is-native-motion');
-    assert.ok(early < 1, `h1 opacity at 80ms was ${early}`);
+    assert.ok(early.length >= 2, `only ${early.length} lines`);
+    assert.ok(early.at(-1) > 0, `last line offset at 120ms was ${early.at(-1)}`);
+    assert.deepEqual(settled.lines, settled.lines.map(() => 0), 'lines not landed');
     assert.equal(settled.opacity, 1);
   });
 
+  // Titles: one real line per mask, nothing clipped once landed, no word wider than its box.
+  for (const width of [320, 390]) {
+    console.log(`\ntitles at ${width}px`);
+    await page.setViewportSize({ width, height: 844 });
+    for (const route of routes) {
+      await page.goto(baseUrl + route, { waitUntil: 'networkidle' });
+      await page.evaluate(async () => { const h = document.documentElement.scrollHeight; for (let y = 0; y <= h; y += 300) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 120)); } });
+      await page.waitForTimeout(2000);
+      const rows = await page.evaluate(() => {
+        const out = [];
+        for (const h of document.querySelectorAll('h1, h2')) {
+          if (h.classList.contains('visually-hidden') || !h.getClientRects().length || h.closest('[data-track]')) continue;
+          const lines = [...h.querySelectorAll('.line')];
+          const issues = [];
+          for (const line of lines) {
+            const span = line.firstElementChild;
+            const range = document.createRange(); range.selectNodeContents(span);
+            const rects = [...range.getClientRects()].filter((r) => r.width > 0);
+            if (new Set(rects.map((r) => Math.round(r.top / 4))).size > 1) issues.push(`mask holds 2+ lines: ${span.textContent.slice(0, 24)}`);
+            if (Math.abs(new DOMMatrix(getComputedStyle(span).transform).m42) > 0.5) { issues.push(`not landed: ${span.textContent.slice(0, 24)}`); continue; }
+            if (getComputedStyle(line).clipPath !== 'none') {
+              const lr = line.getBoundingClientRect();
+              const top = Math.min(...rects.map((r) => r.top)), bottom = Math.max(...rects.map((r) => r.bottom));
+              if (lr.top - top > 0.5 || bottom - lr.bottom > 0.5) issues.push(`clipped: ${span.textContent.slice(0, 24)}`);
+            }
+          }
+          const words = (lines.length ? lines.map((l) => l.textContent).join(' ') : h.textContent).trim().split(/\s+/);
+          const probe = document.createElement('span'); probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;';
+          h.append(probe);
+          let widest = 0, widestWord = '';
+          for (const w of words) { probe.textContent = w; const ww = probe.getBoundingClientRect().width; if (ww > widest) { widest = ww; widestWord = w; } }
+          probe.remove();
+          const box = h.getBoundingClientRect();
+          if (widest > box.width + 0.5) issues.push(`word "${widestWord}" wider than title box`);
+          if (h.scrollWidth > h.clientWidth + 1) issues.push('title overflows its box');
+          if (box.right > document.documentElement.clientWidth + 0.5) issues.push('title past the viewport');
+          out.push({ id: h.id || h.textContent.trim().slice(0, 18), issues });
+        }
+        return out;
+      });
+      await check(`${route} titles at ${width}px: real lines, no clipping, no overflow`, () => {
+        const bad = rows.filter((r) => r.issues.length).map((r) => `${r.id}: ${r.issues.join(' | ')}`);
+        assert.deepEqual(bad, []);
+      });
+    }
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+
   console.log('\n/putnam/ header theme follows the section behind it');
+  await page.goto(baseUrl + '/putnam/', { waitUntil: 'networkidle' });
   const headerTheme = () => page.evaluate(() => ({
     light: document.querySelector('[data-site-header]').classList.contains('site-header--light'),
     logo: [...document.querySelectorAll('[data-logo]')].find((el) => !el.hidden)?.dataset.logo,

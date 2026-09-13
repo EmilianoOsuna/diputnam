@@ -307,7 +307,7 @@ button { font: inherit; }
   body.menu-open .menu-toggle span:nth-child(2) { opacity: 0; }
   body.menu-open .menu-toggle span:last-child { transform: translateY(calc(-0.27rem - 1px)) rotate(-45deg); }
   .panel-content { padding: 6rem 1rem; }
-  .panel h1, .panel h2 { max-width: 24rem; font-size: clamp(3rem, 14vw, 4.6rem); line-height: 0.94; }
+  .panel h1, .panel h2 { max-width: 24rem; font-size: clamp(2.6rem, 12.5vw, 4.6rem); line-height: 0.94; }
   .site-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; padding-bottom: 1rem; font-size: 0.8rem; }
   .scroll-cue { right: 1rem; bottom: 1rem; }
 }
@@ -341,18 +341,27 @@ button { font: inherit; }
 @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
   @keyframes home-chrome-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
   .home-page .site-header, .home-page .site-footer { animation: home-chrome-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-  .home-page .panel--intro .panel-content > * { animation: m-fade-up 1.1s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 180ms; }
 }
 
+/* Title lines. `mobile-motion.ts` rebuilds every h1/h2 as one `.line > span` per visual
+   line. The mask is a clip-path with 0.3em of slack above and below the line box (no
+   layout impact, so leading is unchanged) and it opens once the line has landed
+   (`is-done`), so accents, descenders and text-shadow are never clipped. */
+.line { display: block; clip-path: inset(-0.3em 0); }
+.line > span { display: block; }
+.line.is-done { clip-path: none; }
+.titles-pending :is(h1, h2):not([data-lines]), .titles-pending .line > span { visibility: hidden; }
+/* Editorial line breaks approved for desktop; phones wrap naturally. */
+@media (max-width: 767px) { br.cut { display: none; } }
+
 /* Mobile motion (no library): entrances are keyframes declared per page; reveals are
-   transitions switched on by `mobile-motion.ts` adding `is-in` to the group. Nothing
-   here runs per scroll frame. */
+   transitions switched on by `mobile-motion.ts` adding `is-in` to the group or title.
+   Nothing here runs per scroll frame. */
 @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
   [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity 900ms cubic-bezier(0.22, 1, 0.36, 1), transform 900ms cubic-bezier(0.22, 1, 0.36, 1); transition-delay: calc(var(--i, 0) * 70ms); }
-  [data-reveal='line'] { opacity: 1; transform: translateY(110%); }
+  [data-reveal='line'] { opacity: 1; transform: translateY(160%); transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(var(--i, 0) * 90ms); }
   .is-in [data-reveal] { opacity: 1; transform: none; }
   @keyframes m-fade-up { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
-  @keyframes m-line-up { from { transform: translateY(110%); } to { transform: none; } }
 }
 
 @media (prefers-reduced-motion: reduce) {

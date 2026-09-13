@@ -1,4 +1,4 @@
-import { mountAnchors, mountReveals, supportsScrollTimeline } from './mobile-motion';
+import { mountAnchors, mountReveals, releaseTitles, settleLines, splitTitles, supportsScrollTimeline } from './mobile-motion';
 
 const root = document.querySelector<HTMLElement>('[data-putnam]');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -36,8 +36,8 @@ if (root) {
     // Whatever happens to the motion bundle, never leave it hidden.
     const releaseHero = () => document.documentElement.classList.remove('motion-pending');
     const heroFailsafe = window.setTimeout(releaseHero, 3000);
-    import('./desktop/putnam')
-      .then(({ mount }) => { window.clearTimeout(heroFailsafe); mount(root, setProcessStep, releaseHero); })
+    Promise.all([splitTitles(root, settleLines), import('./desktop/putnam')])
+      .then(([, { mount }]) => { window.clearTimeout(heroFailsafe); mount(root, setProcessStep, releaseHero); releaseTitles(); })
       .catch((error) => { window.clearTimeout(heroFailsafe); releaseHero(); throw error; });
   } else {
     // Active step flips only when a marker crosses the middle of the viewport.
@@ -52,7 +52,7 @@ if (root) {
     processMarkers.forEach((marker) => observer.observe(marker));
 
     if (!reducedMotion) {
-      mountReveals(root, { hero: '.institutional-hero' });
+      splitTitles(root, settleLines).then(() => { mountReveals(root, { hero: '.institutional-hero' }); releaseTitles(); });
       mountAnchors(false);
     }
 
