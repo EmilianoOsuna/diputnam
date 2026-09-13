@@ -4,6 +4,8 @@ import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { groupTargets, revealHeroLines, revealTitles } from './lines';
+
 gsap.registerPlugin(ScrollTrigger);
 
 export const mount = (root: HTMLElement) => {
@@ -16,21 +18,14 @@ export const mount = (root: HTMLElement) => {
   gsap.ticker.lagSmoothing(0);
 
   const context = gsap.context(() => {
-    gsap.from('.nw-hero h1 .line > span', { yPercent: 110, duration: 0.9, stagger: 0.09, ease: 'expo.out' });
+    revealHeroLines(gsap, root.querySelector('.nw-hero h1'));
     gsap.from('.nw-hero .fade-up', { autoAlpha: 0, y: 24, duration: 0.8, delay: 0.4, stagger: 0.08, ease: 'power3.out' });
 
-    gsap.utils.toArray<HTMLElement>('.nw-index h2, .nw-cta h2').forEach((heading) => {
-      gsap.from(heading.querySelectorAll('.line > span'), {
-        yPercent: 110,
-        duration: 0.9,
-        stagger: 0.09,
-        ease: 'expo.out',
-        scrollTrigger: { trigger: heading, start: 'top 80%', toggleActions: 'play none none reverse' },
-      });
-    });
+    revealTitles(gsap, root, '.nw-hero');
 
     gsap.utils.toArray<HTMLElement>('[data-reveal-group]').forEach((group) => {
-      const targets = group.children.length ? Array.from(group.children) : group;
+      const targets = groupTargets(group);
+      if (!targets.length) return;
       gsap.from(targets, {
         autoAlpha: 0,
         y: 24,

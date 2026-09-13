@@ -5,6 +5,8 @@ import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { groupTargets, revealHeroLines, revealTitles } from './lines';
+
 gsap.registerPlugin(ScrollTrigger);
 
 export const mount = (root: HTMLElement) => {
@@ -23,17 +25,21 @@ export const mount = (root: HTMLElement) => {
   gsap.ticker.lagSmoothing(0);
 
   const context = gsap.context(() => {
-    gsap.from('.ed-hero-content > *', {
+    gsap.from('.ed-hero-content > :not(h1)', {
       autoAlpha: 0,
       y: 34,
       duration: 1.15,
-      stagger: 0.09,
+      stagger: 0.36,
       ease: 'power3.out',
     });
+    revealHeroLines(gsap, root.querySelector('.ed-hero-content h1'), { delay: 0.1 });
 
+    revealTitles(gsap, root, '.ed-hero', 'top 85%');
     gsap.utils.toArray<HTMLElement>('[data-reveal-group]').forEach((group) => {
       if (group.closest('.ed-hero')) return;
-      gsap.from(Array.from(group.children), {
+      const targets = groupTargets(group);
+      if (!targets.length) return;
+      gsap.from(targets, {
         autoAlpha: 0,
         y: 28,
         duration: 0.9,

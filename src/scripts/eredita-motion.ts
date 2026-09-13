@@ -1,5 +1,5 @@
 import { mountHorizontalTrack } from './horizontal-track';
-import { mountAnchors, mountReveals } from './mobile-motion';
+import { mountAnchors, mountReveals, releaseTitles, settleLines, splitTitles } from './mobile-motion';
 
 const root = document.querySelector<HTMLElement>('[data-eredita]');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -35,10 +35,14 @@ if (root) {
 }
 
 if (root && !reducedMotion) {
-  if (desktop) {
-    import('./desktop/eredita').then(({ mount }) => { motion = mount(root); motion.refresh(); });
-  } else {
-    mountReveals(root, { hero: '.ed-hero' });
-    mountAnchors(false);
-  }
+  // Titles are rebuilt as real lines first, so both engines animate the same lines.
+  splitTitles(root, settleLines).then(() => {
+    if (desktop) {
+      import('./desktop/eredita').then(({ mount }) => { motion = mount(root); motion.refresh(); releaseTitles(); });
+    } else {
+      mountReveals(root, { hero: '.ed-hero' });
+      releaseTitles();
+      mountAnchors(false);
+    }
+  });
 }

@@ -1,4 +1,4 @@
-import { supportsScrollTimeline } from './mobile-motion';
+import { releaseTitles, revealLines, settleLines, splitTitles, supportsScrollTimeline } from './mobile-motion';
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 // Phones run the scene sweep as CSS scroll-driven animations (global.css) with no
@@ -43,17 +43,27 @@ const observeActive = (targets: HTMLElement[]) => {
 
 if (!reducedMotion && home && panels.length > 1 && markers.length === panels.length && markerTrack) {
   if (desktop) {
-    import('./desktop/home').then(({ mount }) => {
+    Promise.all([splitTitles(home, settleLines), import('./desktop/home')]).then(([, { mount }]) => {
       scrollToTarget = mount({ home, panels, markerTrack, stage, setActive }).scrollTo;
+      releaseTitles();
     });
-  } else if (supportsScrollTimeline()) {
-    home.classList.add('is-enhanced', 'is-css-sweep');
-    observeActive(markers);
   } else {
-    home.classList.add('is-stacked');
-    document.documentElement.classList.add('home-snap');
-    sceneTargets = panels;
-    observeActive(panels);
+    // Scene titles enter line by line; the intro title reveals on load, the others are
+    // already in place when their scene sweeps in.
+    splitTitles(home, settleLines).then((titles) => {
+      titles.forEach((title) => { if (!title.closest('.panel--intro')) revealLines(title); });
+      const intro = home.querySelector<HTMLElement>('.panel--intro h1');
+      window.requestAnimationFrame(() => { if (intro) { void intro.offsetWidth; revealLines(intro); } releaseTitles(); });
+    });
+    if (supportsScrollTimeline()) {
+      home.classList.add('is-enhanced', 'is-css-sweep');
+      observeActive(markers);
+    } else {
+      home.classList.add('is-stacked');
+      document.documentElement.classList.add('home-snap');
+      sceneTargets = panels;
+      observeActive(panels);
+    }
   }
 } else {
   document.documentElement.classList.add('reduced-motion');

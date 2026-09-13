@@ -5,6 +5,8 @@ import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { revealHeroLines } from './lines';
+
 gsap.registerPlugin(ScrollTrigger);
 
 interface HomeParts {
@@ -55,7 +57,9 @@ export const mount = ({ home, panels, markerTrack, stage, setActive }: HomeParts
   resetToFirstScene();
 
   gsap.from('[data-site-header], .site-footer', { autoAlpha: 0, y: 14, duration: 0.9, ease: 'power3.out' });
-  gsap.from('.panel--intro .panel-content > *', { autoAlpha: 0, y: 24, duration: 1.1, stagger: 0.08, ease: 'power3.out', delay: 0.18 });
+  revealHeroLines(gsap, home.querySelector('.panel--intro h1'), { delay: 0.18 });
+  // Other scene titles are already in place when their scene sweeps in: open their masks.
+  home.querySelectorAll('.panel:not(.panel--intro) .line').forEach((line) => line.classList.add('is-done'));
 
   ScrollTrigger.create({
     trigger: markerTrack,

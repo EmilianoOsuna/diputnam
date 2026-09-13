@@ -26,7 +26,7 @@ const categorias = ['Todas', ...new Set(notas.map((n) => n.category))].map((c) =
       <section class="nw-hero" aria-labelledby="nw-hero-title" data-header-theme="light">
         <div class="hero-copy">
           <p class="section-kicker fade-up"><span>Noticias · Putnam</span></p>
-          <h1 id="nw-hero-title"><span class="line"><span>Actualidad,</span></span><span class="line"><span>avances de obra</span></span><span class="line"><span>y visión del negocio.</span></span></h1>
+          <h1 id="nw-hero-title">Actualidad, <br class="cut" />avances de obra <br class="cut" />y visión del negocio.</h1>
         </div>
         <div class="hero-details fade-up">
           <div><p class="hero-lead">Hitos de proyectos, novedades corporativas y contenidos sobre diseño, ejecución y desarrollo inmobiliario, en orden cronológico.</p><a class="hero-index" href="#indice">Ver todas las notas <span aria-hidden="true">↓</span></a></div>
@@ -52,7 +52,7 @@ const categorias = ['Todas', ...new Set(notas.map((n) => n.category))].map((c) =
 
       <section class="nw-index" id="indice" aria-labelledby="nw-index-title" data-header-theme="light">
         <header class="nw-index-head grid-12">
-          <div><p class="section-kicker"><span>Todas las notas</span></p><h2 id="nw-index-title"><span class="line"><span>Hitos, decisiones y avances,</span></span><span class="line"><span>en orden cronológico.</span></span></h2></div>
+          <div><p class="section-kicker"><span>Todas las notas</span></p><h2 id="nw-index-title">Hitos, decisiones y avances, <br class="cut" />en orden cronológico.</h2></div>
           <ul class="nw-filters" data-reveal-group>
             {categorias.map((c, i) => <li><a href="#indice" aria-current={i === 0 ? 'true' : undefined}>{c.label} <b>{pad(c.count)}</b></a></li>)}
           </ul>
@@ -67,7 +67,7 @@ const categorias = ['Todas', ...new Set(notas.map((n) => n.category))].map((c) =
 
       <section class="nw-cta" aria-labelledby="nw-cta-title" data-header-theme="light">
         <p class="section-kicker"><span>Conversemos</span></p>
-        <h2 id="nw-cta-title"><span class="line"><span>¿Quieres comunicar</span></span><span class="line"><span>un proyecto o avance?</span></span></h2>
+        <h2 id="nw-cta-title">¿Quieres comunicar <br class="cut" />un proyecto o avance?</h2>
         <p data-reveal-group>Escríbenos para coordinar la publicación de un hito, lanzamiento o novedad de Putnam con un enfoque institucional.</p>
         <div class="cta-actions" data-reveal-group><a href={`mailto:${contact.email}`}>Escríbenos <span aria-hidden="true">↗</span></a><a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp <span aria-hidden="true">↗</span></a></div>
         <Image class="cta-mark" src={putnamMark} widths={[400, 800]} sizes="(max-width: 767px) 72vw, min(42vw, 42rem)" format="webp" alt="" aria-hidden="true" />
