@@ -25,5 +25,5 @@
 
 ## 5. Validación en dispositivo y cierre
 
-- [ ] 5.1 `npm run build` (incluye `postbuild`), `npm run test:sweep`, `npm run test:mobile`, `npm run test:perf` en verde; commit por área (1–2, 3, 4) y push a `dev` con confirmación del usuario; esperar el deploy de Cloudflare y correr `BASE_URL=<preview> npm run test:mobile`
-- [ ] 5.2 Revisión manual del usuario en su Android contra el deploy: scroll de las seis rutas pegado al dedo, barrido de la home, menú sin tirón al abrir/cerrar, pistas horizontales, Proceso de Putnam; registrar hallazgos como follow-ups en `design.md › Open Questions` o cerrar el change
+- [x] 5.1 `npm run build` (incluye `postbuild`), `npm run test:sweep`, `npm run test:mobile`, `npm run test:perf` en verde; commit por área (1–2, 3, 4) y push a `dev` con confirmación del usuario; esperar el deploy de Cloudflare y correr `BASE_URL=<preview> npm run test:mobile`
+- [x] 5.2 Revisión manual del usuario en su Android contra el deploy: scroll de las seis rutas pegado al dedo, barrido de la home, menú sin tirón al abrir/cerrar, pistas horizontales, Proceso de Putnam; registrar hallazgos como follow-ups en `design.md › Open Questions` o cerrar el change

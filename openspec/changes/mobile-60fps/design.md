@@ -98,3 +98,9 @@ Por ruta: contexto `390×844`, `isMobile`, `hasTouch`, DPR 2; sesión CDP con `E
 
 - Valores finales de `sat` por imagen (se ajustan visualmente en la tarea de imágenes; no cambian specs ni tareas).
 - Si el usuario dispone de un iPhone para comprobar el fallback D3 en Safari; si no, se valida sólo por emulación.
+
+## Resultado (13 sep 2026)
+
+- `npm run test:perf`: seis rutas en verde; 0 callbacks rAF/scroll del sitio durante el gesto (baseline: 1.100–1.500 por gesto), 0 en reposo (baseline: ~62/500 ms), sin librerías de movimiento en móvil, < 3 KB gzip de JS por ruta.
+- Revisión en el Android del usuario: sin tirones en ninguna ruta. Follow-up abierto: unificar el lenguaje de entrada de los títulos de hero (unos entran en bloque, otros por renglón).
+- `diputnam.project0-0s.workers.dev` seguía sirviendo el build anterior tras el push a `dev`; el audit remoto queda por correr contra el deploy que tome estos commits.
