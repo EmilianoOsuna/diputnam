@@ -15,7 +15,7 @@ export const profileMailto = (subject: string) => `mailto:${contact.email}?subje
 export const profileWhatsapp = `https://wa.me/${contact.phone.replace(/\D/g, '')}?text=${encodeURIComponent('Hola, equipo Putnam. Quiero enviarles mi perfil para futuras oportunidades: ')}`;
 
 export const hero = {
-  title: 'Únete a un equipo que construye proyectos con criterio, detalle y visión de largo plazo.',
+  title: 'Únete a un equipo con criterio.',
   lead: 'En Putnam buscamos personas con disciplina técnica, sentido estético y compromiso real con la calidad. Valoramos perfiles que entienden que una buena obra no depende solo de ejecutar, sino de coordinar, anticipar y cuidar cada decisión del proceso.',
 } as const;
 
