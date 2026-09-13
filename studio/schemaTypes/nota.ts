@@ -1,0 +1,33 @@
+import { defineArrayMember, defineField, defineType } from 'sanity';
+
+// One document per language, linked by @sanity/document-internationalization.
+export const nota = defineType({
+  name: 'nota',
+  title: 'Nota',
+  type: 'document',
+  fields: [
+    defineField({ name: 'language', type: 'string', readOnly: true, hidden: true }),
+    defineField({ name: 'title', title: 'Título', type: 'string', validation: (rule) => rule.required() }),
+    defineField({ name: 'slug', title: 'Slug', type: 'slug', options: { source: 'title', maxLength: 96 }, validation: (rule) => rule.required().custom(async (value, context) => {
+      // Unique per language: the same slug may exist in the other language.
+      if (!value?.current) return true;
+      const { document, getClient } = context;
+      const client = getClient({ apiVersion: '2026-09-01' });
+      const id = (document?._id ?? '').replace(/^drafts\./, '');
+      const clash = await client.fetch<number>(`count(*[_type == "nota" && slug.current == $slug && language == $language && !(_id in [$id, "drafts." + $id])])`, { slug: value.current, language: document?.language, id });
+      return clash === 0 || 'Ya existe una nota con este slug en este idioma.';
+    }) }),
+    defineField({ name: 'date', title: 'Fecha', type: 'date', validation: (rule) => rule.required() }),
+    defineField({ name: 'category', title: 'Categoría', type: 'string', validation: (rule) => rule.required() }),
+    defineField({ name: 'tags', title: 'Etiquetas', type: 'array', of: [defineArrayMember({ type: 'string' })], options: { layout: 'tags' } }),
+    defineField({ name: 'excerpt', title: 'Extracto', type: 'text', rows: 4, validation: (rule) => rule.required().max(400) }),
+    defineField({ name: 'readTime', title: 'Tiempo de lectura', type: 'string', description: 'P. ej. "4 min".' }),
+    defineField({ name: 'image', title: 'Imagen destacada', type: 'image', options: { hotspot: true }, fields: [defineField({ name: 'alt', title: 'Texto alternativo', type: 'string' })] }),
+    defineField({ name: 'body', title: 'Cuerpo', type: 'richText' }),
+  ],
+  orderings: [{ title: 'Fecha, más reciente', name: 'dateDesc', by: [{ field: 'date', direction: 'desc' }] }],
+  preview: {
+    select: { title: 'title', subtitle: 'date', media: 'image', language: 'language' },
+    prepare: ({ title, subtitle, media, language }) => ({ title, subtitle: `${language?.toUpperCase() ?? ''} · ${subtitle ?? ''}`, media }),
+  },
+});

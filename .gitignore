@@ -2,6 +2,7 @@ node_modules/
 dist/
 .astro/
 .env*
+!.env.example
 .impeccable/live/
 .impeccable/config.local.json
 .wrangler/
