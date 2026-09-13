@@ -96,7 +96,12 @@
 .ed-legal-card { display: flex; flex-direction: column; gap: 0.6rem; padding: 1.6rem 1.4rem; background: var(--ed-paper); }
 .ed-legal-card strong { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
 .ed-legal-card p { margin: 0; font-size: 0.85rem; line-height: 1.5; color: rgba(0, 58, 54, 0.68); }
-.ed-legal-card span { margin-top: auto; font-size: 0.64rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0, 58, 54, 0.45); }
+.ed-legal-card > span { margin-top: auto; font-size: 0.64rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0, 58, 54, 0.45); }
+.ed-legal-card a { display: grid; gap: 0.2rem; margin-top: auto; }
+.ed-legal-card a span { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+.ed-legal-card a i { font-style: normal; }
+.ed-legal-card a small { font-size: 0.7rem; letter-spacing: 0.02em; color: rgba(0, 58, 54, 0.55); }
+.ed-legal-card a:hover span, .ed-legal-card a:focus-visible span { text-decoration: underline; text-underline-offset: 0.25rem; }
 
 /* CTA */
 .ed-cta { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: center; gap: 2rem; min-height: 72svh; padding: clamp(5rem, 10vw, 8rem) clamp(1.25rem, 3vw, 3.5rem); color: var(--ed-paper); background: var(--ed-green); overflow: hidden; }

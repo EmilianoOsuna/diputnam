@@ -15,7 +15,7 @@ export const eredita = {
   hero: { kicker: 'Residential project · La Paz, Bolivia', title: 'Housing typologies designed to suit different ways of living.', sub: 'A focus on function, design and the residential experience.', alt: 'Contemporary façade of the Ereditá project' },
   intro: {
     eyebrow: 'Ereditá',
-    title: 'A well-considered, safe and durable residential proposal.',
+    title: 'A thoughtful, safe and durable residential proposal.',
     lead: 'Ereditá brings together functional typologies, shared amenities and a documentation structure designed to give buyers greater transparency.',
     bullets: ['Studio, one- and two-bedroom typologies.', 'Shared amenities designed to elevate the residential experience.', 'Planned access to the legal documents that matter to buyers.'],
     facts: [['Location', 'La Paz, Bolivia'], ['Typologies', 'Studio — 2 bedrooms'], ['Amenities', 'Pool, gym, events room'], ['Delivery', 'Phased, Dec 2026 – Jun 2027']],

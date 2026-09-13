@@ -1,0 +1,14 @@
+---
+// A content image from the CMS: srcset by width, tonal treatment in the URL, editor crop
+// as `rect`, hotspot as `object-position`. Layout attributes are passed through so each
+// placement keeps its own sizes/width/height/loading policy.
+import type { CmsImage } from '../lib/content';
+import { altOf, imageSrc, objectPosition, remoteImage, remoteSrcset } from '../lib/images';
+
+// `base` is the width of the fallback `src`; `width`/`height` in rest are the HTML attributes.
+interface Props { image: CmsImage; widths: readonly number[]; base: number; quality: number; sat?: number; sizes: string; class?: string; [key: string]: unknown; }
+const { image, widths, base, quality, sat = 0, sizes, class: className, style, ...rest } = Astro.props;
+const src = imageSrc(image);
+const position = objectPosition(image);
+---
+<img class={className} src={remoteImage(src, base, quality, sat)} srcset={remoteSrcset(src, widths, quality, sat)} sizes={sizes} alt={altOf(image)} style={[position, style].filter(Boolean).join('; ') || undefined} decoding="async" {...rest} />

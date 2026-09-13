@@ -1,0 +1,8 @@
+---
+import Nota from '../../views/nota.astro';
+import { getNotas } from '../../lib/content';
+
+export const getStaticPaths = async () => (await getNotas('es')).map((nota) => ({ params: { slug: nota.slug }, props: { nota } }));
+const { nota } = Astro.props;
+---
+<Nota lang="es" nota={nota} />

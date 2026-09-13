@@ -1,0 +1,74 @@
+---
+import { Image } from 'astro:assets';
+import { PortableText } from 'astro-portabletext';
+import putnamMark from '../assets/putnam-light.png';
+import BodyImage from '../components/BodyImage.astro';
+import CmsImg from '../components/CmsImg.astro';
+import ContactFooter from '../components/ContactFooter.astro';
+import SiteHead from '../components/SiteHead.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { formatDate, notaPath, otherLang, pages, t, type Lang } from '../i18n';
+import { getNoticiasPage, getSettings, type Nota } from '../lib/content';
+import { CARD_WIDTHS, HERO_WIDTHS, SAT } from '../lib/images';
+import '../styles/global.css';
+import '../styles/noticias.css';
+
+interface Props { lang: Lang; nota: Nota; }
+const { lang, nota } = Astro.props;
+const ui = t(lang);
+const other = otherLang(lang);
+const [{ cta }, contact] = await Promise.all([getNoticiasPage(lang), getSettings(lang)]);
+// The language switch and hreflang go to the translated note, or to the news index when there is none.
+const pair = nota.translation ? notaPath(other, nota.translation.slug) : null;
+const alternate = { [lang]: notaPath(lang, nota.slug), [other]: pair };
+const heroImage = nota.image ? { ...nota.image, alt: nota.image.alt ?? '', decorative: !nota.image.alt } : null;
+---
+<html lang={lang}>
+  <head>
+    <SiteHead lang={lang} page="noticias" alternate={alternate} title={`${nota.title} | Putnam`} description={nota.excerpt} />
+  </head>
+  <body class="noticias-page nota-page">
+    <a class="skip-link" href="#contenido">{ui.skipLink}</a>
+    <SiteHeader lang={lang} page="noticias" contact={contact} alternate={pair ?? pages.noticias[other]} />
+
+    <main id="contenido" data-noticias>
+      <article>
+        <section class:list={["nw-hero", "nw-hero--nota", { "nw-hero--plain": !heroImage }]} aria-labelledby="nw-hero-title" data-header-theme={heroImage ? 'light' : 'dark'}>
+          <div class="hero-copy">
+            <p class="section-kicker fade-up"><span>{nota.category}</span><span><time datetime={nota.date}>{formatDate(lang, nota.date)}</time></span></p>
+            <h1 id="nw-hero-title">{nota.title}</h1>
+          </div>
+          <div class="hero-details fade-up">
+            <div><p class="hero-lead">{nota.excerpt}</p><a class="hero-index" href={pages.noticias[lang]}><span aria-hidden="true">←</span> {ui.noticias.backToIndex}</a></div>
+            <div class="hero-meta">{nota.readTime && <span>{ui.noticias.readTime} · {nota.readTime}</span>}{nota.tags.length > 0 && <span>{nota.tags.join(' · ')}</span>}</div>
+          </div>
+          {heroImage && (
+            <figure class="hero-frame" data-parallax>
+              <CmsImg image={heroImage} base={1280} widths={HERO_WIDTHS} quality={78} sat={SAT.hero} sizes="100vw" width="2200" height="1467" loading="eager" fetchpriority="high" />
+            </figure>
+          )}
+        </section>
+
+        <section class="nw-article" data-header-theme="dark">
+          <div class="nw-article-body" data-reveal-group>
+            {nota.body && nota.body.length > 0 ? <PortableText value={nota.body} components={{ type: { image: BodyImage } }} /> : <p>{nota.excerpt}</p>}
+          </div>
+          <footer class="nw-article-foot" data-reveal-group>
+            <a class="hero-index" href={pages.noticias[lang]}><span aria-hidden="true">←</span> {ui.noticias.backToIndex}</a>
+            {pair && <a class="hero-index" href={pair} hreflang={other} lang={other}>{other === 'es' ? ui.langSwitch.toEs : ui.langSwitch.toEn} <span aria-hidden="true">→</span></a>}
+          </footer>
+        </section>
+      </article>
+
+      <section class="nw-cta" aria-labelledby="nw-cta-title" data-header-theme="light">
+        <p class="section-kicker"><span>{cta.kicker}</span></p>
+        <h2 id="nw-cta-title">{cta.title.replaceAll('\n', ' ')}</h2>
+        <p data-reveal-group>{cta.text}</p>
+        <div class="cta-actions" data-reveal-group><a href={`mailto:${contact.email}`}>{ui.writeUs} <span aria-hidden="true">↗</span></a><a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <span aria-hidden="true">↗</span></a></div>
+        <Image class="cta-mark" src={putnamMark} widths={[400, 800]} sizes="(max-width: 767px) 72vw, min(42vw, 42rem)" format="webp" alt="" aria-hidden="true" />
+      </section>
+    </main>
+    <ContactFooter lang={lang} contact={contact} />
+    <script src="../scripts/noticias-motion.ts"></script>
+  </body>
+</html>

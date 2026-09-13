@@ -3,3 +3,4 @@ dist/
 .sanity/
 .env*
 !.env.example
+.local/

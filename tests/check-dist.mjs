@@ -1,7 +1,8 @@
 // Post-build guard: the static build must never ship HTML that depends on Astro's
 // on-demand `/_image` endpoint (there is no worker to serve it on Cloudflare), every
-// local optimized image it references must exist in dist/, and every page declares its
-// locale with a reciprocal hreflang pair.
+// local optimized image it references must exist in dist/, no content image may still
+// point at the former mock hosts, and every page declares its locale with a reciprocal
+// hreflang pair.
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 
@@ -31,6 +32,8 @@ for (const file of htmlFiles) {
 
   const endpointHits = html.match(/\/_image\?[^"'\s)]*/g) ?? [];
   for (const hit of endpointHits) failures.push(`${name}: references on-demand image endpoint ${hit}`);
+  const mockHits = html.match(/https?:\/\/(?:images\.unsplash\.com|images\.ctfassets\.net)[^"'\s,)]*/g) ?? [];
+  for (const hit of new Set(mockHits)) failures.push(`${name}: content image still on a mock host ${hit}`);
 
   const lang = html.match(/<html[^>]*\slang="([^"]+)"/)?.[1];
   const route = routeOf(file);
@@ -62,4 +65,4 @@ if (failures.length) {
   for (const failure of failures) console.error(`  - ${failure}`);
   process.exit(1);
 }
-console.log(`check-dist: ${htmlFiles.length} HTML file(s) OK, no /_image references, all /_astro images present, hreflang pairs reciprocal.`);
+console.log(`check-dist: ${htmlFiles.length} HTML file(s) OK, no /_image references, no mock image hosts, all /_astro images present, hreflang pairs reciprocal.`);

@@ -1,4 +1,4 @@
-import { contact } from './home';
+import { contact } from './home.ts';
 
 const profileBody = [
   'Hola, equipo Putnam.',

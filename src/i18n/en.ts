@@ -21,7 +21,7 @@ export const en: Dictionary = {
     unete: { title: 'Join the team | Putnam', description: 'Join the Putnam team: we look for people with technical discipline, aesthetic sense and a real commitment to quality.' },
     contacto: { title: 'Contact | Putnam', description: 'Talk to Putnam about residential projects, investment and real estate development in Bolivia.' },
   },
-  eredita: { keepScrolling: 'Keep scrolling', requestInfo: 'Request information' },
+  eredita: { keepScrolling: 'Keep scrolling', requestInfo: 'Request information', openPdf: 'Open PDF' },
   putnam: {
     seeApproach: 'See our approach',
     imagePending: 'Image pending',
@@ -40,6 +40,7 @@ export const en: Dictionary = {
     all: 'All',
     count: (shown: string, total: string) => `${shown} of ${total} posts`,
     archive: 'Archive',
+    backToIndex: 'Back to news',
   },
   unete: {
     seeCulture: 'See how we work',

@@ -22,7 +22,7 @@ export const es = {
     unete: { title: 'Únete al equipo | Putnam', description: 'Únete al equipo de Putnam: buscamos personas con disciplina técnica, sentido estético y compromiso real con la calidad.' },
     contacto: { title: 'Contacto | Putnam', description: 'Conversa con Putnam sobre proyectos residenciales, inversión y desarrollo inmobiliario en Bolivia.' },
   },
-  eredita: { keepScrolling: 'Sigue bajando', requestInfo: 'Solicitar información' },
+  eredita: { keepScrolling: 'Sigue bajando', requestInfo: 'Solicitar información', openPdf: 'Abrir PDF' },
   putnam: {
     seeApproach: 'Conoce nuestro enfoque',
     imagePending: 'Imagen pendiente',
@@ -41,6 +41,7 @@ export const es = {
     all: 'Todas',
     count: (shown: string, total: string) => `${shown} de ${total} notas`,
     archive: 'Archivo',
+    backToIndex: 'Volver a noticias',
   },
   unete: {
     seeCulture: 'Conoce cómo trabajamos',

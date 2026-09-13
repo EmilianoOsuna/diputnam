@@ -1,21 +1,24 @@
 ---
-import { Image, Picture } from 'astro:assets';
+import { Image } from 'astro:assets';
 import putnamMark from '../assets/putnam-light.png';
-import uneteHero from '../assets/unete-hero.jpg';
+import CmsImg from '../components/CmsImg.astro';
 import ContactFooter from '../components/ContactFooter.astro';
 import Lines from '../components/Lines.astro';
 import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
-import { contact } from '../data/home';
-import { apply, culture, hero, openings, process, profile, profileMailto, profileWhatsapp, spontaneous } from '../data/unete';
 import { pages, t, type Lang } from '../i18n';
+import { getSettings, getUnete } from '../lib/content';
+import { HERO_WIDTHS, SAT } from '../lib/images';
 import '../styles/global.css';
 import '../styles/unete.css';
 
 interface Props { lang: Lang; }
 const { lang } = Astro.props;
 const ui = t(lang);
+const [{ hero, culture, profile, openings, process, spontaneous, apply, mail }, contact] = await Promise.all([getUnete(lang), getSettings(lang)]);
 const pad = (index: number) => String(index + 1).padStart(2, '0');
+const profileMailto = (subject: string) => `mailto:${contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(mail.body)}`;
+const profileWhatsapp = `https://wa.me/${contact.whatsappNumber}?text=${encodeURIComponent(mail.whatsapp)}`;
 const sendProfile = profileMailto(ui.unete.profileSubject);
 const contactHref = pages.contacto[lang];
 ---
@@ -25,26 +28,26 @@ const contactHref = pages.contacto[lang];
   </head>
   <body class="unete-page">
     <a class="skip-link" href="#contenido">{ui.skipLink}</a>
-    <SiteHeader lang={lang} page="unete" />
+    <SiteHeader lang={lang} page="unete" contact={contact} />
 
     <main id="contenido" data-unete>
       <section class="un-hero" id="inicio" aria-labelledby="un-hero-title" data-header-theme="light">
         <div class="hero-copy">
           <p class="section-kicker fade-up"><span>{hero.kicker} · {contact.city}</span></p>
-          <h1 id="un-hero-title">{hero.title}</h1>
+          <h1 id="un-hero-title"><Lines text={hero.title} /></h1>
         </div>
         <div class="hero-details fade-up">
           <div><p class="hero-lead">{hero.lead}</p><a class="hero-index" href="#cultura">{ui.unete.seeCulture} <span aria-hidden="true">↓</span></a></div>
           <div class="hero-meta">{hero.meta.map((line) => <span>{line}</span>)}</div>
         </div>
         <figure class="hero-frame">
-          <Picture src={uneteHero} formats={['avif', 'webp']} widths={[640, 840, 1280]} sizes="100vw" quality="mid" alt={ui.unete.heroAlt} loading="eager" decoding="async" fetchpriority="high" />
+          <CmsImg image={hero.image} base={1280} widths={HERO_WIDTHS} quality={78} sat={SAT.hero} sizes="100vw" width="2200" height="1467" loading="eager" fetchpriority="high" />
         </figure>
       </section>
 
       <section class="un-culture" id="cultura" aria-labelledby="un-culture-title" data-culture data-header-theme="light">
         <div class="pin-stage" data-pin-stage>
-          <div><p class="section-kicker">{culture.kicker}</p><h2 id="un-culture-title">{culture.title}</h2><p class="pin-lead">{culture.text}</p></div>
+          <div><p class="section-kicker">{culture.kicker}</p><h2 id="un-culture-title"><Lines text={culture.title} /></h2><p class="pin-lead">{culture.text}</p></div>
           <div><div class="pin-counter"><b data-pin-current data-track-current>01</b><span aria-hidden="true">/</span><span>{pad(culture.traits.length - 1)}</span></div><div class="pin-rail" aria-hidden="true"><span data-pin-rail data-track-rail></span></div></div>
         </div>
         <div class="traits" data-traits>
@@ -87,7 +90,7 @@ const contactHref = pages.contacto[lang];
 
       <section class="un-process" id="proceso" aria-labelledby="un-process-title" data-header-theme="dark">
         <header class="section-head grid-12">
-          <div><p class="section-kicker">{process.kicker}</p><h2 id="un-process-title">{process.title}</h2></div>
+          <div><p class="section-kicker">{process.kicker}</p><h2 id="un-process-title"><Lines text={process.title} /></h2></div>
           <p data-reveal-group>{process.text}</p>
         </header>
         <div class="steps" data-reveal-group>
@@ -115,7 +118,7 @@ const contactHref = pages.contacto[lang];
         <Image class="cta-mark" src={putnamMark} widths={[400, 800]} sizes="(max-width: 767px) 72vw, min(42vw, 42rem)" format="webp" alt="" aria-hidden="true" />
       </section>
     </main>
-    <ContactFooter lang={lang} />
+    <ContactFooter lang={lang} contact={contact} />
     <script src="../scripts/unete-motion.ts"></script>
   </body>
 </html>

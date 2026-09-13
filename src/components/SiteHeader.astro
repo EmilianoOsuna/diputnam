@@ -1,14 +1,14 @@
 ---
 import { getImage } from 'astro:assets';
-import { contact } from '../data/home';
+import type { Settings } from '../lib/content';
 import { otherLang, pages, t, type Lang, type PageKey } from '../i18n';
 import logoDarkSrc from '../assets/putnam-dark.png';
 import logoLightSrc from '../assets/putnam-light.png';
 
 // `alternate` is where the language switch goes when this page has no direct pair
 // (a note without translation falls back to the section index).
-interface Props { lang: Lang; page: PageKey; alternate?: string; home?: boolean; contacto?: boolean; }
-const { lang, page, home = false, contacto = false } = Astro.props;
+interface Props { lang: Lang; page: PageKey; contact: Settings; alternate?: string; home?: boolean; contacto?: boolean; }
+const { lang, page, contact, home = false, contacto = false } = Astro.props;
 const ui = t(lang);
 const other = otherLang(lang);
 const alternate = Astro.props.alternate ?? pages[page][other];

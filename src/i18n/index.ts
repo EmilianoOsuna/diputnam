@@ -25,3 +25,12 @@ for (const lang of Object.keys(dictionaries) as Lang[]) {
 }
 
 export const t = (lang: Lang): Dictionary => dictionaries[lang];
+
+// "09 Mar 2026" in both locales (month abbreviation capitalized, no trailing period).
+export const formatDate = (lang: Lang, iso: string) => {
+  const date = new Date(`${iso}T00:00:00Z`);
+  const parts = new Intl.DateTimeFormat(lang, { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).formatToParts(date);
+  const get = (type: string) => parts.find((part) => part.type === type)?.value ?? '';
+  const month = get('month').replace('.', '');
+  return `${get('day')} ${month.charAt(0).toUpperCase()}${month.slice(1)} ${get('year')}`;
+};

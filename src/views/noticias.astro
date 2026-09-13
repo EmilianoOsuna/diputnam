@@ -1,20 +1,21 @@
 ---
-import { Image, Picture } from 'astro:assets';
+import { Image } from 'astro:assets';
 import putnamMark from '../assets/putnam-light.png';
-import contactoHero from '../assets/contacto-hero.jpg';
+import CmsImg from '../components/CmsImg.astro';
 import ContactFooter from '../components/ContactFooter.astro';
 import Lines from '../components/Lines.astro';
 import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
-import { contact } from '../data/home';
-import { notas, noticiasPage } from '../data/noticias';
-import { t, type Lang } from '../i18n';
+import { formatDate, notaPath, t, type Lang } from '../i18n';
+import { getNotas, getNoticiasPage, getSettings } from '../lib/content';
+import { CARD_WIDTHS, HERO_WIDTHS, SAT } from '../lib/images';
 import '../styles/global.css';
 import '../styles/noticias.css';
 
 interface Props { lang: Lang; }
 const { lang } = Astro.props;
 const ui = t(lang);
+const [{ hero, index, empty, cta }, notas, contact] = await Promise.all([getNoticiasPage(lang), getNotas(lang), getSettings(lang)]);
 const [destacada] = notas;
 const pad = (n: number) => String(n).padStart(2, '0');
 const categorias = [ui.noticias.all, ...new Set(notas.map((n) => n.category))].map((c, i) => ({ label: c, count: i === 0 ? notas.length : notas.filter((n) => n.category === c).length }));
@@ -25,60 +26,72 @@ const categorias = [ui.noticias.all, ...new Set(notas.map((n) => n.category))].m
   </head>
   <body class="noticias-page">
     <a class="skip-link" href="#contenido">{ui.skipLink}</a>
-    <SiteHeader lang={lang} page="noticias" />
+    <SiteHeader lang={lang} page="noticias" contact={contact} />
 
     <main id="contenido" data-noticias>
       <section class="nw-hero" aria-labelledby="nw-hero-title" data-header-theme="light">
         <div class="hero-copy">
-          <p class="section-kicker fade-up"><span>{noticiasPage.hero.kicker}</span></p>
-          <h1 id="nw-hero-title"><Lines text={noticiasPage.hero.title} /></h1>
+          <p class="section-kicker fade-up"><span>{hero.kicker}</span></p>
+          <h1 id="nw-hero-title"><Lines text={hero.title} /></h1>
         </div>
         <div class="hero-details fade-up">
-          <div><p class="hero-lead">{noticiasPage.hero.lead}</p><a class="hero-index" href="#indice">{ui.noticias.seeAll} <span aria-hidden="true">↓</span></a></div>
-          <div class="hero-meta"><span>{ui.noticias.published(pad(notas.length))}</span><span>{ui.noticias.latest} · {destacada.date}</span></div>
+          <div><p class="hero-lead">{hero.lead}</p><a class="hero-index" href="#indice">{ui.noticias.seeAll} <span aria-hidden="true">↓</span></a></div>
+          <div class="hero-meta"><span>{ui.noticias.published(pad(notas.length))}</span>{destacada && <span>{ui.noticias.latest} · {formatDate(lang, destacada.date)}</span>}</div>
         </div>
         <figure class="hero-frame" data-parallax>
-          <Picture src={contactoHero} formats={['avif', 'webp']} widths={[640, 840, 1280]} sizes="100vw" quality="mid" alt={ui.noticias.heroAlt} loading="eager" decoding="async" fetchpriority="high" />
+          <CmsImg image={hero.image} base={1280} widths={HERO_WIDTHS} quality={78} sat={SAT.hero} sizes="100vw" width="2200" height="1467" loading="eager" fetchpriority="high" />
         </figure>
       </section>
 
-      <section class="nw-featured grid-12" aria-labelledby="nw-featured-title" data-header-theme="dark">
-        <figure class="nw-featured-media" data-reveal-group>
-          <div class="media-placeholder"><span>{ui.noticias.photoPlaceholder}</span><b>01</b><small>{ui.soon}</small></div>
-        </figure>
-        <div class="nw-featured-copy">
-          <p class="section-kicker"><span>{ui.noticias.featured}</span><span>{destacada.date}</span></p>
-          <h2 id="nw-featured-title" data-reveal-group>{destacada.title}</h2>
-          <p data-reveal-group>{destacada.excerpt}</p>
-          <dl data-reveal-group><div><dt>{ui.noticias.category}</dt><dd>{destacada.category}</dd></div><div><dt>{ui.noticias.readTime}</dt><dd>{destacada.readTime}</dd></div></dl>
-          <div class="cta-actions" data-reveal-group><a href={`#nota-${destacada.slug}`}>{ui.noticias.readNote} <span aria-hidden="true">→</span></a></div>
-        </div>
-      </section>
+      {destacada ? (
+        <section class="nw-featured grid-12" aria-labelledby="nw-featured-title" data-header-theme="dark">
+          <figure class="nw-featured-media" data-reveal-group>
+            {destacada.image ? (
+              <CmsImg image={{ ...destacada.image, alt: destacada.image.alt ?? '', decorative: !destacada.image.alt }} base={960} widths={CARD_WIDTHS} quality={75} sat={SAT.card} sizes="(min-width: 768px) 58vw, 100vw" width="1200" height="960" loading="lazy" />
+            ) : (
+              <div class="media-placeholder"><span>{ui.noticias.photoPlaceholder}</span><b>01</b><small>{ui.soon}</small></div>
+            )}
+          </figure>
+          <div class="nw-featured-copy">
+            <p class="section-kicker"><span>{ui.noticias.featured}</span><span>{formatDate(lang, destacada.date)}</span></p>
+            <h2 id="nw-featured-title" data-reveal-group>{destacada.title}</h2>
+            <p data-reveal-group>{destacada.excerpt}</p>
+            <dl data-reveal-group><div><dt>{ui.noticias.category}</dt><dd>{destacada.category}</dd></div><div><dt>{ui.noticias.readTime}</dt><dd>{destacada.readTime}</dd></div></dl>
+            <div class="cta-actions" data-reveal-group><a href={notaPath(lang, destacada.slug)}>{ui.noticias.readNote} <span aria-hidden="true">→</span></a></div>
+          </div>
+        </section>
+      ) : (
+        <section class="nw-empty" aria-labelledby="nw-empty-title" data-header-theme="dark">
+          <p class="section-kicker"><span>{index.kicker}</span></p>
+          <h2 id="nw-empty-title"><Lines text={empty.title} /></h2>
+          <p data-reveal-group>{empty.text}</p>
+        </section>
+      )}
 
       <section class="nw-index" id="indice" aria-labelledby="nw-index-title" data-header-theme="light">
         <header class="nw-index-head grid-12">
-          <div><p class="section-kicker"><span>{noticiasPage.index.kicker}</span></p><h2 id="nw-index-title"><Lines text={noticiasPage.index.title} /></h2></div>
+          <div><p class="section-kicker"><span>{index.kicker}</span></p><h2 id="nw-index-title"><Lines text={index.title} /></h2></div>
           <ul class="nw-filters" data-reveal-group>
             {categorias.map((c, i) => <li><a href="#indice" aria-current={i === 0 ? 'true' : undefined}>{c.label} <b>{pad(c.count)}</b></a></li>)}
           </ul>
         </header>
         <div class="index-list" data-reveal-group>
           {notas.map((nota, i) => (
-            <a class="index-row" id={`nota-${nota.slug}`} href={contact.whatsapp} target="_blank" rel="noreferrer"><span>{pad(i + 1)}</span><time>{nota.date}</time><div><small>{nota.tags.map((t) => <span>{t}</span>)}</small><strong>{nota.title}</strong><p>{nota.excerpt}</p></div><i aria-hidden="true">↗</i></a>
+            <a class="index-row" id={`nota-${nota.slug}`} href={notaPath(lang, nota.slug)}><span>{pad(i + 1)}</span><time datetime={nota.date}>{formatDate(lang, nota.date)}</time><div><small>{nota.tags.map((tag) => <span>{tag}</span>)}</small><strong>{nota.title}</strong><p>{nota.excerpt}</p></div><i aria-hidden="true">→</i></a>
           ))}
         </div>
-        <div class="index-foot"><span>{ui.noticias.count(pad(notas.length), pad(notas.length))}</span><span>{ui.noticias.archive} · {noticiasPage.index.archive}</span></div>
+        <div class="index-foot"><span>{ui.noticias.count(pad(notas.length), pad(notas.length))}</span><span>{ui.noticias.archive} · {index.archive}</span></div>
       </section>
 
       <section class="nw-cta" aria-labelledby="nw-cta-title" data-header-theme="light">
-        <p class="section-kicker"><span>{noticiasPage.cta.kicker}</span></p>
-        <h2 id="nw-cta-title"><Lines text={noticiasPage.cta.title} /></h2>
-        <p data-reveal-group>{noticiasPage.cta.text}</p>
+        <p class="section-kicker"><span>{cta.kicker}</span></p>
+        <h2 id="nw-cta-title"><Lines text={cta.title} /></h2>
+        <p data-reveal-group>{cta.text}</p>
         <div class="cta-actions" data-reveal-group><a href={`mailto:${contact.email}`}>{ui.writeUs} <span aria-hidden="true">↗</span></a><a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <span aria-hidden="true">↗</span></a></div>
         <Image class="cta-mark" src={putnamMark} widths={[400, 800]} sizes="(max-width: 767px) 72vw, min(42vw, 42rem)" format="webp" alt="" aria-hidden="true" />
       </section>
     </main>
-    <ContactFooter lang={lang} />
+    <ContactFooter lang={lang} contact={contact} />
     <script src="../scripts/noticias-motion.ts"></script>
   </body>
 </html>

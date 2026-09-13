@@ -1,8 +1,8 @@
 ---
-import { contact } from '../data/home';
 import { t, type Lang } from '../i18n';
-interface Props { lang: Lang; fixed?: boolean; }
-const { lang, fixed = false } = Astro.props;
+import type { Settings } from '../lib/content';
+interface Props { lang: Lang; contact: Settings; fixed?: boolean; }
+const { lang, contact, fixed = false } = Astro.props;
 const ui = t(lang);
 ---
 <footer class:list={["site-footer", { "site-footer--flow": !fixed }]} id={fixed ? undefined : 'contacto'}>

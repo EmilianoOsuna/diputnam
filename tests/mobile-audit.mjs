@@ -11,7 +11,8 @@ const shots = 'tests/.artifacts/mobile';
 const BROWN = 'rgb(89, 64, 55)';
 const URL_BAR_DELTA = 90; // px hidden/revealed by a phone's address bar
 
-const routes = siteRoutes;
+// Static routes plus the first note linked from each news index (content-dependent).
+const routes = [...siteRoutes];
 const failures = [];
 const check = async (label, fn) => {
   try { await fn(); console.log(`  ok   ${label}`); }
@@ -83,6 +84,11 @@ const trackChecks = async (route, trackSelector, total) => {
 };
 
 try {
+  for (const index of ['/noticias/', '/en/news/']) {
+    await page.goto(baseUrl + index, { waitUntil: 'domcontentloaded' });
+    const first = await page.locator('.index-row').first().getAttribute('href').catch(() => null);
+    if (first) routes.push(first);
+  }
   for (const route of routes) {
     console.log(`\n${route}`);
     await page.goto(baseUrl + route, { waitUntil: 'networkidle' });
@@ -105,6 +111,15 @@ try {
     await check(`${route} header mark is visible and sharp (svg or ≥300px)`, () => {
       assert.equal(shell.logo.visible, true, 'no visible mark');
       assert.ok(shell.logo.svg || shell.logo.natural >= 300, `naturalWidth ${shell.logo.natural}`);
+    });
+    // CMS images: the editor's hotspot lands as object-position on an object-fit: cover image.
+    const hotspots = await page.$$eval('img[style*="object-position"]', (imgs) => imgs.map((img) => {
+      const css = getComputedStyle(img);
+      const declared = img.style.objectPosition.replace(/\.0%/g, '%');
+      return { declared, computed: css.objectPosition, fit: css.objectFit };
+    }));
+    await check(`${route} hotspot images keep object-position (${hotspots.length})`, async () => {
+      for (const h of hotspots) { assert.equal(h.fit, 'cover'); assert.equal(h.computed, h.declared); }
     });
     await page.screenshot({ path: `${shots}${route.replace(/\//g, '_')}top.png` });
   }
