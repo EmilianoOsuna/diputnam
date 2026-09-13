@@ -1,8 +1,9 @@
-// Mobile audit for the six routes at a phone viewport. Collects every failure
+// Mobile audit for every published route (both locales) at a phone viewport. Collects every failure
 // instead of stopping at the first one so a run shows the full picture.
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
 import { chromium } from 'playwright';
+import { routes as siteRoutes } from '../src/i18n/routes.ts';
 
 const baseUrl = process.env.BASE_URL ?? 'http://127.0.0.1:4321';
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
@@ -10,7 +11,7 @@ const shots = 'tests/.artifacts/mobile';
 const BROWN = 'rgb(89, 64, 55)';
 const URL_BAR_DELTA = 90; // px hidden/revealed by a phone's address bar
 
-const routes = ['/', '/putnam/', '/eredita/', '/unete/', '/contacto/', '/noticias/'];
+const routes = siteRoutes;
 const failures = [];
 const check = async (label, fn) => {
   try { await fn(); console.log(`  ok   ${label}`); }

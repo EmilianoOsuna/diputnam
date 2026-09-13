@@ -1,4 +1,4 @@
-// Mobile frame-budget check for the six routes at a phone viewport with the CPU
+// Mobile frame-budget check for every published route (both locales) at a phone viewport with the CPU
 // throttled ×4. Drags the page with synthetic touch events (CDP) and measures what
 // the site does during the gesture and its fling:
 // rAF/scroll callbacks it registered, frame pacing, long tasks and forced layouts.
@@ -8,6 +8,7 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 import { chromium } from 'playwright';
+import { pages, routes as siteRoutes } from '../src/i18n/routes.ts';
 
 const baseUrl = process.env.BASE_URL ?? 'http://127.0.0.1:4321';
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
@@ -17,8 +18,8 @@ const DRAG = { distance: 900, duration: 700 }; // px of finger travel, ms
 const MOTION_LIBS = /gsap|ScrollTrigger|lenis/i;
 const JS_BUDGET = 10 * 1024; // gzip bytes of first-party scripts on a mobile load
 
-const routes = ['/', '/putnam/', '/eredita/', '/unete/', '/contacto/', '/noticias/'];
-const tracks = { '/eredita/': '.ed-h-track', '/unete/': '.traits', '/contacto/': '.reasons' };
+const routes = siteRoutes;
+const tracks = Object.fromEntries(Object.values(pages.eredita).map((r) => [r, '.ed-h-track']).concat(Object.values(pages.unete).map((r) => [r, '.traits']), Object.values(pages.contacto).map((r) => [r, '.reasons'])));
 const failures = [];
 const report = {};
 const check = (label, fn) => {

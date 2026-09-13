@@ -15,11 +15,14 @@ export const profileMailto = (subject: string) => `mailto:${contact.email}?subje
 export const profileWhatsapp = `https://wa.me/${contact.phone.replace(/\D/g, '')}?text=${encodeURIComponent('Hola, equipo Putnam. Quiero enviarles mi perfil para futuras oportunidades: ')}`;
 
 export const hero = {
+  kicker: 'Talento Putnam',
   title: 'Únete a un equipo con criterio.',
+  meta: ['Posiciones fijas · Colaboraciones por proyecto', 'Arquitectura · Obra · Coordinación · Soporte'],
   lead: 'En Putnam buscamos personas con disciplina técnica, sentido estético y compromiso real con la calidad. Valoramos perfiles que entienden que una buena obra no depende solo de ejecutar, sino de coordinar, anticipar y cuidar cada decisión del proceso.',
 } as const;
 
 export const culture = {
+  kicker: 'Nuestra cultura',
   title: 'Cómo trabajamos en Putnam',
   text: 'Priorizamos una forma de trabajo sobria, técnica y profesional. Nos interesa más la consistencia en el tiempo que la improvisación de corto plazo.',
   traits: [
@@ -31,7 +34,8 @@ export const culture = {
 } as const;
 
 export const profile = {
-  title: 'Buscamos profesionales que quieran crecer con una constructora enfocada en valor patrimonial y ejecución rigurosa.',
+  kicker: 'Qué valoramos',
+  title: 'Buscamos profesionales que quieran crecer\ncon una constructora enfocada en valor\npatrimonial y ejecución rigurosa.',
   text: 'Trabajamos en proyectos residenciales y desarrollos boutique donde el detalle importa. Eso exige equipos responsables, ordenados y capaces de colaborar entre diseño, obra, proveedores y cliente final.',
   values: [
     { title: 'Rigor profesional', text: 'Personas que ordenan, documentan y ejecutan con método.' },
@@ -46,8 +50,10 @@ export const profile = {
 } as const;
 
 export const openings = {
-  title: 'Actualmente no estamos contratando.',
+  kicker: 'Oportunidades',
+  title: 'Actualmente\nno estamos contratando.',
   text: 'Nuestro equipo crece de manera selectiva y en función de necesidades concretas de cada proyecto. Por ahora no contamos con procesos activos de incorporación.',
+  emptyKicker: 'Sin vacantes abiertas',
   emptyTitle: 'No hay vacantes abiertas en este momento',
   emptyText: [
     'En Putnam Desarrollos Inmobiliarios priorizamos incorporaciones puntuales, con criterio técnico, visión de largo plazo y capacidad de ejecución. Cuando abrimos una posición, buscamos perfiles que realmente eleven el estándar de la compañía.',
@@ -57,6 +63,7 @@ export const openings = {
 } as const;
 
 export const process = {
+  kicker: 'Proceso de selección',
   title: 'Qué esperamos del proceso.',
   text: 'Queremos procesos simples, serios y claros, enfocados en compatibilidad profesional y calidad del perfil.',
   steps: [
@@ -68,12 +75,14 @@ export const process = {
 } as const;
 
 export const spontaneous = {
-  title: 'Aunque no veas una vacante exacta, puedes escribirnos.',
+  kicker: 'Postulación espontánea',
+  title: 'Aunque no veas una vacante exacta,\npuedes escribirnos.',
   text: 'Si tu perfil aporta valor en arquitectura, ingeniería, coordinación, compras, visualización, comercialización o administración de proyectos, estaremos encantados de revisar tu información. En empresas en crecimiento, muchas buenas incorporaciones empiezan antes de que exista una vacante formal.',
   fields: ['Arquitectura', 'Ingeniería', 'Coordinación', 'Compras', 'Visualización', 'Comercialización', 'Administración de proyectos'],
 } as const;
 
 export const apply = {
-  title: '¿Quieres formar parte de Putnam Desarrollos Inmobiliarios?',
+  kicker: 'Aplicar',
+  title: '¿Quieres formar parte\nde Putnam Desarrollos\nInmobiliarios?',
   text: 'Envíanos tu perfil y una breve nota sobre el tipo de rol que te interesa. Revisaremos tu información y te contactaremos si vemos una coincidencia clara con nuestras necesidades.',
 } as const;

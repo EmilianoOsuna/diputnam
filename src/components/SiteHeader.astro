@@ -1,12 +1,18 @@
 ---
 import { getImage } from 'astro:assets';
 import { contact } from '../data/home';
+import { otherLang, pages, t, type Lang, type PageKey } from '../i18n';
 import logoDarkSrc from '../assets/putnam-dark.png';
 import logoLightSrc from '../assets/putnam-light.png';
 
-interface Props { home?: boolean; contacto?: boolean; }
-const { home = false, contacto = false } = Astro.props;
-const links = [{ label: 'Ereditá', href: '/eredita/' }, { label: 'Putnam', href: '/putnam/' }, { label: 'Noticias', href: '/noticias/' }, { label: 'Únete', href: '/unete/' }, { label: 'Contacto', href: '/contacto/' }];
+// `alternate` is where the language switch goes when this page has no direct pair
+// (a note without translation falls back to the section index).
+interface Props { lang: Lang; page: PageKey; alternate?: string; home?: boolean; contacto?: boolean; }
+const { lang, page, home = false, contacto = false } = Astro.props;
+const ui = t(lang);
+const other = otherLang(lang);
+const alternate = Astro.props.alternate ?? pages[page][other];
+const links = (['eredita', 'putnam', 'noticias', 'unete', 'contacto'] as const satisfies readonly PageKey[]).map((key) => ({ label: ui.nav[key], href: pages[key][lang] }));
 const path = Astro.url.pathname.replace(/\/?$/, '/');
 
 // The mark renders in a ~53px box; 360px covers 3x screens with room to spare. Each theme
@@ -19,26 +25,29 @@ const mark = async (src: ImageMetadata) => ({
 const marks = { dark: await mark(logoDarkSrc), light: await mark(logoLightSrc) };
 ---
 <header class:list={["site-header", { "site-header--light": home }]} data-site-header data-auto-theme>
-  <a class="brand brand--mark" href="/" aria-label="Putnam, inicio">
+  <a class="brand brand--mark" href={pages.home[lang]} aria-label={ui.brand.homeAria}>
     {(['dark', 'light'] as const).map((theme) => (
       <picture data-logo={theme} hidden={home ? theme === 'dark' : theme === 'light'}>
         <source type="image/webp" srcset={marks[theme].webp} />
         <img src={marks[theme].png} width={MARK_SIZE} height={MARK_SIZE} alt="" decoding="async" />
       </picture>
     ))}
-    <span class="brand-copy"><strong>Putnam</strong><small>Desarrollos inmobiliarios</small></span>
+    <span class="brand-copy"><strong>Putnam</strong><small>{ui.brand.tagline}</small></span>
   </a>
-  <nav class="site-nav" id="site-navigation" aria-label="Navegación principal">
+  <nav class="site-nav" id="site-navigation" aria-label={ui.nav.aria}>
     {links.map((link) => <a href={link.href} aria-current={path === link.href ? 'page' : undefined}>{link.label}</a>)}
-    <span aria-label="Español">ES</span>
+    <div class="lang-switch" role="group" aria-label={ui.langSwitch.aria}>
+      <span aria-current="true" lang={lang}>{ui.langSwitch[lang]}</span>
+      <a href={alternate} hreflang={other} lang={other} aria-label={other === 'es' ? ui.langSwitch.toEs : ui.langSwitch.toEn}>{ui.langSwitch[other]}</a>
+    </div>
     <div class="mobile-menu-contact">
       <a href={`mailto:${contact.email}`}>{contact.email}</a>
       <a href={`tel:${contact.phone.replaceAll(' ', '')}`}>{contact.phone}</a>
       <span>{contact.city}</span>
-      <a href={contact.whatsapp} target="_blank" rel="noreferrer">WhatsApp ↗</a>
+      <a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} ↗</a>
     </div>
   </nav>
-  <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></button>
+  <button class="menu-toggle" type="button" aria-label={ui.nav.open} data-menu-label-open={ui.nav.open} data-menu-label-close={ui.nav.close} aria-expanded="false" aria-controls="site-navigation" data-menu-toggle><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></button>
 </header>
 <script src="../scripts/menu.ts"></script>
 <script src="../scripts/controls.ts"></script>

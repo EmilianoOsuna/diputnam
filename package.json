@@ -9,7 +9,12 @@
     "preview": "astro preview",
     "test:sweep": "node tests/home-sweep.mjs",
     "test:mobile": "node tests/mobile-audit.mjs",
-    "test:perf": "node tests/mobile-perf.mjs"
+    "test:perf": "node tests/mobile-perf.mjs",
+    "test:i18n": "node tests/i18n-sweep.mjs",
+    "studio:dev": "npm --prefix studio run dev",
+    "studio:build": "npm --prefix studio run build",
+    "studio:deploy": "npm --prefix studio run deploy",
+    "studio:seed": "npm --prefix studio run seed"
   },
   "repository": {
     "type": "git",

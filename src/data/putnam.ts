@@ -36,3 +36,15 @@ export const putnamEditorialImage = {
   src: 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?q=88&w=1800&auto=format&fit=crop',
   alt: 'Volúmenes y líneas de una construcción contemporánea',
 } as const;
+
+export const putnamHero = {
+  title: 'Una visión.\nTodo el proceso.',
+  lead: 'Integramos diseño, planificación y ejecución para construir valor a largo plazo.',
+} as const;
+
+export const putnamSections = {
+  process: { kicker: 'Proceso Putnam' },
+  principles: { kicker: 'Lo que nos guía', title: 'Misión, visión y valores', valuesLabel: 'Valores / 06', valuesTitle: 'Principios que atraviesan cada decisión.' },
+  differences: { kicker: 'La diferencia Putnam', title: 'Rigor en lo invisible.\nClaridad en el resultado.' },
+  cta: { kicker: 'Siguiente paso', title: 'Una conversación puede ser el inicio de algo sólido.' },
+} as const;

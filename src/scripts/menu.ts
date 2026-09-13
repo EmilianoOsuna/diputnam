@@ -47,7 +47,7 @@ const setMenuOpen = (open: boolean) => {
   siteNav?.classList.toggle('is-open', open);
   document.body.classList.toggle('menu-open', open);
   menuToggle?.setAttribute('aria-expanded', String(open));
-  menuToggle?.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  menuToggle?.setAttribute('aria-label', (open ? menuToggle.dataset.menuLabelClose : menuToggle.dataset.menuLabelOpen) ?? '');
   document.body.style.overflow = open ? 'hidden' : '';
   document.querySelectorAll<HTMLElement>('main, .site-footer, [data-scroll-cue]').forEach((element) => { element.inert = open; });
   if (open) {

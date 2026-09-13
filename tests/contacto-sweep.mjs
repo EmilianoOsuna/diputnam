@@ -14,7 +14,7 @@ try {
 
   assert.equal(await page.locator('h1').count(), 1);
   assert.equal(await page.locator('main > section').count(), 6);
-  assert.deepEqual(await page.locator('.site-nav > a').evaluateAll((links) => links.map((link) => link.getAttribute('href'))), ['/eredita/', '/putnam/', '/contacto/']);
+  assert.deepEqual(await page.locator('.site-nav > a').evaluateAll((links) => links.map((link) => link.getAttribute('href'))), ['/eredita/', '/putnam/', '/noticias/', '/unete/', '/contacto/']);
   assert.equal(await page.locator('.brand').getAttribute('href'), '/');
   assert.equal(await page.locator('label[for]').count(), 6);
   assert.equal(await page.locator('#ct-motivo option').count(), 6);
@@ -51,7 +51,7 @@ try {
 
   for (const route of ['/', '/eredita/', '/putnam/', '/contacto/']) {
     await page.goto(`${baseUrl}${route}`, { waitUntil: 'networkidle' });
-    assert.deepEqual(await page.locator('.site-nav > a').evaluateAll((links) => links.map((link) => link.getAttribute('href'))), ['/eredita/', '/putnam/', '/contacto/']);
+    assert.deepEqual(await page.locator('.site-nav > a').evaluateAll((links) => links.map((link) => link.getAttribute('href'))), ['/eredita/', '/putnam/', '/noticias/', '/unete/', '/contacto/']);
     assert.equal(await page.locator('.brand').getAttribute('href'), '/');
   }
 

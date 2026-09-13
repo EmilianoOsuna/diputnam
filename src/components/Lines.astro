@@ -1,0 +1,11 @@
+---
+// Renders editor-authored line breaks in a title. Content stores a plain `\n`; here it
+// becomes `<br>` (`hard`: breaks at every width, home scenes) or `<br class="cut">`
+// (`cut`: desktop-only editorial break, interior h1/h2). splitLines treats both as a
+// hard end of line, so the per-line entrance follows the editor's cut. A space precedes
+// each break so words never fuse when a `.cut` break is hidden on phones.
+interface Props { text: string; mode?: 'hard' | 'cut'; }
+const { text, mode = 'cut' } = Astro.props;
+const lines = text.split('\n');
+---
+{lines.map((line, index) => <>{index > 0 && <>{' '}{mode === 'hard' ? <br /> : <br class="cut" />}</>}{line}</>)}

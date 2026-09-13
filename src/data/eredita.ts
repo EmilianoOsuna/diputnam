@@ -122,3 +122,9 @@ export const erediteLegalDocs = {
     { title: 'Fichas y políticas del proyecto', text: 'Sección prevista para políticas comerciales, garantías y documentos complementarios.' },
   ],
 } as const;
+
+export const erediteSections = {
+  gallery: { kicker: 'Galería', title: 'Fotografías y renders del proyecto.' },
+  typologies: { kicker: 'Tipologías', title: 'Cuatro formas\nde vivir Ereditá.', intro: 'Cada tipología resuelve un estilo de vida distinto, desde el primer departamento hasta la vida en familia.' },
+  cta: { kicker: 'Siguiente paso', title: 'Conoce Ereditá de cerca y resuelve tus dudas.' },
+} as const;

@@ -1,0 +1,125 @@
+---
+import { Image } from 'astro:assets';
+import putnamMark from '../assets/putnam-light.png';
+import ContactFooter from '../components/ContactFooter.astro';
+import Lines from '../components/Lines.astro';
+import SiteHead from '../components/SiteHead.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { contact } from '../data/home';
+import { putnamDifferences, putnamEditorialImage, putnamHero, putnamIntro, putnamPrinciples, putnamProcess, putnamSections } from '../data/putnam';
+import { t, type Lang } from '../i18n';
+import { SAT, remoteImage as unsplashVariant } from '../lib/images';
+import '../styles/global.css';
+import '../styles/putnam.css';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+---
+<html lang={lang}>
+  <head>
+    <SiteHead lang={lang} page="putnam" preconnectUnsplash />
+  </head>
+  <body class="putnam-page">
+    <script is:inline>if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(min-width: 768px)').matches) document.documentElement.classList.add('motion-pending');</script>
+    <a class="skip-link" href="#contenido">{ui.skipLink}</a>
+    <SiteHeader lang={lang} page="putnam" />
+
+    <main id="contenido" data-putnam>
+      <section class="institutional-hero" id="inicio" aria-labelledby="putnam-title" data-header-theme="light">
+        <div class="hero-copy" data-reveal-group>
+          <p class="section-kicker">{putnamIntro.eyebrow}</p>
+          <h1 id="putnam-title"><Lines text={putnamHero.title} mode="hard" /></h1>
+        </div>
+        <div class="hero-details" data-reveal-group>
+          <p class="hero-lead">{putnamHero.lead}</p>
+          <a class="hero-index" href="#enfoque">{ui.putnam.seeApproach} <span aria-hidden="true">→</span></a>
+        </div>
+        <figure class="hero-frame">
+          <img
+            src={unsplashVariant(putnamEditorialImage.src, 1280, 82, SAT.hero)}
+            srcset={`${unsplashVariant(putnamEditorialImage.src, 640, 76, SAT.hero)} 640w, ${unsplashVariant(putnamEditorialImage.src, 960, 80, SAT.hero)} 960w, ${unsplashVariant(putnamEditorialImage.src, 1280, 82, SAT.hero)} 1280w`}
+            sizes="100vw"
+            alt={putnamEditorialImage.alt}
+            width="1800"
+            height="1200"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </figure>
+      </section>
+
+      <section class="process" id="enfoque" aria-labelledby="process-title" data-process data-header-theme="dark">
+        <div class="process-stage">
+          <header class="process-heading">
+            <p class="section-kicker">{putnamSections.process.kicker}</p>
+            <h2 id="process-title" class="visually-hidden">{putnamSections.process.kicker}</h2>
+          </header>
+          <div class="process-visual">
+            {putnamProcess.map((step, index) => (
+              <figure class:list={["process-media", { "is-active": index === 0 }]} data-process-media={index} aria-hidden={index === 0 ? 'false' : 'true'}>
+                {step.image ? <img src={unsplashVariant(step.image, 960, 78, SAT.process)} srcset={`${unsplashVariant(step.image, 640, 74, SAT.process)} 640w, ${unsplashVariant(step.image, 960, 78, SAT.process)} 960w, ${unsplashVariant(step.image, 1280, 80, SAT.process)} 1280w`} sizes="(max-width: 767px) calc(100vw - 2rem), calc(100vw - 7rem)" alt={step.alt} width="1800" height="1200" loading="lazy" decoding="async" fetchpriority="low" /> : <div class="media-placeholder" role="img" aria-label={ui.putnam.imagePendingFor(step.title)}><span>{ui.putnam.imagePending}</span><b>{step.number}</b><small>{step.title}</small></div>}
+              </figure>
+            ))}
+            <div class="process-shade" aria-hidden="true"></div>
+          </div>
+          <div class="process-overlays" aria-live="polite">
+            {putnamProcess.map((step, index) => (
+              <article class:list={["process-step", { "is-active": index === 0 }]} data-process-step={index} aria-hidden={index === 0 ? 'false' : 'true'}>
+                <span class="step-number">{step.number}</span><h3>{step.title}</h3><p>{step.text}</p>
+              </article>
+            ))}
+          </div>
+          <div class="process-counter"><span data-process-current>01</span><span aria-hidden="true">/</span><span>06</span></div>
+          <div class="process-rail" aria-hidden="true"><span data-line-progress></span></div>
+        </div>
+        <div class="process-markers" data-process-markers aria-hidden="true">{putnamProcess.map((_, index) => <div class="process-marker" data-process-marker={index}></div>)}</div>
+      </section>
+
+      <section class="principles" aria-labelledby="principles-title" data-header-theme="light">
+        <p class="section-kicker">{putnamSections.principles.kicker}</p>
+        <h2 id="principles-title" class="visually-hidden">{putnamSections.principles.title}</h2>
+        <article class="principle principle--mission" data-reveal-group>
+          <span>{putnamPrinciples.mission.label}</span>
+          <h3>{putnamPrinciples.mission.title}</h3>
+          <p>{putnamPrinciples.mission.text}</p>
+        </article>
+        <article class="principle principle--vision" data-reveal-group>
+          <span>{putnamPrinciples.vision.label}</span>
+          <h3>{putnamPrinciples.vision.title}</h3>
+          <p>{putnamPrinciples.vision.text}</p>
+        </article>
+        <div class="values" data-reveal-group>
+          <span>{putnamSections.principles.valuesLabel}</span>
+          <h3>{putnamSections.principles.valuesTitle}</h3>
+          <ol>{putnamPrinciples.values.map((value, index) => <li><b>{String(index + 1).padStart(2, '0')}</b>{value}</li>)}</ol>
+        </div>
+      </section>
+
+      <section class="differences" aria-labelledby="differences-title" data-header-theme="dark">
+        <header class="section-heading" data-reveal-group>
+          <p class="section-kicker">{putnamSections.differences.kicker}</p>
+          <h2 id="differences-title"><Lines text={putnamSections.differences.title} mode="hard" /></h2>
+        </header>
+        <div class="difference-list">
+          {putnamDifferences.map((item) => (
+            <article class="difference" data-reveal-group><span>{item.number}</span><h3>{item.title}</h3><p>{item.text}</p></article>
+          ))}
+        </div>
+      </section>
+
+      <section class="institutional-cta" aria-labelledby="cta-title" data-reveal-group data-header-theme="light">
+        <p class="section-kicker">{putnamSections.cta.kicker}</p>
+        <h2 id="cta-title">{putnamSections.cta.title}</h2>
+        <div class="cta-actions">
+          <a href={`mailto:${contact.email}`}>{ui.writeUs} <span aria-hidden="true">↗</span></a>
+          <a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <span aria-hidden="true">↗</span></a>
+        </div>
+        <Image class="cta-mark" src={putnamMark} widths={[400, 800]} sizes="(max-width: 767px) 72vw, min(42vw, 42rem)" format="webp" alt="" aria-hidden="true" />
+      </section>
+    </main>
+    <ContactFooter lang={lang} />
+    <script src="../scripts/putnam-motion.ts"></script>
+  </body>
+</html>

@@ -1,6 +1,15 @@
 ---
-interface Props { title: string; description: string; preconnectUnsplash?: boolean; }
-const { title, description, preconnectUnsplash = false } = Astro.props;
+import { pages, t, type Lang, type PageKey } from '../i18n';
+
+// `page` resolves the hreflang pair from the route table; `alternate` overrides it for
+// dynamic pages (a note's translation, or none when the note exists in one language).
+interface Props { lang: Lang; page: PageKey; alternate?: Partial<Record<Lang, string | null>>; title?: string; description?: string; preconnectUnsplash?: boolean; }
+const { lang, page, alternate = {}, preconnectUnsplash = false } = Astro.props;
+const ui = t(lang);
+const title = Astro.props.title ?? ui.meta[page].title;
+const description = Astro.props.description ?? ui.meta[page].description;
+const href = (target: Lang) => (target in alternate ? alternate[target] : pages[page][target]);
+const alternates = (['es', 'en'] as const).map((target) => ({ target, href: href(target) })).filter((entry) => entry.href);
 ---
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -10,6 +19,8 @@ const { title, description, preconnectUnsplash = false } = Astro.props;
 <link rel="icon" href="/favicon.png" />
 <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 {preconnectUnsplash && <link rel="preconnect" href="https://images.unsplash.com" />}
+{alternates.map(({ target, href }) => <link rel="alternate" hreflang={target} href={href} />)}
+<link rel="alternate" hreflang="x-default" href={href('es') ?? pages[page].es} />
 <title>{title}</title>
 {/* Titles stay hidden until the motion runtime has split them into lines and set their
     start state, so the plain title never flashes before its entrance. Failsafe: 2.5 s. */}
