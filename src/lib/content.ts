@@ -22,14 +22,20 @@ const projections = (lang: Lang) => {
   return { l, img, heading, pairs, titled, strings };
 };
 
-export interface Settings { city: string; email: string; phone: string; whatsapp: string; whatsappNumber: string; address: string; hours: string; hoursShort: string; responseTime: string; mapsUrl: string; coordinates: { lat: number; lng: number } }
+export interface Organization { description: string; legalName: string | null; foundingYear: number | null; sameAs: string[]; logo: string | null }
+export interface Settings { city: string; email: string; phone: string; whatsapp: string; whatsappNumber: string; address: string; hours: string; hoursShort: string; responseTime: string; mapsUrl: string; coordinates: { lat: number; lng: number }; organization: Organization }
 export const getSettings = async (lang: Lang): Promise<Settings> => {
   const { l } = projections(lang);
-  const s = await sanityFetch<Omit<Settings, 'whatsapp' | 'whatsappNumber'> & { whatsappMessage: string }>(`*[_id == "siteSettings"][0]{ city, email, phone, ${l('whatsappMessage')}, address, ${l('hours')}, ${l('hoursShort')}, responseTime, mapsUrl, coordinates }`, { lang });
+  const s = await sanityFetch<Omit<Settings, 'whatsapp' | 'whatsappNumber' | 'organization'> & { whatsappMessage: string; organization: Partial<Organization> | null }>(`*[_id == "siteSettings"][0]{ city, email, phone, ${l('whatsappMessage')}, address, ${l('hours')}, ${l('hoursShort')}, responseTime, mapsUrl, coordinates,
+    organization{ ${l('description')}, legalName, foundingYear, "sameAs": coalesce(sameAs, []), "logo": logo.asset->url } }`, { lang });
   if (!s) throw new Error('Sanity: siteSettings is missing (run the seed)');
   const whatsappNumber = s.phone.replace(/\D/g, '');
-  return { ...s, whatsappNumber, whatsapp: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(s.whatsappMessage ?? '')}` };
+  const organization: Organization = { description: '', legalName: null, foundingYear: null, sameAs: [], logo: null, ...s.organization };
+  return { ...s, organization, whatsappNumber, whatsapp: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(s.whatsappMessage ?? '')}` };
 };
+
+// Last publish time of a singleton, for sitemap lastmod (a build date would be a lie).
+export const getUpdatedAt = (id: string) => sanityFetch<string | null>(`*[_id == $id][0]._updatedAt`, { id });
 
 export interface HomeScene { id: 'inicio' | 'eredita' | 'putnam' | 'contacto'; title: string; image: CmsImage }
 export const getHome = (lang: Lang) => { const { l, img } = projections(lang); return sanityFetch<{ scenes: HomeScene[] }>(`*[_id == "home"][0]{ scenes[]{ id, ${l('title')}, ${img('image')} } }`, { lang }); };
@@ -112,9 +118,12 @@ export const getNoticiasPage = (lang: Lang) => { const { l, img, heading } = pro
 }`, { lang }); };
 
 export interface NotaImage { url: string; width: number; height: number; alt: string | null; crop?: CmsImage['crop']; hotspot?: CmsImage['hotspot'] }
-export interface Nota { title: string; slug: string; date: string; category: string; tags: string[]; excerpt: string; readTime: string | null; image: NotaImage | null; body: unknown[] | null; translation: { slug: string } | null }
-const notaFields = `title, "slug": slug.current, date, category, "tags": coalesce(tags, []), excerpt, readTime,
-  "image": image{ "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, crop, hotspot, alt },
+export interface NotaSeo { title: string | null; description: string | null; image: NotaImage | null }
+export interface Nota { title: string; slug: string; date: string; updatedAt: string | null; category: string; tags: string[]; excerpt: string; readTime: string | null; image: NotaImage | null; body: unknown[] | null; translation: { slug: string } | null; seo: NotaSeo }
+const notaImage = (path: string) => `"image": ${path}{ "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, crop, hotspot, alt }`;
+const notaFields = `title, "slug": slug.current, date, "updatedAt": _updatedAt, category, "tags": coalesce(tags, []), excerpt, readTime,
+  ${notaImage('image')},
+  "seo": { "title": seo.title, "description": seo.description, ${notaImage('seo.image')} },
   body[]{ ..., _type == "image" => { "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height } },
   "translation": *[_type == "translation.metadata" && references(^._id)][0].translations[language != $lang][0].value->{ "slug": slug.current }`;
 export const getNotas = (lang: Lang) => sanityFetch<Nota[]>(`*[_type == "nota" && language == $lang && defined(slug.current)] | order(date desc){ ${notaFields} }`, { lang });

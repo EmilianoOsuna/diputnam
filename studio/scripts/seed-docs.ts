@@ -36,6 +36,10 @@ export const buildDocs = async (uploadImage: UploadImage): Promise<SeedDoc[]> =>
     address: contact.address, hours: loc(contact.hours, en.settings.hours), hoursShort: loc(contact.hoursShort, en.settings.hoursShort),
     responseTime: contact.responseTime, mapsUrl: contact.mapsUrl,
     coordinates: { _type: 'geopoint', lat: contact.coordinates.latitude, lng: contact.coordinates.longitude },
+    organization: {
+      description: loc(contact.organization.description, en.settings.organizationDescription),
+      sameAs: contact.organization.sameAs,
+    },
   });
 
   // Home scenes.

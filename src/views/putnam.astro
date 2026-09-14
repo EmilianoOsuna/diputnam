@@ -20,7 +20,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 ---
 <html lang={lang}>
   <head>
-    <SiteHead lang={lang} page="putnam" />
+    <SiteHead lang={lang} page="putnam" settings={contact} />
   </head>
   <body class="putnam-page">
     <script is:inline>if (!matchMedia('(prefers-reduced-motion: reduce)').matches && matchMedia('(min-width: 768px)').matches) document.documentElement.classList.add('motion-pending');</script>

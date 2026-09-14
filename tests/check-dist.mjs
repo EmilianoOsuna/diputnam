@@ -1,12 +1,14 @@
 // Post-build guard: the static build must never ship HTML that depends on Astro's
 // on-demand `/_image` endpoint (there is no worker to serve it on Cloudflare), every
 // local optimized image it references must exist in dist/, no content image may still
-// point at the former mock hosts, and every page declares its locale with a reciprocal
-// hreflang pair.
+// point at the former mock hosts, and every indexable page declares its locale, an
+// absolute canonical equal to its own route and a reciprocal absolute hreflang pair.
+// (Search/social metadata beyond that is checked by seo-audit.mjs.)
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 
 const dist = process.env.DIST_DIR ?? 'dist';
+const SITE = 'https://diputnam.com';
 const failures = [];
 
 const walk = async (dir) => {
@@ -24,6 +26,9 @@ const files = await walk(dist);
 const htmlFiles = files.filter((file) => file.endsWith('.html'));
 const routeOf = (file) => '/' + relative(dist, file).replace(/index\.html$/, '');
 const alternatesOf = (html) => Object.fromEntries([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map(([, lang, href]) => [lang, href]));
+const isNoindex = (html) => /<meta name="robots" content="noindex[^"]*"/.test(html);
+// Absolute site URL → route, or null when it points elsewhere (localhost, preview hosts…).
+const routeFromUrl = (url) => (url.startsWith(`${SITE}/`) ? url.slice(SITE.length) : null);
 const pageAlternates = new Map();
 
 for (const file of htmlFiles) {
@@ -39,10 +44,20 @@ for (const file of htmlFiles) {
   const route = routeOf(file);
   const expectedLang = route.startsWith('/en/') ? 'en' : 'es';
   if (lang !== expectedLang) failures.push(`${name}: <html lang="${lang}"> (expected "${expectedLang}")`);
-  const alternates = alternatesOf(html);
-  if (alternates[expectedLang] !== route) failures.push(`${name}: self hreflang is ${alternates[expectedLang]}`);
-  if (!alternates['x-default']) failures.push(`${name}: missing x-default hreflang`);
-  pageAlternates.set(route, alternates);
+  if (/https?:\/\/(?:localhost|127\.0\.0\.1|[\w.-]+\.workers\.dev|www\.diputnam\.com)[:/]/.test(html)) failures.push(`${name}: references a non-canonical host`);
+  if (!isNoindex(html)) {
+    const canonicals = [...html.matchAll(/<link rel="canonical" href="([^"]+)"/g)].map(([, href]) => href);
+    if (canonicals.length !== 1) failures.push(`${name}: expected one canonical, found ${canonicals.length}`);
+    else if (canonicals[0] !== `${SITE}${route}`) failures.push(`${name}: canonical is ${canonicals[0]} (expected ${SITE}${route})`);
+    const alternates = Object.fromEntries(Object.entries(alternatesOf(html)).map(([lang, href]) => {
+      const target = routeFromUrl(href);
+      if (!target) failures.push(`${name}: hreflang ${lang} is not an absolute site URL: ${href}`);
+      return [lang, target ?? href];
+    }));
+    if (alternates[expectedLang] !== route) failures.push(`${name}: self hreflang is ${alternates[expectedLang]}`);
+    if (!alternates['x-default']) failures.push(`${name}: missing x-default hreflang`);
+    pageAlternates.set(route, alternates);
+  }
 
   const assetRefs = new Set(html.match(/\/_astro\/[\w.-]+\.(?:webp|avif|png|jpe?g|svg)/g) ?? []);
   for (const ref of assetRefs) {
@@ -65,4 +80,4 @@ if (failures.length) {
   for (const failure of failures) console.error(`  - ${failure}`);
   process.exit(1);
 }
-console.log(`check-dist: ${htmlFiles.length} HTML file(s) OK, no /_image references, no mock image hosts, all /_astro images present, hreflang pairs reciprocal.`);
+console.log(`check-dist: ${htmlFiles.length} HTML file(s) OK, no /_image references, no mock image hosts, all /_astro images present, canonicals absolute, hreflang pairs reciprocal.`);

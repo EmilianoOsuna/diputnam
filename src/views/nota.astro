@@ -9,7 +9,8 @@ import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { formatDate, notaPath, otherLang, pages, t, type Lang } from '../i18n';
 import { getNoticiasPage, getSettings, type Nota } from '../lib/content';
-import { CARD_WIDTHS, HERO_WIDTHS, SAT } from '../lib/images';
+import { CARD_WIDTHS, HERO_WIDTHS, SAT, ogUrl } from '../lib/images';
+import { absolute, truncate } from '../lib/seo';
 import '../styles/global.css';
 import '../styles/noticias.css';
 
@@ -22,10 +23,19 @@ const [{ cta }, contact] = await Promise.all([getNoticiasPage(lang), getSettings
 const pair = nota.translation ? notaPath(other, nota.translation.slug) : null;
 const alternate = { [lang]: notaPath(lang, nota.slug), [other]: pair };
 const heroImage = nota.image ? { ...nota.image, alt: nota.image.alt ?? '', decorative: !nota.image.alt } : null;
+
+// Search/social metadata: editor overrides first, then the note itself, cut to size.
+const TITLE_SUFFIX = ' | Putnam';
+const seoTitle = nota.seo.title ?? truncate(nota.title, 60 - TITLE_SUFFIX.length);
+const seoDescription = nota.seo.description ?? truncate(nota.excerpt, 155);
+const shareImage = nota.seo.image ?? nota.image;
+const ogImage = shareImage ? ogUrl(shareImage) : `/og/cover-${lang}.png`;
+const ogImageAlt = shareImage?.alt ?? ui.og.alt;
+const article = { headline: nota.title, published: nota.date, modified: nota.updatedAt ?? nota.date, section: nota.category, image: absolute(ogImage), imageAlt: ogImageAlt };
 ---
 <html lang={lang}>
   <head>
-    <SiteHead lang={lang} page="noticias" alternate={alternate} title={`${nota.title} | Putnam`} description={nota.excerpt} />
+    <SiteHead lang={lang} page="noticias" settings={contact} alternate={alternate} title={`${seoTitle}${TITLE_SUFFIX}`} description={seoDescription} article={article} breadcrumbTitle={nota.title} image={ogImage} imageAlt={ogImageAlt} imageType={shareImage ? 'image/jpeg' : 'image/png'} />
   </head>
   <body class="noticias-page nota-page">
     <a class="skip-link" href="#contenido">{ui.skipLink}</a>

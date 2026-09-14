@@ -1,27 +1,76 @@
 ---
 import { pages, t, type Lang, type PageKey } from '../i18n';
+import type { Settings } from '../lib/content';
+import { absolute, jsonLd, jsonLdScript, ogLocale, pageTypeOf, SITE_NAME, type ArticleMeta, type PageType } from '../lib/seo';
+import { OG_HEIGHT, OG_WIDTH } from '../lib/images';
 
 // `page` resolves the hreflang pair from the route table; `alternate` overrides it for
 // dynamic pages (a note's translation, or none when the note exists in one language).
-interface Props { lang: Lang; page: PageKey; alternate?: Partial<Record<Lang, string | null>>; title?: string; description?: string; }
-const { lang, page, alternate = {} } = Astro.props;
+// `settings` feeds the Organization structured data; `article` turns the page into a
+// NewsArticle; `image` overrides the per-page social cover (absolute URL or site path).
+interface Props {
+  lang: Lang; page: PageKey; settings: Settings;
+  alternate?: Partial<Record<Lang, string | null>>;
+  title?: string; description?: string;
+  pageType?: PageType; article?: ArticleMeta; breadcrumbTitle?: string;
+  image?: string; imageAlt?: string; imageType?: string;
+  noindex?: boolean;
+}
+const { lang, page, settings, alternate = {}, article, breadcrumbTitle, noindex = false } = Astro.props;
 const ui = t(lang);
 const title = Astro.props.title ?? ui.meta[page].title;
 const description = Astro.props.description ?? ui.meta[page].description;
+const pageType = Astro.props.pageType ?? pageTypeOf(page);
 const href = (target: Lang) => (target in alternate ? alternate[target] : pages[page][target]);
 const alternates = (['es', 'en'] as const).map((target) => ({ target, href: href(target) })).filter((entry) => entry.href);
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+const canonical = absolute(path);
+const xDefault = absolute(href('es') ?? pages[page].es);
+const pair = alternates.find((entry) => entry.target !== lang);
+
+const image = absolute(Astro.props.image ?? `/og/${page}-${lang}.png`);
+const imageAlt = Astro.props.imageAlt ?? ui.og.alt;
+const imageType = Astro.props.imageType ?? 'image/png';
+
+const graph = jsonLd({ lang, page, url: canonical, title, description, pageType, settings, article, breadcrumbTitle });
 ---
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>{title}</title>
 <meta name="description" content={description} />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+{!noindex && <link rel="canonical" href={canonical} />}
+{!noindex && alternates.map(({ target, href }) => <link rel="alternate" hreflang={target} href={absolute(href!)} />)}
+{!noindex && <link rel="alternate" hreflang="x-default" href={xDefault} />}
 <meta name="theme-color" content="#f4eedf" />
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#003a36" />
-<link rel="icon" href="/favicon.png" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
 <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preconnect" href="https://cdn.sanity.io" />
-{alternates.map(({ target, href }) => <link rel="alternate" hreflang={target} href={href} />)}
-<link rel="alternate" hreflang="x-default" href={href('es') ?? pages[page].es} />
-<title>{title}</title>
+<meta property="og:type" content={article ? 'article' : 'website'} />
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:locale" content={ogLocale(lang)} />
+{pair && <meta property="og:locale:alternate" content={ogLocale(pair.target)} />}
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={image} />
+<meta property="og:image:width" content={String(OG_WIDTH)} />
+<meta property="og:image:height" content={String(OG_HEIGHT)} />
+<meta property="og:image:alt" content={imageAlt} />
+<meta property="og:image:type" content={imageType} />
+{article && <meta property="article:published_time" content={article.published} />}
+{article && <meta property="article:modified_time" content={article.modified} />}
+{article && <meta property="article:section" content={article.section} />}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={image} />
+<meta name="twitter:image:alt" content={imageAlt} />
+<script is:inline type="application/ld+json" set:html={jsonLdScript(graph)} />
 {/* Titles stay hidden until the motion runtime has split them into lines and set their
     start state, so the plain title never flashes before its entrance. Failsafe: 2.5 s. */}
 <script is:inline>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.classList.add('titles-pending'); setTimeout(function () { document.documentElement.classList.remove('titles-pending'); }, 2500); }</script>

@@ -34,6 +34,25 @@ export const objectPosition = (image: Pick<CmsImage, 'crop' | 'hotspot'>) => {
   return `object-position: ${(x * 100).toFixed(1)}% ${(y * 100).toFixed(1)}%`;
 };
 
+// Social preview (1200×630): the CDN crops around the hotspot; the editor crop is kept.
+// Bots do not send `Accept: image/webp`, so `auto=format` delivers JPEG to them.
+export const OG_WIDTH = 1200;
+export const OG_HEIGHT = 630;
+export const ogUrl = (image: Pick<CmsImage, 'url' | 'width' | 'height' | 'crop' | 'hotspot'>) => {
+  const url = new URL(imageSrc(image));
+  url.searchParams.set('w', String(OG_WIDTH));
+  url.searchParams.set('h', String(OG_HEIGHT));
+  url.searchParams.set('fit', 'crop');
+  if (image.hotspot) {
+    url.searchParams.set('crop', 'focalpoint');
+    url.searchParams.set('fp-x', image.hotspot.x.toFixed(3));
+    url.searchParams.set('fp-y', image.hotspot.y.toFixed(3));
+  }
+  url.searchParams.set('q', '80');
+  url.searchParams.set('auto', 'format');
+  return url.toString().replaceAll('%2C', ',');
+};
+
 export const altOf = (image: Pick<CmsImage, 'alt' | 'decorative'>) => (image.decorative ? '' : image.alt);
 
 export const HERO_WIDTHS = [640, 960, 1280, 1600, 2000] as const;

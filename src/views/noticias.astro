@@ -22,7 +22,7 @@ const categorias = [ui.noticias.all, ...new Set(notas.map((n) => n.category))].m
 ---
 <html lang={lang}>
   <head>
-    <SiteHead lang={lang} page="noticias" />
+    <SiteHead lang={lang} page="noticias" settings={contact} />
   </head>
   <body class="noticias-page">
     <a class="skip-link" href="#contenido">{ui.skipLink}</a>

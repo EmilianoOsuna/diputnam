@@ -44,4 +44,8 @@ export const contact = {
   responseTime: '24 – 48 h',
   mapsUrl: 'https://maps.app.goo.gl/uLKQ1rPhj3DSpW1U8',
   coordinates: { latitude: -16.541498, longitude: -68.078775 },
+  organization: {
+    description: 'Putnam es una desarrolladora inmobiliaria residencial con sede en La Paz, Bolivia, que integra diseño, planificación y construcción con visión patrimonial de largo plazo.',
+    sameAs: ['https://www.instagram.com/putnamdesarrollosinmobiliarios'],
+  },
 };

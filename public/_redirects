@@ -1,0 +1,2 @@
+# Single canonical host. Requires www.diputnam.com to be attached to the Worker as a custom domain (see README).
+https://www.diputnam.com/* https://diputnam.com/:splat 301

@@ -24,6 +24,16 @@ export const nota = defineType({
     defineField({ name: 'readTime', title: 'Tiempo de lectura', type: 'string', description: 'P. ej. "4 min".' }),
     defineField({ name: 'image', title: 'Imagen destacada', type: 'image', options: { hotspot: true }, fields: [defineField({ name: 'alt', title: 'Texto alternativo', type: 'string' })] }),
     defineField({ name: 'body', title: 'Cuerpo', type: 'richText' }),
+    // Optional overrides for search and social previews; the site derives them from
+    // title/excerpt/image when empty.
+    defineField({
+      name: 'seo', title: 'SEO y redes', type: 'object', options: { collapsible: true, collapsed: true },
+      fields: [
+        defineField({ name: 'title', title: 'Título para buscadores', type: 'string', description: 'Máximo 60 caracteres. Si se deja vacío se recorta el título de la nota.', validation: (rule) => rule.max(60) }),
+        defineField({ name: 'description', title: 'Descripción para buscadores', type: 'text', rows: 3, description: 'Máximo 155 caracteres. Si se deja vacío se recorta el extracto.', validation: (rule) => rule.max(155) }),
+        defineField({ name: 'image', title: 'Imagen para compartir', type: 'image', options: { hotspot: true }, description: 'Se recorta a 1200×630. Si falta se usa la imagen destacada.', fields: [defineField({ name: 'alt', title: 'Texto alternativo', type: 'string' })] }),
+      ],
+    }),
   ],
   orderings: [{ title: 'Fecha, más reciente', name: 'dateDesc', by: [{ field: 'date', direction: 'desc' }] }],
   preview: {

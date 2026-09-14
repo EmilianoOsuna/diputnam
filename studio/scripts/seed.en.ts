@@ -146,4 +146,5 @@ export const settings = {
   whatsappMessage: 'Hello, I would like to arrange a consultation with Putnam Desarrollos Inmobiliarios',
   hours: 'Monday to Friday · 08:30 to 18:30',
   hoursShort: 'Mon – Fri · 08:30 – 18:30',
+  organizationDescription: 'Putnam is a residential real estate developer based in La Paz, Bolivia, that integrates design, planning and construction with a long-term asset-value mindset.',
 };

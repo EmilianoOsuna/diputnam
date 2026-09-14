@@ -1,0 +1,69 @@
+/* 404: one editorial closing section in the language of the CTA blocks (deep green, big
+   title with an editorial cut, faded mark), plus a numbered index of the site's sections
+   so the dead end always has a way out. No motion runtime: entrances are plain CSS. */
+.not-found-page {
+  --putnam-green: #004b46;
+  --putnam-deep: #003a36;
+  --putnam-paper: #f4eedf;
+  --gutter: clamp(1.25rem, 3vw, 3.5rem);
+  overflow-x: clip;
+  color: var(--putnam-paper);
+  background: var(--putnam-green);
+}
+.not-found-page .titles-pending h1, .titles-pending .not-found-page h1 { visibility: visible; }
+
+.nf { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2rem; min-height: 100dvh; padding: 8rem var(--gutter) 5rem; overflow: hidden; isolation: isolate; align-content: end; background: var(--putnam-green); }
+.nf[hidden] { display: none; }
+
+.nf-kicker { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem 2rem; grid-column: 1 / 13; margin: 0 0 clamp(2.5rem, 6dvh, 5rem); font-size: 0.72rem; font-weight: 600; line-height: 1; letter-spacing: 0.16em; text-transform: uppercase; }
+.nf-kicker .nf-path { color: rgba(244, 238, 223, 0.6); font-weight: 500; letter-spacing: 0.1em; text-transform: none; }
+.nf-kicker .nf-path[hidden] { display: none; }
+.nf-kicker .nf-path code { font: inherit; color: var(--putnam-paper); }
+
+.nf-copy { position: relative; z-index: 1; grid-column: 1 / 9; }
+.nf-copy h1 { max-width: 62rem; margin: 0 0 2rem; font-size: clamp(3.2rem, 7.2vw, 7.4rem); font-weight: 500; line-height: 0.9; letter-spacing: -0.06em; }
+.nf-lead { max-width: 30rem; margin: 0 0 3rem; color: rgba(244, 238, 223, 0.72); font-size: 1rem; line-height: 1.65; }
+.nf-actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+.nf-actions a { display: flex; justify-content: space-between; width: min(18rem, 100%); min-height: 2.75rem; padding: 1rem 0; border-top: 1px solid currentColor; font-size: 0.83rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.nf-actions a span { transition: transform 180ms ease; }
+.nf-actions a:hover span, .nf-actions a:focus-visible span { transform: translateX(0.25rem); }
+
+/* Numbered index, aligned to the bottom of the copy like a colophon. */
+.nf-index { position: relative; z-index: 1; grid-column: 10 / 13; align-self: end; }
+.nf-index p { margin: 0 0 1.2rem; color: rgba(244, 238, 223, 0.6); font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; }
+.nf-index ol { margin: 0; padding: 0; list-style: none; }
+.nf-index li { border-top: 1px solid rgba(244, 238, 223, 0.22); }
+.nf-index li:last-child { border-bottom: 1px solid rgba(244, 238, 223, 0.22); }
+.nf-index a { display: flex; align-items: baseline; gap: 1.2rem; min-height: 2.75rem; padding: 0.85rem 0; font-size: 1.05rem; letter-spacing: -0.01em; transition: padding-left 220ms ease; }
+.nf-index a:hover, .nf-index a:focus-visible { padding-left: 0.4rem; }
+.nf-index a span { color: rgba(244, 238, 223, 0.5); font-size: 0.68rem; letter-spacing: 0.12em; }
+
+.nf .cta-mark { position: absolute; z-index: 0; right: clamp(1rem, 4vw, 5rem); top: 9dvh; width: min(28vw, 28rem); height: auto; object-fit: contain; opacity: 0.16; pointer-events: none; }
+
+/* Footer in the flow (the shell's default is fixed over a full-height page). */
+.not-found-page .site-footer--flow { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 2rem; min-height: 14rem; padding: 4rem var(--gutter); color: var(--putnam-paper); background: var(--putnam-deep); font-size: 0.9rem; line-height: 1.45; text-shadow: none; }
+.not-found-page .site-footer--flow::before { display: none; }
+.not-found-page .menu-toggle { min-width: 44px; min-height: 44px; }
+
+/* Staggered entrance without JavaScript. */
+@media (prefers-reduced-motion: no-preference) {
+  .nf-kicker, .nf-copy h1, .nf-lead, .nf-actions, .nf-index { animation: nf-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .nf-copy h1 { animation-delay: 80ms; }
+  .nf-lead { animation-delay: 200ms; }
+  .nf-actions { animation-delay: 300ms; }
+  .nf-index { animation-delay: 420ms; }
+  .nf .cta-mark { animation: nf-mark 1400ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+}
+@keyframes nf-in { from { opacity: 0; transform: translateY(1.2rem); } to { opacity: 1; transform: none; } }
+@keyframes nf-mark { from { opacity: 0; transform: translateY(2rem); } to { opacity: 0.16; transform: none; } }
+
+@media (max-width: 767px) {
+  .nf { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; padding: 7rem var(--gutter) 3.5rem; }
+  .nf-kicker, .nf-copy, .nf-index { grid-column: 1; }
+  .nf-kicker { margin-bottom: 1.5rem; }
+  .nf-kicker .nf-path { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .nf-copy h1 { font-size: clamp(2.6rem, 12vw, 3.6rem); letter-spacing: -0.05em; }
+  .nf-lead { margin-bottom: 2rem; }
+  .nf-actions a { width: 100%; }
+  .nf .cta-mark { top: auto; bottom: -4vw; right: -6vw; width: 58vw; opacity: 0.12; }
+}

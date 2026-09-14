@@ -15,6 +15,18 @@ export const siteSettings = defineType({
     defineField({ name: 'responseTime', title: 'Tiempo de respuesta', type: 'string', validation: (rule) => rule.required() }),
     defineField({ name: 'mapsUrl', title: 'Enlace a Google Maps', type: 'url' }),
     defineField({ name: 'coordinates', title: 'Coordenadas', type: 'geopoint' }),
+    // Feeds the Organization structured data (schema.org) on every page.
+    defineField({
+      name: 'organization', title: 'Datos de la empresa (SEO)', type: 'object',
+      description: 'Se publica como datos estructurados para buscadores y asistentes de IA.',
+      fields: [
+        defineField({ name: 'description', title: 'Descripción de Putnam', type: 'localeText', description: 'Una o dos frases: qué hace Putnam y dónde.', validation: (rule) => rule.required() }),
+        defineField({ name: 'legalName', title: 'Razón social', type: 'string' }),
+        defineField({ name: 'foundingYear', title: 'Año de fundación', type: 'number', validation: (rule) => rule.integer().min(1900).max(2100) }),
+        defineField({ name: 'sameAs', title: 'Redes y perfiles', type: 'array', of: [{ type: 'url' }], description: 'Instagram, LinkedIn, Facebook, Perfil de Negocio de Google…' }),
+        defineField({ name: 'logo', title: 'Logo (cuadrado)', type: 'image', description: 'Opcional; si falta se usa el icono del sitio.' }),
+      ],
+    }),
   ],
   preview: { prepare: () => ({ title: 'Datos de contacto' }) },
 });

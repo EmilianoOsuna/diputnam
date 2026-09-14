@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="{{lang}}">
+<head>
+<meta charset="utf-8" />
+<style>
+  @font-face { font-family: 'DM Sans'; font-weight: 400 600; src: url('{{fonts}}/dm-sans-latin.woff2') format('woff2'); }
+  @font-face { font-family: 'Josefin Sans'; font-weight: 600; src: url('{{fonts}}/josefin-sans-600-latin.woff2') format('woff2'); }
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body { position: relative; background: #003a36; color: #f4eedf; font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+  .mark { position: absolute; right: 72px; top: 50%; transform: translateY(-50%); width: 300px; height: 300px; opacity: 0.16; }
+  .lockup { position: absolute; left: 80px; top: 76px; display: flex; align-items: center; gap: 22px; }
+  .lockup svg { width: 74px; height: 74px; }
+  .lockup .name { display: grid; gap: 4px; font-family: 'Josefin Sans', sans-serif; line-height: 1; text-transform: uppercase; }
+  .lockup strong { font-size: 36px; font-weight: 600; letter-spacing: 0.045em; }
+  .lockup small { font-size: 13px; font-weight: 600; letter-spacing: 0.16em; }
+  .title { position: absolute; left: 80px; right: 380px; bottom: 96px; margin: 0; font-weight: 500; font-size: 64px; line-height: 1.08; letter-spacing: -0.015em; }
+  .title.cover { font-size: 58px; }
+  .title small { display: block; margin-top: 18px; font-size: 30px; font-weight: 400; line-height: 1.2; letter-spacing: 0; color: rgba(244, 238, 223, 0.76); }
+  .rule { position: absolute; left: 80px; right: 80px; bottom: 64px; height: 1px; background: rgba(244, 238, 223, 0.22); }
+  .domain { position: absolute; left: 80px; bottom: 32px; font-size: 18px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(244, 238, 223, 0.6); }
+</style>
+</head>
+<body>
+  <div class="mark">{{mark}}</div>
+  <div class="lockup">{{mark}}<span class="name"><strong>Putnam</strong><small>{{tagline}}</small></span></div>
+  <h1 class="title {{kind}}">{{line1}}{{line2}}</h1>
+  <div class="rule"></div>
+  <div class="domain">diputnam.com</div>
+</body>
+</html>

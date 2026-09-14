@@ -25,7 +25,10 @@ const uploadImage = async (source: string) => {
   return id;
 };
 
-const docs = await buildDocs(uploadImage);
+// Published documents carry _updatedAt in Sanity; the site uses it for sitemap lastmod
+// and dateModified, so the offline dataset stamps the seed time.
+const stamp = new Date().toISOString();
+const docs = (await buildDocs(uploadImage)).map((doc) => ({ _updatedAt: stamp, ...doc }));
 await mkdir(dirname(out), { recursive: true });
 await writeFile(out, JSON.stringify([...docs, ...assets], null, 1));
 console.log(`seed-local: ${docs.length} documents + ${assets.length} assets → ${out}`);

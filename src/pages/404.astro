@@ -1,0 +1,65 @@
+---
+// One 404 for the whole site (the host serves dist/404.html for any missing route).
+// Spanish is rendered by default; when the missing URL starts with /en/ the inline
+// script swaps in the English block and prints the requested path. Not indexable.
+import { Image } from 'astro:assets';
+import putnamMark from '../assets/putnam-light.png';
+import ContactFooter from '../components/ContactFooter.astro';
+import Lines from '../components/Lines.astro';
+import SiteHead from '../components/SiteHead.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { locales, pages, t, type PageKey } from '../i18n';
+import { getSettings } from '../lib/content';
+import '../styles/global.css';
+import '../styles/not-found.css';
+
+const contact = await getSettings('es');
+const blocks = await Promise.all(locales.map(async (lang) => ({ lang, ui: t(lang), contact: lang === 'es' ? contact : await getSettings(lang) })));
+const sections = ['eredita', 'putnam', 'noticias', 'unete', 'contacto'] as const satisfies readonly PageKey[];
+---
+<html lang="es">
+  <head>
+    <SiteHead lang="es" page="home" settings={contact} title={`${t('es').notFound.kicker.split(' · ')[1]} | Putnam`} description={t('es').notFound.text} noindex />
+  </head>
+  <body class="not-found-page">
+    <SiteHeader lang="es" page="home" contact={contact} />
+    <main id="contenido">
+      {blocks.map(({ lang, ui, contact }) => (
+        <section class="nf" lang={lang} data-lang={lang} hidden={lang !== 'es'} data-header-theme="light" aria-labelledby={`nf-title-${lang}`}>
+          <p class="nf-kicker"><span>{ui.notFound.kicker}</span><span class="nf-path" data-path hidden>{ui.notFound.requested} · <code data-path-value></code></span></p>
+          <div class="nf-copy">
+            <h1 id={`nf-title-${lang}`}><Lines text={ui.notFound.title} /></h1>
+            <p class="nf-lead">{ui.notFound.text}</p>
+            <div class="nf-actions">
+              <a href={pages.home[lang]}>{ui.notFound.goHome} <span aria-hidden="true">→</span></a>
+              <a href={`mailto:${contact.email}`}>{ui.notFound.contact} <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+          <nav class="nf-index" aria-label={ui.notFound.sections}>
+            <p>{ui.notFound.suggestions}</p>
+            <ol>
+              {sections.map((key, index) => <li><a href={pages[key][lang]}><span>{String(index + 1).padStart(2, '0')}</span>{ui.nav[key]}</a></li>)}
+            </ol>
+          </nav>
+          <Image class="cta-mark" src={putnamMark} widths={[400, 800]} sizes="(max-width: 767px) 58vw, min(34vw, 34rem)" format="webp" alt="" aria-hidden="true" />
+        </section>
+      ))}
+    </main>
+    <ContactFooter lang="es" contact={contact} />
+    <script is:inline>
+      (function () {
+        var en = location.pathname.startsWith('/en/');
+        if (en) {
+          document.documentElement.lang = 'en';
+          document.querySelectorAll('[data-lang]').forEach(function (block) { block.hidden = block.dataset.lang !== 'en'; });
+        }
+        var block = document.querySelector('[data-lang="' + (en ? 'en' : 'es') + '"]');
+        var path = block && block.querySelector('[data-path]');
+        if (path && location.pathname !== '/404.html') {
+          path.querySelector('[data-path-value]').textContent = location.pathname;
+          path.hidden = false;
+        }
+      })();
+    </script>
+  </body>
+</html>
