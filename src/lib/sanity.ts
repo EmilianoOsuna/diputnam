@@ -16,8 +16,9 @@ const localFetch = async (file: string): Promise<Fetch> => {
 };
 
 const remoteFetch = (): Fetch => {
-  const projectId = env('SANITY_PROJECT_ID');
-  const dataset = env('SANITY_DATASET');
+  // Vercel's Sanity integration injects NEXT_PUBLIC_SANITY_* / SANITY_STUDIO_* instead.
+  const projectId = env('SANITY_PROJECT_ID') || env('NEXT_PUBLIC_SANITY_PROJECT_ID') || env('SANITY_STUDIO_PROJECT_ID');
+  const dataset = env('SANITY_DATASET') || env('NEXT_PUBLIC_SANITY_DATASET') || env('SANITY_STUDIO_DATASET');
   const missing = [!projectId && 'SANITY_PROJECT_ID', !dataset && 'SANITY_DATASET'].filter(Boolean);
   if (missing.length) throw new Error(`Sanity: missing ${missing.join(' and ')} (copy .env.example to .env or set SANITY_LOCAL_DATASET for an offline build)`);
   const client = createClient({ projectId, dataset, apiVersion: '2026-09-01', useCdn: true, perspective: 'published' });
