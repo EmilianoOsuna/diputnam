@@ -1,5 +1,5 @@
 // Post-build guard: the static build must never ship HTML that depends on Astro's
-// on-demand `/_image` endpoint (there is no worker to serve it on Cloudflare), every
+// on-demand `/_image` endpoint (static host, nothing serves it), every
 // local optimized image it references must exist in dist/, no content image may still
 // point at the former mock hosts, and every indexable page declares its locale, an
 // absolute canonical equal to its own route and a reciprocal absolute hreflang pair.

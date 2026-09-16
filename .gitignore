@@ -5,5 +5,4 @@ dist/
 !.env.example
 .impeccable/live/
 .impeccable/config.local.json
-.wrangler/
 tests/.artifacts/

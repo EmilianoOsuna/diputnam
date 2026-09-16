@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  // Canonical origin. Fixed on purpose: a preview on workers.dev must canonicalize to
+  // Canonical origin. Fixed on purpose: a preview on *.vercel.app must canonicalize to
   // production, never to itself (see openspec seo-geo-foundation, D1).
   site: 'https://diputnam.com',
   trailingSlash: 'always',

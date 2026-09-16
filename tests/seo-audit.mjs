@@ -2,7 +2,7 @@
 // seo-geo-foundation): every indexable page carries one h1, a sized title/description,
 // robots, a complete Open Graph/Twitter set with an existing 1200×630 image, valid
 // JSON-LD with Organization/WebSite/page type (NewsArticle on notes), and linked icons;
-// robots.txt, sitemap.xml, llms.txt, 404.html, _headers agree with what dist/ holds.
+// robots.txt, sitemap.xml, llms.txt, 404.html, vercel.json agree with what dist/ holds.
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 
@@ -123,8 +123,8 @@ const notFound = await read('404.html');
 if (notFound && !/<meta name="robots" content="noindex/.test(notFound)) fail('404.html: not noindex');
 if (notFound && !/lang="en"/.test(notFound)) fail('404.html: no English block');
 
-const headers = await read('_headers');
-if (headers && !/\/_astro\/\*\s+Cache-Control: public, max-age=31536000, immutable/.test(headers)) fail('_headers: /_astro/* is not immutable');
+const headers = await readFile(new URL('../vercel.json', import.meta.url), 'utf8').catch(() => '');
+if (!/"source": "\/_astro\/(.*)".*max-age=31536000, immutable/.test(headers)) fail('vercel.json: /_astro/* is not immutable');
 await read('site.webmanifest');
 
 if (failures.length) {
@@ -132,4 +132,4 @@ if (failures.length) {
   for (const failure of failures) console.error(`  - ${failure}`);
   process.exit(1);
 }
-console.log(`seo-audit: ${indexable.size} indexable page(s) OK — titles, descriptions, Open Graph, JSON-LD, icons, robots.txt, sitemap.xml, llms.txt, 404.html, _headers.`);
+console.log(`seo-audit: ${indexable.size} indexable page(s) OK — titles, descriptions, Open Graph, JSON-LD, icons, robots.txt, sitemap.xml, llms.txt, 404.html, vercel.json.`);

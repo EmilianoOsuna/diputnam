@@ -28,8 +28,8 @@
 
 ## 4. Publicación automática y cierre
 
-- [x] 4.1 Crear `.github/workflows/deploy.yml` (push a `main` + `repository_dispatch`) con `npm ci`, `npm run build` y `wrangler deploy` usando secretos del repo (D10); verificar que un push despliega y que un `repository_dispatch` manual reconstruye el sitio
-- [ ] 4.2 Configurar el webhook de Sanity (create/update/delete de todos los tipos) hacia la URL de dispatch con secreto; verificar que publicar una nota en el Studio produce un deploy con la nota visible en producción en menos de cinco minutos
+- [x] 4.1 Hosting en Vercel: importar el repo `diputnam/diputnam`, variables `SANITY_PROJECT_ID`/`SANITY_DATASET`; cabeceras en `vercel.json` (sustituye a Cloudflare + workflow)
+- [ ] 4.2 Webhook de Sanity (create/update/delete de todos los tipos) hacia el Deploy Hook de Vercel; verificar que publicar una nota produce un deploy con la nota visible en menos de cinco minutos
 - [x] 4.3 README: variables de entorno, comandos del Studio, seed, flujo de publicación y pasos para migrar a Vercel (variables, deploy hook, URL del webhook, retirar workflow); verificar que el usuario puede seguirlo en un entorno limpio
 - [ ] 4.4 Revisión del usuario del contenido en inglés en el Studio y prueba de humo del admin (subir imagen, reemplazar PDF con nueva versión, publicar nota); commit en `main` sin líneas de atribución y push con confirmación del usuario
 

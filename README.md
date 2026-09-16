@@ -70,41 +70,31 @@ Los tests corren contra `astro preview` (o `BASE_URL`).
 
 Solo se publica contenido con **Publish**. Cada publicación dispara un webhook que reconstruye el sitio:
 
-- **Cloudflare (host actual)**: el webhook llama a GitHub (`repository_dispatch`) y `.github/workflows/deploy.yml` construye y ejecuta `wrangler deploy`. Secretos del repositorio: `SANITY_PROJECT_ID`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`; variable opcional `SANITY_DATASET`.
-  - Webhook en [sanity.io/manage](https://www.sanity.io/manage) → API → Webhooks: URL `https://api.github.com/repos/EmilianoOsuna/diputnam/dispatches`, método `POST`, cabeceras `Accept: application/vnd.github+json` y `Authorization: Bearer <token de GitHub con permiso contents:write>`, cuerpo `{"event_type":"sanity-publish"}`, filtro GROQ `_type in ["home","eredita","putnam","unete","contacto","noticias","siteSettings","nota","documentoLegal","translation.metadata"]`, disparar en create/update/delete.
-- **Vercel (destino)**: importa el repo, define `SANITY_PROJECT_ID` y `SANITY_DATASET`, crea un *Deploy Hook* y pon su URL en el webhook de Sanity (método `POST`, sin cabeceras). Después retira `.github/workflows/deploy.yml` y `wrangler.jsonc`.
+- **Vercel**: importa el repo (framework Astro, salida `dist/`) con las variables `SANITY_PROJECT_ID` y `SANITY_DATASET`; cada push a `main` despliega.
+- Webhook en [sanity.io/manage](https://www.sanity.io/manage) → API → Webhooks: URL del *Deploy Hook* de Vercel (Settings → Git → Deploy Hooks), método `POST`, sin cabeceras ni cuerpo, filtro GROQ `_type in ["home","eredita","putnam","unete","contacto","noticias","siteSettings","nota","documentoLegal","translation.metadata"]`, disparar en create/update/delete.
+- Cabeceras de caché y seguridad en `vercel.json`; `www` → apex se configura en Vercel → Domains.
 
 ## Dominio, SEO y motores generativos
 
-El dominio canónico es `https://diputnam.com` (`site` en `astro.config.mjs`). Toda URL absoluta del sitio —`canonical`, `hreflang`, Open Graph, sitemap, `llms.txt`— sale de ahí, también en vistas previas en `workers.dev`, para que solo el dominio final se indexe.
+El dominio canónico es `https://diputnam.com` (`site` en `astro.config.mjs`). Toda URL absoluta del sitio —`canonical`, `hreflang`, Open Graph, sitemap, `llms.txt`— sale de ahí, también en vistas previas en `*.vercel.app`, para que solo el dominio final se indexe.
 
 Qué publica cada build en la raíz de `dist/`:
 
 - `robots.txt`: permite todo el sitio a buscadores y a rastreadores de IA (GPTBot, ClaudeBot, PerplexityBot…) y declara el sitemap.
 - `sitemap.xml`: las doce rutas y todas las notas con `lastmod` (última publicación en Sanity) y alternativas `hreflang`.
 - `llms.txt`: resumen de Putnam, páginas y notas en ambos idiomas, contacto.
-- `404.html`: página no encontrada bilingüe (`noindex`); Cloudflare la sirve con estado 404.
-- `_headers` y `_redirects`: caché inmutable para `/_astro/`, `/fonts/`; cabeceras de seguridad; `www` → apex.
+- `404.html`: página no encontrada bilingüe (`noindex`); Vercel la sirve con estado 404.
+- `vercel.json`: caché inmutable para `/_astro/`, `/fonts/`; cabeceras de seguridad.
 
 Cada página lleva `canonical`, Open Graph/Twitter con su portada (`public/og/<página>-<idioma>.png`; las notas usan su imagen destacada recortada por el CDN de Sanity) y datos estructurados JSON-LD (`Organization`, `WebSite`, tipo de página, `BreadcrumbList`, `NewsArticle` en notas). `<title>` y `meta description` de las páginas estáticas están en `src/i18n/{es,en}.ts` → `meta` (30–60 y 110–155 caracteres; `seo-audit` lo verifica). En el Studio:
 
 - **Datos de contacto → Datos de la empresa (SEO)**: descripción, razón social, año de fundación, redes (`sameAs`), logo cuadrado opcional.
 - **Nota → SEO y redes**: título, descripción e imagen para compartir; si se dejan vacíos se derivan del título, el extracto y la imagen destacada.
 
-### Cuando el dominio esté en Cloudflare
+### Cuando el dominio apunte a Vercel
 
-1. Worker → Settings → Domains & Routes: añadir `diputnam.com` **y** `www.diputnam.com` como *custom domains* (el `_redirects` del build manda `www` al apex con 301). HTTPS y la barra final los normaliza Cloudflare.
+1. Vercel → Settings → Domains: añadir `diputnam.com` **y** `www.diputnam.com`, con `www` marcado como *Redirect to* `diputnam.com` (301). HTTPS lo gestiona Vercel; la barra final la fija `trailingSlash: always` de Astro.
 2. Verificar `curl -I https://www.diputnam.com/eredita` → `301` a `https://diputnam.com/eredita/` y `https://diputnam.com/proyectos/` → `404`.
-3. [Google Search Console](https://search.google.com/search-console) y [Bing Webmaster Tools](https://www.bing.com/webmasters): verificar la propiedad (registro DNS TXT en Cloudflare) y enviar `https://diputnam.com/sitemap.xml`.
+3. [Google Search Console](https://search.google.com/search-console) y [Bing Webmaster Tools](https://www.bing.com/webmasters): verificar la propiedad (registro DNS TXT en el proveedor del dominio) y enviar `https://diputnam.com/sitemap.xml`.
 4. Crear o reclamar el [Perfil de Negocio de Google](https://business.google.com) de la oficina de San Miguel y añadir su URL, junto a las redes, en **Datos de la empresa (SEO) → Redes y perfiles**.
 5. Comprobar una URL de cada tipo en la [prueba de resultados enriquecidos](https://search.google.com/test/rich-results), el [Sharing Debugger](https://developers.facebook.com/tools/debug/) de Meta y el [Post Inspector](https://www.linkedin.com/post-inspector/) de LinkedIn.
-
-## Migrar a Vercel
-
-1. Importar el repositorio en Vercel (framework Astro, salida `dist/`).
-2. Variables: `SANITY_PROJECT_ID`, `SANITY_DATASET`.
-3. Crear un Deploy Hook (Settings → Git) y sustituir la URL del webhook de Sanity.
-4. Borrar `.github/workflows/deploy.yml` y `wrangler.jsonc`.
-5. Trasladar `public/_headers` y `public/_redirects` a `vercel.json` (`headers`, `redirects`; `www` → apex se configura en Domains) y mantener `404.html` (Vercel lo sirve para rutas inexistentes).
-
-Ningún código del sitio conoce el host.
