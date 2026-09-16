@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
 import { chromium } from 'playwright';
-import { routes as siteRoutes } from '../src/i18n/routes.ts';
+import { projectPairs, routes as siteRoutes } from './routes.mjs';
 
 const baseUrl = process.env.BASE_URL ?? 'http://127.0.0.1:4321';
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
@@ -11,8 +11,9 @@ const shots = 'tests/.artifacts/mobile';
 const BROWN = 'rgb(89, 64, 55)';
 const URL_BAR_DELTA = 90; // px hidden/revealed by a phone's address bar
 
-// Static routes plus the first note linked from each news index (content-dependent).
+// Static routes and project pages, plus the first note linked from each news index (content-dependent).
 const routes = [...siteRoutes];
+const project = Object.values(projectPairs)[0]?.es;
 const failures = [];
 const check = async (label, fn) => {
   try { await fn(); console.log(`  ok   ${label}`); }
@@ -81,6 +82,88 @@ const trackChecks = async (route, trackSelector, total) => {
     assert.ok(end.progress > 0.98, `final progress ${end.progress}`);
   });
   await page.screenshot({ path: `${shots}${route.replace(/\//g, '_')}track.png` });
+};
+
+// Typology media gallery on the swipe track (typology-media-gallery + mobile-horizontal-tracks).
+const galleryChecks = async (route) => {
+  const requests = [];
+  const onRequest = (request) => { if (/\.mp4(\?|$)/.test(request.url())) requests.push(request.url()); };
+  page.on('request', onRequest);
+  await page.goto(baseUrl + route, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(600);
+  await check(`${route} gallery: no mp4 requested before reaching the typologies`, () => assert.deepEqual(requests, []));
+  await check(`${route} gallery: thumbnails are ≤ 320px wide and only the selected medium is shown`, async () => {
+    const state = await page.evaluate(() => {
+      const widths = [...document.querySelectorAll('.ed-h-thumb img')].flatMap((img) => [img.currentSrc || img.src, ...img.srcset.split(',')].map((c) => Number(new URL(c.trim().split(' ')[0], location.href).searchParams.get('w'))));
+      const panels = [...document.querySelectorAll('.ed-h-panel:not(.ed-h-panel--intro)')].map((panel) => ({
+        media: panel.querySelectorAll('[role="tabpanel"]').length,
+        shown: [...panel.querySelectorAll('[role="tabpanel"]')].filter((pane) => !pane.hidden).length,
+        tabs: panel.querySelectorAll('[role="tab"]').length,
+        selected: panel.querySelectorAll('[role="tab"][aria-selected="true"]').length,
+      }));
+      return { widths, panels };
+    });
+    assert.ok(state.widths.length > 0, 'no thumbnails');
+    assert.ok(state.widths.every((w) => w > 0 && w <= 320), `thumb widths ${[...new Set(state.widths)].join(',')}`);
+    for (const panel of state.panels) {
+      assert.equal(panel.shown, 1, 'one visible medium');
+      assert.equal(panel.tabs, panel.media > 1 ? panel.media : 0, 'strip only with several media');
+      assert.equal(panel.selected, panel.media > 1 ? 1 : 0, 'one selected tab');
+    }
+    assert.ok(new Set(state.panels.map((p) => p.media)).size > 1, 'dataset should mix media counts');
+  });
+  await check(`${route} gallery: card heights and copy offsets do not depend on the number of media`, async () => {
+    const rects = await page.evaluate(() => [...document.querySelectorAll('.ed-h-panel:not(.ed-h-panel--intro)')].map((panel) => {
+      const card = panel.getBoundingClientRect();
+      const copy = panel.querySelector('.ed-h-copy').getBoundingClientRect();
+      return { height: Math.round(card.height), copyTop: Math.round(copy.top - card.top) };
+    }));
+    assert.equal(new Set(rects.map((r) => r.height)).size, 1, `heights ${rects.map((r) => r.height).join(',')}`);
+    assert.equal(new Set(rects.map((r) => r.copyTop)).size, 1, `copy tops ${rects.map((r) => r.copyTop).join(',')}`);
+  });
+  await check(`${route} gallery: selecting the third thumbnail swaps the visible medium and keeps focus`, async () => {
+    const panel = page.locator('.ed-h-panel:not(.ed-h-panel--intro)').filter({ has: page.locator('[role="tab"]:nth-child(3)') }).first();
+    await panel.evaluate((el) => el.scrollIntoView({ block: 'center', inline: 'start' }));
+    await page.waitForTimeout(400);
+    const before = await panel.locator('[role="tabpanel"]:not([hidden]) img, [role="tabpanel"]:not([hidden]) video').first().evaluate((el) => el.currentSrc || el.src || el.querySelector('source')?.src);
+    await panel.locator('[role="tab"]').nth(2).click();
+    await page.waitForTimeout(200);
+    const after = await panel.locator('[role="tabpanel"]:not([hidden]) img').first().evaluate((el) => el.currentSrc || el.src);
+    assert.notEqual(after, before, 'medium changed');
+    assert.equal(await panel.locator('[role="tab"]').nth(2).getAttribute('aria-selected'), 'true');
+    assert.equal(await panel.locator('[role="tab"]').nth(2).evaluate((el) => el === document.activeElement), true, 'focus stays on the tab');
+  });
+  await check(`${route} gallery: swiping the thumbnail strip does not move the track`, async () => {
+    const track = page.locator('.ed-h-track');
+    await track.evaluate((el) => { el.scrollTo({ left: 0, behavior: 'auto' }); });
+    await page.waitForTimeout(300);
+    const strip = page.locator('.ed-h-panel:not(.ed-h-panel--intro)').first().locator('.ed-h-thumb-strip');
+    const box = await strip.boundingBox();
+    assert.ok(box, 'first card has a strip');
+    const y = box.y + box.height / 2;
+    const client = await page.context().newCDPSession(page);
+    await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: box.x + box.width - 10, y }] });
+    for (let step = 1; step <= 8; step++) await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: box.x + box.width - 10 - step * 20, y }] });
+    await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await page.waitForTimeout(600);
+    assert.equal(await track.evaluate((el) => el.scrollLeft), 0, 'track stayed on the first card');
+  });
+  await check(`${route} gallery: the video plays only while its panel is the visible one`, async () => {
+    const video = page.locator('.ed-h-panel video[data-video]').first();
+    assert.equal(await video.count(), 1, 'dataset has one typology with video');
+    const panel = page.locator('.ed-h-panel', { has: page.locator('video[data-video]') }).first();
+    await panel.evaluate((el) => el.scrollIntoView({ block: 'center', inline: 'start' }));
+    await page.waitForTimeout(600);
+    assert.equal(await panel.locator('[role="tab"]').first().evaluate((tab) => tab.classList.contains('is-video')), true, 'video is the first medium');
+    await panel.locator('[role="tab"]').first().click();
+    await page.waitForTimeout(300);
+    assert.equal(await video.evaluate((el) => el.paused), false, 'plays when visible and selected');
+    assert.ok(requests.some((url) => url.endsWith('.mp4')), 'mp4 requested once visible');
+    await page.locator('.ed-h-track').evaluate((el) => el.scrollTo({ left: 0, behavior: 'auto' }));
+    await page.waitForTimeout(600);
+    assert.equal(await video.evaluate((el) => el.paused), true, 'pauses when the panel leaves');
+  });
+  page.off('request', onRequest);
 };
 
 try {
@@ -273,7 +356,13 @@ try {
   });
 
   console.log('\nhorizontal tracks');
-  await trackChecks('/eredita/', '.ed-h-track', 4);
+  if (project) {
+    await page.goto(baseUrl + project, { waitUntil: 'domcontentloaded' });
+    await trackChecks(project, '.ed-h-track', await page.locator('.ed-h-panel:not(.ed-h-panel--intro)').count());
+    await galleryChecks(project);
+  } else {
+    failures.push('no Ereditá project page in dist/');
+  }
   await trackChecks('/unete/', '.traits', 4);
   await trackChecks('/contacto/', '.reasons', 3);
 } finally {

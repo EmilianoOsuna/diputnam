@@ -1,4 +1,6 @@
 ---
+// Landing page of the Ereditá line: hero with the mark, the line's concept and one card
+// per published project, each linking to its own page (see proyecto.astro).
 import { Picture } from 'astro:assets';
 import erediteMark from '../assets/eredita-logo.png';
 import CmsImg from '../components/CmsImg.astro';
@@ -6,8 +8,8 @@ import ContactFooter from '../components/ContactFooter.astro';
 import Lines from '../components/Lines.astro';
 import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
-import { formatDate, t, type Lang } from '../i18n';
-import { getEredita, getLegalDocs, getSettings } from '../lib/content';
+import { projectPath, t, type Lang } from '../i18n';
+import { getEredita, getProyectos, getSettings } from '../lib/content';
 import { CARD_WIDTHS, HERO_WIDTHS, SAT, imageSrc } from '../lib/images';
 import '../styles/global.css';
 import '../styles/eredita.css';
@@ -15,9 +17,8 @@ import '../styles/eredita.css';
 interface Props { lang: Lang; }
 const { lang } = Astro.props;
 const ui = t(lang);
-const [page, legalDocs, contact] = await Promise.all([getEredita(lang), getLegalDocs(lang), getSettings(lang)]);
-const { hero, intro, gallery, typologies, legal, cta } = page;
-const megabytes = (bytes: number) => `${(bytes / 1048576).toFixed(1)} MB`;
+const [page, projects, contact] = await Promise.all([getEredita(lang), getProyectos(lang), getSettings(lang)]);
+const { hero, intro, cta } = page;
 ---
 <html lang={lang}>
   <head>
@@ -63,87 +64,32 @@ const megabytes = (bytes: number) => `${(bytes / 1048576).toFixed(1)} MB`;
         </dl>
       </section>
 
-      <section class="ed-gallery" aria-labelledby="ed-gallery-title" data-header-theme="light">
+      <section class="ed-projects" aria-labelledby="ed-projects-title" data-header-theme="light">
         <header class="section-heading" data-reveal-group>
-          <p class="section-kicker">{gallery.kicker}</p>
-          <h2 id="ed-gallery-title"><Lines text={gallery.title} /></h2>
+          <p class="section-kicker">{page.projects.kicker}</p>
+          <h2 id="ed-projects-title"><Lines text={page.projects.title} /></h2>
+          {page.projects.text && <p class="ed-projects-lead">{page.projects.text}</p>}
         </header>
-        <div class="ed-masonry" data-reveal-group>
-          {gallery.items.map((item) => (
-            <figure class="ed-masonry-item">
-              <CmsImg image={item.image} base={960} widths={CARD_WIDTHS} quality={75} sat={SAT.gallery} sizes="(min-width: 900px) 50vw, 100vw" loading="lazy" width="1200" height="900" />
-              <figcaption>{item.tag}</figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
-      <section class="ed-typologies" aria-labelledby="ed-typologies-title" data-header-theme="dark" data-h-wrapper>
-        <header class="ed-h-head">
-          <p class="section-kicker">{typologies.kicker}</p>
-          <h2 id="ed-typologies-title"><Lines text={typologies.title} mode="hard" /></h2>
-          <p class="ed-h-intro-copy">{typologies.intro}</p>
-          <div class="ed-h-progress">
-            <span class="ed-h-counter"><b data-track-current>01</b><i aria-hidden="true">/</i><span>0{typologies.items.length}</span></span>
-            <span class="ed-h-rail" aria-hidden="true"><span data-track-rail></span></span>
-          </div>
-        </header>
-        <div class="ed-h-track" data-h-track>
-          <div class="ed-h-panel ed-h-panel--intro" data-h-panel>
-            <p class="section-kicker">{typologies.kicker}</p>
-            <h2><Lines text={typologies.title} mode="hard" /></h2>
-            <p class="ed-h-intro-copy">{typologies.intro}</p>
-            <span class="ed-h-hint">{ui.eredita.keepScrolling} <span aria-hidden="true">↓</span></span>
-          </div>
-          {typologies.items.map((item, index) => (
-            <article class="ed-h-panel" data-h-panel>
-              <figure class="ed-h-media">
-                <CmsImg image={item.image} base={960} widths={CARD_WIDTHS} quality={75} sat={SAT.card} sizes="(min-width: 900px) 50vw, 100vw" loading="lazy" width="1400" height="1400" />
-              </figure>
-              <div class:list={['ed-h-copy', `is-${item.tone}`]}>
-                <div class="ed-h-copy-head">
-                  <span class="ed-h-index">0{index + 1}<i>/</i>0{typologies.items.length}</span>
-                  <span class="ed-h-tag">{item.tag}</span>
+        <ul class="ed-project-list" data-reveal-group aria-label={ui.eredita.projects}>
+          {projects.map((project, index) => (
+            <li class="ed-project" data-project>
+              <a class="ed-project-link" href={projectPath(lang, project.slug)}>
+                <figure class="ed-project-media">
+                  <CmsImg image={project.card.image} base={960} widths={CARD_WIDTHS} quality={75} sat={SAT.card} sizes="(min-width: 900px) 58vw, 100vw" loading="lazy" width="1600" height="1000" />
+                </figure>
+                <div class="ed-project-copy">
+                  <div class="ed-project-head">
+                    <span class="ed-h-index">0{index + 1}<i>/</i>0{projects.length}</span>
+                    {project.status && <span class="ed-h-tag">{project.status}</span>}
+                  </div>
+                  <h3>{project.name}</h3>
+                  <p>{project.card.text}</p>
+                  <span class="ed-cta-link">{ui.eredita.viewProject} <span aria-hidden="true">→</span></span>
                 </div>
-                <h3>{item.title}</h3>
-                <p class="ed-h-subtitle">{item.subtitle}</p>
-                <p class="ed-h-desc">{item.description}</p>
-                <ul class="ed-h-specs">
-                  {item.specs.map((spec) => (
-                    <li><span>{spec.label}</span><b>{spec.value}</b></li>
-                  ))}
-                </ul>
-                <a class="ed-cta-link" href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.eredita.requestInfo} <span aria-hidden="true">→</span></a>
-              </div>
-            </article>
+              </a>
+            </li>
           ))}
-        </div>
-      </section>
-
-      <section class="ed-legal" aria-labelledby="ed-legal-title" data-header-theme="dark">
-        <header class="ed-legal-header" data-reveal-group>
-          <div>
-            <p class="section-kicker">{legal.kicker}</p>
-            <h2 id="ed-legal-title"><Lines text={legal.title} /></h2>
-          </div>
-          <p>{legal.lead}</p>
-        </header>
-        <div class="ed-legal-grid" data-reveal-group>
-          {legalDocs.map((doc) => (
-            <article class="ed-legal-card">
-              <strong>{doc.title}</strong>
-              <p>{doc.description}</p>
-              {doc.file ? (
-                <a href={doc.file.url} type="application/pdf" target="_blank" rel="noreferrer">
-                  <span>{ui.eredita.openPdf} <i aria-hidden="true">↗</i></span>
-                  <small>{[doc.version, doc.validFrom && formatDate(lang, doc.validFrom), megabytes(doc.file.size)].filter(Boolean).join(' · ')}</small>
-                </a>
-              ) : (
-                <span>{ui.soon}</span>
-              )}
-            </article>
-          ))}
-        </div>
+        </ul>
       </section>
 
       <section class="ed-cta" aria-labelledby="ed-cta-title" data-reveal-group data-header-theme="light">

@@ -1,0 +1,8 @@
+---
+import View from '../../views/proyecto.astro';
+import { getProyecto, getProyectos } from '../../lib/content';
+
+export const getStaticPaths = async () => Promise.all((await getProyectos('es')).map(async ({ slug }) => ({ params: { slug }, props: { project: await getProyecto('es', slug) } })));
+const { project } = Astro.props;
+---
+<View lang="es" project={project} />

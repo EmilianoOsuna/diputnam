@@ -28,6 +28,8 @@
 .ed-hero-mark { position: absolute; z-index: 1; top: 50vh; right: clamp(2rem, 7vw, 7rem); width: min(26vw, 24rem); height: auto; transform: translateY(-50%); filter: drop-shadow(0 0.5rem 2rem rgba(0, 0, 0, 0.35)); pointer-events: none; }
 .ed-hero-content { position: relative; z-index: 1; width: min(52rem, 100%); color: var(--ed-paper); }
 .ed-hero-content .section-kicker { margin-bottom: 1.1rem; color: rgba(244, 238, 223, 0.82); }
+.ed-back { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1.6rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(244, 238, 223, 0.82); }
+.ed-back:hover, .ed-back:focus-visible { color: var(--ed-paper); text-decoration: underline; text-underline-offset: 0.3rem; }
 .ed-hero-content h1 { margin: 0; font-size: clamp(2.4rem, 5vw, 4.4rem); font-weight: 500; line-height: 1.05; letter-spacing: -0.03em; }
 .ed-hero-sub { margin: 1.1rem 0 0; font-size: clamp(1rem, 1.3vw, 1.2rem); color: rgba(244, 238, 223, 0.82); }
 
@@ -55,6 +57,21 @@
 @media (min-width: 640px) { .ed-masonry { column-count: 2; } }
 @media (min-width: 1100px) { .ed-masonry { column-count: 3; } }
 
+/* Projects of the line (landing): one wide card per project, complete even when there is a single one. */
+.ed-projects { padding: clamp(5rem, 10vw, 9rem) clamp(1.25rem, 3vw, 3.5rem); color: var(--ed-paper); background: var(--ed-dusk); }
+.ed-projects .section-heading { margin-bottom: clamp(3rem, 6vw, 5rem); }
+.ed-projects-lead { max-width: 34rem; margin: 1.6rem 0 0; font-size: 1.02rem; line-height: 1.6; color: rgba(244, 238, 223, 0.72); }
+.ed-project-list { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); margin: 0; padding: 0; list-style: none; }
+.ed-project-link { display: grid; grid-template-columns: 1.4fr 1fr; color: inherit; text-decoration: none; background: var(--ed-ink); }
+.ed-project-media { position: relative; margin: 0; aspect-ratio: 16 / 10; overflow: hidden; background: var(--ed-sand); }
+.ed-project-media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 600ms ease; }
+.ed-project-link:hover .ed-project-media img, .ed-project-link:focus-visible .ed-project-media img { transform: scale(1.03); }
+.ed-project-copy { display: flex; flex-direction: column; justify-content: center; gap: 1rem; padding: clamp(2rem, 4vw, 4rem); }
+.ed-project-head { display: flex; align-items: center; gap: 1rem; }
+.ed-project-copy h3 { margin: 0.4rem 0 0; font-size: clamp(2rem, 3.4vw, 3.2rem); font-weight: 500; line-height: 1; letter-spacing: -0.03em; }
+.ed-project-copy p { max-width: 26rem; margin: 0; font-size: 0.95rem; line-height: 1.6; color: rgba(244, 238, 223, 0.7); }
+.ed-project-link:focus-visible { outline: 2px solid var(--ed-paper); outline-offset: 4px; }
+
 /* Typologies — horizontal scroll */
 .ed-typologies { position: relative; height: 100dvh; overflow: hidden; background: var(--ed-paper); }
 .ed-h-head { display: none; }
@@ -68,7 +85,25 @@
 .ed-h-intro-copy { max-width: 28rem; margin: 0; font-size: 1.05rem; line-height: 1.6; color: rgba(0, 58, 54, 0.75); }
 .ed-h-hint { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(0, 58, 54, 0.5); }
 .ed-h-media { position: relative; margin: 0; height: 100%; overflow: hidden; background: var(--ed-sand); }
-.ed-h-media img { width: 100%; height: 100%; object-fit: cover; }
+.ed-h-media img, .ed-h-media video { width: 100%; height: 100%; object-fit: cover; }
+/* Every medium sits in the same box; `hidden` (not display on the class) picks the visible one. */
+.ed-h-medium { position: absolute; inset: 0; }
+.ed-h-medium[hidden] { display: none; }
+.ed-h-play { position: absolute; top: 50%; left: 50%; display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.8rem 1.2rem; font: inherit; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ed-paper); background: rgba(6, 10, 9, 0.7); border: 1px solid rgba(244, 238, 223, 0.5); transform: translate(-50%, -50%); cursor: pointer; }
+.ed-h-play[hidden] { display: none; }
+/* Thumbnail strip: fixed-height overlay at the foot of the media box, so the number of
+   media never changes the card's height; scrolls on its own without moving the track. */
+.ed-h-thumbs { --thumb: 4.5rem; position: absolute; right: 0; bottom: 0; left: 0; z-index: 1; display: flex; align-items: center; gap: 0.4rem; height: calc(var(--thumb) + 1.6rem); padding: 0.8rem 0.9rem; background: linear-gradient(0deg, rgba(6, 10, 9, 0.72), rgba(6, 10, 9, 0)); }
+.ed-h-thumb-strip { display: flex; gap: 0.5rem; height: var(--thumb); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; touch-action: pan-x; }
+.ed-h-thumb-strip::-webkit-scrollbar { display: none; }
+.ed-h-thumb { position: relative; flex: 0 0 auto; width: calc(var(--thumb) * 4 / 3); height: var(--thumb); padding: 0; border: 2px solid transparent; background: var(--ed-dusk); scroll-snap-align: start; cursor: pointer; transition: border-color 160ms ease, opacity 160ms ease; }
+.ed-h-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0.75; transition: opacity 160ms ease; }
+.ed-h-thumb:hover img, .ed-h-thumb[aria-selected="true"] img { opacity: 1; }
+.ed-h-thumb[aria-selected="true"] { border-color: var(--ed-paper); }
+.ed-h-thumb:focus-visible { outline: 2px solid var(--ed-paper); outline-offset: 2px; }
+.ed-h-thumb.is-video::after { content: '▶'; position: absolute; inset: 0; display: grid; place-items: center; font-size: 0.85rem; color: var(--ed-paper); text-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.7); }
+.ed-h-thumb-nav { flex: 0 0 auto; display: grid; place-items: center; width: 2rem; height: 2rem; padding: 0; font: inherit; color: var(--ed-paper); background: rgba(6, 10, 9, 0.6); border: 1px solid rgba(244, 238, 223, 0.35); border-radius: 50%; cursor: pointer; }
+.ed-h-thumb-nav[hidden] { display: none; }
 .ed-h-copy { display: flex; flex-direction: column; justify-content: center; gap: 1.1rem; padding: clamp(2rem, 4vw, 4.5rem); color: var(--ed-paper); background: var(--ed-ink); }
 .ed-h-copy-head { display: flex; align-items: center; justify-content: flex-start; gap: 1rem; max-width: 30rem; }
 .ed-h-index { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; color: rgba(244, 238, 223, 0.55); }
@@ -138,6 +173,9 @@
   /* One full card per screen (viewport minus gutters); equal heights with content pinned to the top. */
   .ed-h-panel { display: grid; grid-template-columns: 1fr; grid-template-rows: auto 1fr; align-content: start; flex: 0 0 calc(100vw - 2 * var(--track-gutter)); width: auto; height: auto; scroll-snap-align: start; scroll-snap-stop: always; }
   .ed-h-media { height: 46vw; max-height: 16rem; }
+  .ed-h-thumbs { --thumb: 3rem; padding: 0.5rem 0.6rem; height: calc(var(--thumb) + 1rem); }
+  .ed-h-thumb-nav { display: none; }
+  .ed-project-link { grid-template-columns: 1fr; }
   .ed-h-copy { justify-content: flex-start; gap: 0.75rem; padding: 1.35rem 1.1rem 1.6rem; }
   .ed-h-copy h3 { margin-top: 0.2rem; font-size: clamp(1.8rem, 7.4vw, 2.4rem); }
   .ed-h-subtitle { font-size: 0.95rem; }

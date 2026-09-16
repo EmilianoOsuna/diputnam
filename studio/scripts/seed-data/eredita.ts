@@ -45,6 +45,9 @@ export const erediteTypologies = [
     subtitle: 'Espacios compactos y eficientes para vida urbana, renta o primera inversión.',
     image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=85&w=1600&auto=format&fit=crop',
     alt: 'Monoambiente Ereditá',
+    images: ['https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=85&w=1600&auto=format&fit=crop', 'https://images.ctfassets.net/d816js9bi8lf/4epRkOEeBykhWwcCDRiCAp/8ebe182a4aa35acf23fb85ed541ee926/MClayton_2501-2-SPA-MOS_001.jpg?w=1200&fl=progressive&q=80'],
+    captions: ['Interior con luz natural', 'Render del monoambiente'],
+    video: null,
     description: 'Nuestros monoambientes están diseñados para maximizar cada metro cuadrado. Con distribuciones inteligentes, acabados premium y tecnología constructiva de vanguardia, ofrecemos unidades que combinan comodidad, estética y alta rentabilidad para inversores.',
     specs: [
       { key: 'Superficie', val: '35 – 48 m²' },
@@ -63,6 +66,9 @@ export const erediteTypologies = [
     subtitle: 'Distribución funcional para usuarios que priorizan confort y versatilidad.',
     image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?q=85&w=1600&auto=format&fit=crop',
     alt: '1 dormitorio Ereditá',
+    images: ['https://images.unsplash.com/photo-1484154218962-a197022b5858?q=85&w=1600&auto=format&fit=crop'],
+    captions: ['Dormitorio principal'],
+    video: null,
     description: 'Departamentos de 1 dormitorio pensados para quienes buscan independencia con estilo. Ambientes bien distribuidos, iluminación natural y acabados de calidad que garantizan confort diario y plusvalía a largo plazo.',
     specs: [
       { key: 'Superficie', val: '52 – 68 m²' },
@@ -81,6 +87,9 @@ export const erediteTypologies = [
     subtitle: 'Mayor amplitud para familias pequeñas o residentes que requieren ambientes adicionales.',
     image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=85&w=1600&auto=format&fit=crop',
     alt: '2 dormitorios Ereditá',
+    images: ['https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=85&w=1600&auto=format&fit=crop', 'https://images.unsplash.com/photo-1484154218962-a197022b5858?q=85&w=1600&auto=format&fit=crop'],
+    captions: ['Living comedor', 'Dormitorio principal'],
+    video: null,
     description: 'Nuestras unidades de 2 dormitorios ofrecen el equilibrio perfecto entre espacio y funcionalidad. Ideales para familias que buscan calidad de vida, con ambientes amplios, doble baño y acceso directo a todas las áreas comunes del edificio.',
     specs: [
       { key: 'Superficie', val: '75 – 95 m²' },
@@ -99,6 +108,9 @@ export const erediteTypologies = [
     subtitle: 'Amenidades y espacios compartidos concebidos para elevar la experiencia del proyecto.',
     image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?q=85&w=1600&auto=format&fit=crop',
     alt: 'Áreas comunes Ereditá',
+    images: ['https://images.unsplash.com/photo-1494526585095-c41746248156?q=85&w=1600&auto=format&fit=crop', 'https://images.ctfassets.net/d816js9bi8lf/MEHph2NURZ0CDlwyHFk4L/d3ec5da9f9b9cabf317e5704360acfb6/T_H_From_Video.png?w=1200&fl=progressive&q=80', 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?q=85&w=1600&auto=format&fit=crop'],
+    captions: ['Terraza con parrillero', 'Render de la piscina', 'Volúmenes exteriores'],
+    video: 'areas-comunes.mp4',
     description: 'Las áreas comunes de nuestros edificios están diseñadas para fomentar la vida en comunidad y el bienestar de todos los residentes. Desde piscina y gimnasio hasta salones de eventos y terrazas con vistas panorámicas, cada espacio refleja nuestro compromiso con la calidad de vida.',
     specs: [
       { key: 'Piscina', val: 'Semi-olímpica climatizada' },
@@ -123,7 +135,15 @@ export const erediteLegalDocs = {
   ],
 } as const;
 
+export const erediteProject = {
+  name: 'EREDITÁ Art',
+  slug: 'eredita-art',
+  status: 'En preventa',
+  card: 'El primer edificio de la línea Ereditá: monoambientes, 1 y 2 dormitorios con áreas comunes pensadas para la vida en comunidad.',
+} as const;
+
 export const erediteSections = {
+  projects: { kicker: 'Proyectos', title: 'Los edificios\nde la línea Ereditá.', text: 'Cada proyecto Ereditá comparte la misma idea de vivienda bien pensada, segura y durable, adaptada a su ubicación.' },
   gallery: { kicker: 'Galería', title: 'Fotografías y renders del proyecto.' },
   typologies: { kicker: 'Tipologías', title: 'Cuatro formas\nde vivir Ereditá.', intro: 'Cada tipología resuelve un estilo de vida distinto, desde el primer departamento hasta la vida en familia.' },
   cta: { kicker: 'Siguiente paso', title: 'Conoce Ereditá de cerca y resuelve tus dudas.' },

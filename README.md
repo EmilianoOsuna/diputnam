@@ -36,9 +36,10 @@ SANITY_LOCAL_DATASET=studio/.local/dataset.json npm run build
 
 ```
 npm run dev / build / preview
-npm run test:i18n      # rutas, hreflang y selector de idioma
+npm run test:i18n      # rutas, hreflang y selector de idioma (incluye las páginas de proyecto)
+npm run test:eredita   # galería de medios de las tipologías en desktop (video, teclado, reduced motion)
 npm run test:sweep     # home
-npm run test:mobile    # auditoría móvil de todas las rutas (incluye una nota)
+npm run test:mobile    # auditoría móvil de todas las rutas (incluye una nota y un proyecto Ereditá)
 npm run test:perf      # presupuesto de frames en móvil
 npm run test:seo       # metadatos, JSON-LD, sitemap, robots, llms.txt, 404 (también corre en postbuild)
 npm run assets:og      # regenera public/og/*.png (tras cambiar títulos en src/i18n o la marca)
@@ -46,6 +47,7 @@ npm run assets:icons   # regenera favicon.svg/.ico, apple-touch-icon, icons/ y s
 npm run studio:dev     # Studio en local (studio/.env con SANITY_STUDIO_PROJECT_ID)
 npm run studio:deploy  # publica el Studio en <nombre>.sanity.studio
 npm run studio:seed    # carga el contenido inicial (una sola vez, requiere sanity login)
+npm --prefix studio run migrate:proyectos   # una vez: mueve el contenido de Ereditá al proyecto EREDITÁ Art (acepta -- --dry-run)
 ```
 
 Los tests corren contra `astro preview` (o `BASE_URL`).
@@ -61,9 +63,11 @@ Los tests corren contra `astro preview` (o `BASE_URL`).
 
 ### Modelo de contenido
 
-- **Secciones del sitio** (un documento fijo cada una): Inicio, Ereditá, La firma, Únete, Contacto, Noticias (portada) y Datos de contacto. Cada texto tiene español (obligatorio) e inglés (opcional; el sitio cae al español si falta). En los títulos, cada Intro es un salto de renglón.
+- **Secciones del sitio** (un documento fijo cada una): Inicio, Ereditá (línea), La firma, Únete, Contacto, Noticias (portada) y Datos de contacto. Cada texto tiene español (obligatorio) e inglés (opcional; el sitio cae al español si falta). En los títulos, cada Intro es un salto de renglón.
+- **Proyectos Ereditá**: Ereditá es una línea de edificios. `/eredita/` es su portada (hero, concepto y una tarjeta por proyecto) y cada proyecto —"EREDITÁ Art", y los que se creen después— es un documento con nombre, ruta (`/eredita/<ruta>/` y `/en/eredita/<ruta>/`), orden, estado, tarjeta y el contenido comercial (introducción, galería, tipologías, documentación, cierre). Publicar un proyecto nuevo no requiere código: entra solo en la portada, el sitemap y `llms.txt`.
+- **Tipologías**: cada una tiene un video opcional (mp4, con póster) y una lista de renders/fotos con pie. En el panel se ve el video por defecto (silenciado, en bucle, solo mientras el panel está visible; sin autoplay con movimiento reducido) o la primera imagen, y una tira de miniaturas permite elegir cada medio. Los videos van comprimidos: H.264, ≤ 1280 px, ≤ 5 MB (el CDN de Sanity en plan free tiene ~10 GB/mes).
 - **Notas**: un documento por idioma, enlazados con el botón de traducciones del Studio. Una nota solo en español no aparece en `/en/news/`.
-- **Documentos legales** (Ereditá): título, descripción, orden y PDF opcional. Sin archivo la tarjeta muestra "Próximamente"; con archivo son obligatorias la versión y la fecha de vigencia, y reemplazar el PDF sin cambiar la versión bloquea la publicación. Las versiones anteriores quedan en el historial del documento.
+- **Documentos legales** (Ereditá): título, descripción, orden, proyecto opcional (vacío = se muestra en todos los proyectos) y PDF opcional. Sin archivo la tarjeta muestra "Próximamente"; con archivo son obligatorias la versión y la fecha de vigencia, y reemplazar el PDF sin cambiar la versión bloquea la publicación. Las versiones anteriores quedan en el historial del documento.
 - **Imágenes**: todas con punto focal (hotspot) y recorte editables; el sitio genera las variantes por ancho y el tratamiento tonal desde el CDN de Sanity.
 
 ### Publicación automática
@@ -71,7 +75,7 @@ Los tests corren contra `astro preview` (o `BASE_URL`).
 Solo se publica contenido con **Publish**. Cada publicación dispara un webhook que reconstruye el sitio:
 
 - **Vercel**: importa el repo (framework Astro, salida `dist/`) con las variables `SANITY_PROJECT_ID` y `SANITY_DATASET`; cada push a `main` despliega.
-- Webhook en [sanity.io/manage](https://www.sanity.io/manage) → API → Webhooks: URL del *Deploy Hook* de Vercel (Settings → Git → Deploy Hooks), método `POST`, sin cabeceras ni cuerpo, filtro GROQ `_type in ["home","eredita","putnam","unete","contacto","noticias","siteSettings","nota","documentoLegal","translation.metadata"]`, disparar en create/update/delete.
+- Webhook en [sanity.io/manage](https://www.sanity.io/manage) → API → Webhooks: URL del *Deploy Hook* de Vercel (Settings → Git → Deploy Hooks), método `POST`, sin cabeceras ni cuerpo, filtro GROQ `_type in ["home","eredita","proyecto","putnam","unete","contacto","noticias","siteSettings","nota","documentoLegal","translation.metadata"]`, disparar en create/update/delete.
 - Cabeceras de caché y seguridad en `vercel.json`; `www` → apex se configura en Vercel → Domains.
 
 ## Dominio, SEO y motores generativos

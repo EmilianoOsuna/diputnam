@@ -8,7 +8,8 @@
     "dev": "sanity dev",
     "build": "sanity build",
     "deploy": "sanity deploy",
-    "seed": "sanity exec scripts/seed.ts --with-user-token"
+    "seed": "sanity exec scripts/seed.ts --with-user-token",
+    "migrate:proyectos": "sanity exec scripts/migrate-proyectos.ts --with-user-token"
   },
   "dependencies": {
     "@sanity/document-internationalization": "^6.2.35",

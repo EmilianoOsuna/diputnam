@@ -25,10 +25,25 @@ const uploadImage = async (source: string) => {
   return id;
 };
 
+// The typology video of the seed is a fabricated mp4 asset: never fetched by the tests
+// (the panel loads it only when visible and `preload="none"` defers even that).
+const uploadFile = async (source: string) => {
+  const hash = createHash('sha1').update(source).digest('hex');
+  const id = `file-${hash}-mp4`;
+  if (!assets.some((asset) => asset._id === id)) {
+    assets.push({
+      _id: id, _type: 'sanity.fileAsset', extension: 'mp4', mimeType: 'video/mp4', size: 4_000_000,
+      url: `https://cdn.sanity.io/files/local/production/${hash}.mp4`,
+      source: { name: 'seed', id: source },
+    });
+  }
+  return id;
+};
+
 // Published documents carry _updatedAt in Sanity; the site uses it for sitemap lastmod
 // and dateModified, so the offline dataset stamps the seed time.
 const stamp = new Date().toISOString();
-const docs = (await buildDocs(uploadImage)).map((doc) => ({ _updatedAt: stamp, ...doc }));
+const docs = (await buildDocs(uploadImage, uploadFile)).map((doc) => ({ _updatedAt: stamp, ...doc }));
 await mkdir(dirname(out), { recursive: true });
 await writeFile(out, JSON.stringify([...docs, ...assets], null, 1));
 console.log(`seed-local: ${docs.length} documents + ${assets.length} assets → ${out}`);

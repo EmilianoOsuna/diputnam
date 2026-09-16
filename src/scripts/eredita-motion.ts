@@ -1,4 +1,5 @@
 import { mountHorizontalTrack } from './horizontal-track';
+import { mountTypologyMedia } from './typology-media';
 import { mountAnchors, mountReveals, releaseTitles, settleLines, splitTitles } from './mobile-motion';
 
 const root = document.querySelector<HTMLElement>('[data-eredita]');
@@ -8,9 +9,10 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 const desktop = window.matchMedia('(min-width: 768px)').matches;
 let motion: { refresh: () => void } | null = null;
 
-// Mobile typologies: native swipe track. Independent of GSAP/reduced motion so the
-// counter and rail keep working even when every animation is off.
+// Typology media (video + renders) and, on phones, the native swipe track. Both are
+// independent of GSAP/reduced motion so they keep working even when every animation is off.
 if (root) {
+  mountTypologyMedia(root);
   const track = root.querySelector<HTMLElement>('[data-h-track]');
   const mobile = window.matchMedia('(max-width: 899px)');
   let unmount: (() => void) | null = null;

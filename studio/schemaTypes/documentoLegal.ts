@@ -2,7 +2,7 @@ import { defineField, defineType } from 'sanity';
 
 type LegalDoc = { _id?: string; file?: { asset?: { _ref?: string } }; version?: string; validFrom?: string };
 
-// Buyer-facing documents for Ereditá. The file is optional (the card reads "Coming soon"
+// Buyer-facing documents for Ereditá, common to the line or tied to one project. The file is optional (the card reads "Coming soon"
 // without it); once there is a file, a version label and a validity date are required, and
 // swapping the file without bumping the version is refused. Older revisions stay in
 // Sanity's document history.
@@ -14,6 +14,7 @@ export const documentoLegal = defineType({
     defineField({ name: 'title', title: 'Título', type: 'localeString', validation: (rule) => rule.required() }),
     defineField({ name: 'description', title: 'Descripción', type: 'localeText', validation: (rule) => rule.required() }),
     defineField({ name: 'order', title: 'Orden', type: 'number', validation: (rule) => rule.required().integer().min(1) }),
+    defineField({ name: 'proyecto', title: 'Proyecto', type: 'reference', to: [{ type: 'proyecto' }], description: 'Vacío = se muestra en todos los proyectos de Ereditá.' }),
     defineField({
       name: 'file', title: 'Archivo PDF', type: 'file', options: { accept: 'application/pdf' },
       validation: (rule) => rule.custom(async (value, context) => {
@@ -38,7 +39,7 @@ export const documentoLegal = defineType({
   ],
   orderings: [{ title: 'Orden', name: 'order', by: [{ field: 'order', direction: 'asc' }] }],
   preview: {
-    select: { title: 'title.es', version: 'version', validFrom: 'validFrom', file: 'file.asset._ref' },
-    prepare: ({ title, version, validFrom, file }) => ({ title, subtitle: file ? `${version ?? '—'} · ${validFrom ?? ''}` : 'Sin archivo (Próximamente)' }),
+    select: { title: 'title.es', version: 'version', validFrom: 'validFrom', file: 'file.asset._ref', project: 'proyecto.name' },
+    prepare: ({ title, version, validFrom, file, project }) => ({ title, subtitle: `${project ?? 'Todos los proyectos'} · ${file ? `${version ?? '—'} · ${validFrom ?? ''}` : 'Sin archivo (Próximamente)'}` }),
   },
 });

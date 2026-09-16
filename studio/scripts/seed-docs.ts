@@ -3,7 +3,7 @@
 // in ./seed.en.ts. Image handling is injected: the real seed uploads
 // assets to Sanity, the local seed fabricates asset documents for offline builds.
 import { contact, homePanels } from './seed-data/home.ts';
-import { erediteGallery, erediteHero, erediteIntro, erediteLegalDocs, erediteSections, erediteTypologies } from './seed-data/eredita.ts';
+import { erediteGallery, erediteHero as erediteHeroData, erediteIntro, erediteLegalDocs, erediteProject, erediteSections, erediteTypologies } from './seed-data/eredita.ts';
 import { putnamDifferences, putnamEditorialImage, putnamHero, putnamIntro, putnamPrinciples, putnamProcess, putnamSections } from './seed-data/putnam.ts';
 import * as un from './seed-data/unete.ts';
 import * as ct from './seed-data/contacto.ts';
@@ -13,13 +13,15 @@ import * as en from './seed.en.ts';
 export type SeedDoc = Record<string, unknown> & { _id: string; _type: string };
 // Resolves a source (remote URL or file name under src/assets) to an image asset id.
 export type UploadImage = (source: string) => Promise<string>;
+// Resolves a source to a file asset id (mp4); undefined = the seed has no video to offer.
+export type UploadFile = (source: string) => Promise<string>;
 
 const loc = (es: string, en?: string | null) => ({ es, ...(en ? { en } : {}) });
 const key = (index: number) => `k${index}`;
 const monthIndex: Record<string, string> = { Ene: '01', Feb: '02', Mar: '03', Abr: '04', May: '05', Jun: '06', Jul: '07', Ago: '08', Sep: '09', Oct: '10', Nov: '11', Dic: '12' };
 const isoDate = (date: string) => { const [d, m, y] = date.split(' '); return `${y}-${monthIndex[m]}-${d}`; };
 
-export const buildDocs = async (uploadImage: UploadImage): Promise<SeedDoc[]> => {
+export const buildDocs = async (uploadImage: UploadImage, uploadFile?: UploadFile): Promise<SeedDoc[]> => {
   const image = async (source: string, altEs: string, altEn?: string) => ({
     _type: 'localeImage',
     asset: { _type: 'reference', _ref: await uploadImage(source) },
@@ -51,15 +53,27 @@ export const buildDocs = async (uploadImage: UploadImage): Promise<SeedDoc[]> =>
     }))),
   });
 
-  // Ereditá.
+  // Ereditá: the line's landing page, then its first project carrying the commercial content.
+  const erediteHero = { kicker: loc(erediteHeroData.kicker, en.eredita.hero.kicker), title: loc(erediteHeroData.title, en.eredita.hero.title), sub: loc(erediteHeroData.sub, en.eredita.hero.sub), poster: await image(erediteHeroData.poster, erediteHeroData.alt, en.eredita.hero.alt) };
+  const erediteIntroDoc = {
+    kicker: loc(erediteIntro.eyebrow, en.eredita.intro.eyebrow), title: loc(erediteIntro.title, en.eredita.intro.title), lead: loc(erediteIntro.lead, en.eredita.intro.lead),
+    bullets: erediteIntro.bullets.map((b, i) => ({ _key: key(i), _type: 'localeString', ...loc(b, en.eredita.intro.bullets[i]) })),
+    facts: erediteIntro.facts.map((f, i) => ({ _key: key(i), _type: 'labelValue', label: loc(f.label, en.eredita.intro.facts[i][0]), value: loc(f.value, en.eredita.intro.facts[i][1]) })),
+  };
   docs.push({
     _id: 'eredita', _type: 'eredita',
-    hero: { kicker: loc(erediteHero.kicker, en.eredita.hero.kicker), title: loc(erediteHero.title, en.eredita.hero.title), sub: loc(erediteHero.sub, en.eredita.hero.sub), poster: await image(erediteHero.poster, erediteHero.alt, en.eredita.hero.alt) },
-    intro: {
-      kicker: loc(erediteIntro.eyebrow, en.eredita.intro.eyebrow), title: loc(erediteIntro.title, en.eredita.intro.title), lead: loc(erediteIntro.lead, en.eredita.intro.lead),
-      bullets: erediteIntro.bullets.map((b, i) => ({ _key: key(i), _type: 'localeString', ...loc(b, en.eredita.intro.bullets[i]) })),
-      facts: erediteIntro.facts.map((f, i) => ({ _key: key(i), _type: 'labelValue', label: loc(f.label, en.eredita.intro.facts[i][0]), value: loc(f.value, en.eredita.intro.facts[i][1]) })),
-    },
+    hero: erediteHero,
+    intro: erediteIntroDoc,
+    projects: { kicker: loc(erediteSections.projects.kicker, en.eredita.projects.kicker), title: loc(erediteSections.projects.title, en.eredita.projects.title), text: loc(erediteSections.projects.text, en.eredita.projects.text) },
+    cta: { kicker: loc(erediteSections.cta.kicker, en.eredita.cta.kicker), title: loc(erediteSections.cta.title, en.eredita.cta.title) },
+  });
+  docs.push({
+    _id: 'proyecto.eredita-art', _type: 'proyecto',
+    name: erediteProject.name, slug: { _type: 'slug', current: erediteProject.slug }, order: 1,
+    status: loc(erediteProject.status, en.eredita.project.status),
+    card: { image: await image(erediteHeroData.poster, erediteHeroData.alt, en.eredita.hero.alt), text: loc(erediteProject.card, en.eredita.project.card) },
+    hero: erediteHero,
+    intro: erediteIntroDoc,
     gallery: {
       kicker: loc(erediteSections.gallery.kicker, en.eredita.gallery.kicker), title: loc(erediteSections.gallery.title, en.eredita.gallery.title),
       items: await Promise.all(erediteGallery.map(async (item, i) => ({ _key: key(i), image: await image(item.src, item.alt, en.eredita.gallery.alts[i]), tag: loc(item.tag, en.eredita.gallery.tags[item.tag]) }))),
@@ -68,9 +82,14 @@ export const buildDocs = async (uploadImage: UploadImage): Promise<SeedDoc[]> =>
       kicker: loc(erediteSections.typologies.kicker, en.eredita.typologies.kicker), title: loc(erediteSections.typologies.title, en.eredita.typologies.title), intro: loc(erediteSections.typologies.intro, en.eredita.typologies.intro),
       items: await Promise.all(erediteTypologies.map(async (item, i) => {
         const t = en.eredita.typologies.items[item.id];
+        // The former single image becomes the first render; the seed's only video (when the
+        // seed can provide one) goes to the shared amenities, with that same image as poster.
+        const video = item.video && uploadFile ? { _type: 'file', asset: { _type: 'reference', _ref: await uploadFile(item.video) } } : null;
         return {
           _key: key(i), id: { _type: 'slug', current: item.id }, tag: loc(item.tag, en.eredita.typologies.tags[item.tag]), tone: item.tone,
-          title: loc(item.title, t.title), subtitle: loc(item.subtitle, t.subtitle), image: await image(item.image, item.alt, t.alt), description: loc(item.description, t.description),
+          title: loc(item.title, t.title), subtitle: loc(item.subtitle, t.subtitle), description: loc(item.description, t.description),
+          ...(video ? { video, poster: await image(item.image, item.alt, t.alt) } : {}),
+          images: await Promise.all(item.images.map(async (src, j) => ({ _key: key(j), ...(await image(src, item.alt, t.alt)), _type: 'captionedImage', ...(item.captions[j] ? { caption: loc(item.captions[j], t.captions[j]) } : {}) }))),
           specs: item.specs.map((s, j) => ({ _key: key(j), _type: 'labelValue', label: loc(s.key, t.specs[j][0]), value: loc(s.val, t.specs[j][1]) })),
         };
       })),

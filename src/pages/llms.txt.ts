@@ -1,15 +1,17 @@
 // Plain-text guide for generative engines (llmstxt.org): who Putnam is, where each page
 // lives in both languages and which notes exist. Same sources as the pages.
 import type { APIRoute } from 'astro';
-import { locales, notaPath, pages, t, type PageKey } from '../i18n';
-import { getNotas, getSettings } from '../lib/content';
+import { locales, notaPath, pages, projectPath, t, type PageKey } from '../i18n';
+import { getNotas, getProyectos, getSettings } from '../lib/content';
 import { absolute } from '../lib/seo';
 
 export const GET: APIRoute = async () => {
   const settings = await getSettings('es');
   const sections = await Promise.all(locales.map(async (lang) => {
     const ui = t(lang);
-    const pageLines = (Object.keys(pages) as PageKey[]).map((key) => `- [${ui.meta[key].title}](${absolute(pages[key][lang])}): ${ui.meta[key].description}`);
+    // Each Ereditá project is listed under the line's page.
+    const projectLines = (await getProyectos(lang)).map((project) => `  - [${project.name}](${absolute(projectPath(lang, project.slug))}): ${project.card.text}`);
+    const pageLines = (Object.keys(pages) as PageKey[]).flatMap((key) => [`- [${ui.meta[key].title}](${absolute(pages[key][lang])}): ${ui.meta[key].description}`, ...(key === 'eredita' ? projectLines : [])]);
     const notas = await getNotas(lang);
     const notaLines = notas.map((nota) => `- [${nota.title}](${absolute(notaPath(lang, nota.slug))}) — ${nota.date}: ${nota.excerpt}`);
     const heading = lang === 'es' ? 'Español' : 'English';

@@ -8,7 +8,8 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 import { chromium } from 'playwright';
-import { pages, routes as siteRoutes } from '../src/i18n/routes.ts';
+import { pages } from '../src/i18n/routes.ts';
+import { projectRoutes, routes as siteRoutes } from './routes.mjs';
 
 const baseUrl = process.env.BASE_URL ?? 'http://127.0.0.1:4321';
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
@@ -19,7 +20,7 @@ const MOTION_LIBS = /gsap|ScrollTrigger|lenis/i;
 const JS_BUDGET = 10 * 1024; // gzip bytes of first-party scripts on a mobile load
 
 const routes = siteRoutes;
-const tracks = Object.fromEntries(Object.values(pages.eredita).map((r) => [r, '.ed-h-track']).concat(Object.values(pages.unete).map((r) => [r, '.traits']), Object.values(pages.contacto).map((r) => [r, '.reasons'])));
+const tracks = Object.fromEntries(projectRoutes.map((r) => [r, '.ed-h-track']).concat(Object.values(pages.unete).map((r) => [r, '.traits']), Object.values(pages.contacto).map((r) => [r, '.reasons'])));
 const failures = [];
 const report = {};
 const check = (label, fn) => {

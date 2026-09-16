@@ -1,0 +1,209 @@
+---
+// One Ereditá project: the commercial page (intro, gallery, typologies with their media,
+// buyer documents) at /eredita/<slug>/ in both languages.
+import { Picture } from 'astro:assets';
+import erediteMark from '../assets/eredita-logo.png';
+import CmsImg from '../components/CmsImg.astro';
+import ContactFooter from '../components/ContactFooter.astro';
+import Lines from '../components/Lines.astro';
+import SiteHead from '../components/SiteHead.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { formatDate, pages, projectPath, t, type Lang } from '../i18n';
+import { getLegalDocs, getSettings, type Proyecto, type TypologyMedia } from '../lib/content';
+import { CARD_WIDTHS, HERO_WIDTHS, SAT, imageSrc, ogUrl, remoteImage, remoteSrcset } from '../lib/images';
+import { truncate } from '../lib/seo';
+import '../styles/global.css';
+import '../styles/eredita.css';
+
+interface Props { lang: Lang; project: Proyecto; }
+const { lang, project } = Astro.props;
+const ui = t(lang);
+const [legalDocs, contact] = await Promise.all([getLegalDocs(lang, project.id), getSettings(lang)]);
+const { name, slug, hero, intro, gallery, typologies, legal, cta } = project;
+const megabytes = (bytes: number) => `${(bytes / 1048576).toFixed(1)} MB`;
+const alternate = { es: projectPath('es', slug), en: projectPath('en', slug) };
+const TITLE_SUFFIX = ' · Ereditá | Putnam';
+const title = ui.eredita.projectTitle(truncate(name, 60 - TITLE_SUFFIX.length));
+const description = truncate(intro.lead, 155);
+
+// Thumbnails are tiny (≈4.5rem): 160–320px covers 1x–3x screens.
+const THUMB_WIDTHS = [160, 240, 320] as const;
+const thumbImage = (medium: TypologyMedia) => (medium.kind === 'video' ? medium.poster : medium.image);
+const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredita.media.video : medium.caption || medium.image.alt);
+---
+<html lang={lang}>
+  <head>
+    <SiteHead lang={lang} page="eredita" settings={contact} alternate={alternate} title={title} description={description} image={ogUrl(hero.poster)} imageAlt={hero.poster.alt} imageType="image/jpeg" breadcrumbTitle={name} />
+  </head>
+  <body class="eredita-page">
+    <a class="skip-link" href="#contenido">{ui.skipLink}</a>
+    <SiteHeader lang={lang} page="eredita" contact={contact} alternate={alternate[lang === 'es' ? 'en' : 'es']} />
+
+    <main id="contenido" data-eredita>
+      <section class="ed-hero" aria-labelledby="ed-hero-title" data-header-theme="light">
+        <div class="ed-hero-media" data-parallax>
+          {hero.video ? (
+            <video poster={imageSrc(hero.poster)} autoplay muted loop playsinline aria-hidden="true">
+              <source src={hero.video} type="video/mp4" />
+            </video>
+          ) : (
+            <CmsImg image={hero.poster} base={1280} widths={HERO_WIDTHS} quality={78} sizes="100vw" width="2200" height="1400" fetchpriority="high" />
+          )}
+          <div class="ed-hero-shade"></div>
+        </div>
+        <Picture class="ed-hero-mark" src={erediteMark} widths={[320, 640, 960]} sizes="(max-width: 767px) 40vw, min(26vw, 24rem)" formats={['webp']} fallbackFormat="png" alt="Ereditá" loading="eager" />
+        <div class="ed-hero-content" data-reveal-group>
+          <a class="ed-back" href={pages.eredita[lang]}><span aria-hidden="true">←</span> {ui.eredita.backToLine}</a>
+          <p class="section-kicker">{hero.kicker}</p>
+          <h1 id="ed-hero-title"><Lines text={hero.title} /></h1>
+          <p class="ed-hero-sub">{hero.sub}</p>
+        </div>
+      </section>
+
+      <section class="ed-intro" aria-labelledby="ed-intro-title" data-header-theme="dark">
+        <div class="ed-intro-copy" data-reveal-group>
+          <p class="section-kicker">{intro.kicker}</p>
+          <h2 id="ed-intro-title"><Lines text={intro.title} /></h2>
+          <p class="ed-lead">{intro.lead}</p>
+          <ul class="ed-bullets">
+            {intro.bullets.map((bullet) => <li>{bullet}</li>)}
+          </ul>
+        </div>
+        <dl class="ed-facts" data-reveal-group>
+          {intro.facts.map((fact) => (
+            <div class="ed-fact"><dt>{fact.label}</dt><dd>{fact.value}</dd></div>
+          ))}
+        </dl>
+      </section>
+
+      <section class="ed-gallery" aria-labelledby="ed-gallery-title" data-header-theme="light">
+        <header class="section-heading" data-reveal-group>
+          <p class="section-kicker">{gallery.kicker}</p>
+          <h2 id="ed-gallery-title"><Lines text={gallery.title} /></h2>
+        </header>
+        <div class="ed-masonry" data-reveal-group>
+          {gallery.items.map((item) => (
+            <figure class="ed-masonry-item">
+              <CmsImg image={item.image} base={960} widths={CARD_WIDTHS} quality={75} sat={SAT.gallery} sizes="(min-width: 900px) 50vw, 100vw" loading="lazy" width="1200" height="900" />
+              <figcaption>{item.tag}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <section class="ed-typologies" aria-labelledby="ed-typologies-title" data-header-theme="dark" data-h-wrapper>
+        <header class="ed-h-head">
+          <p class="section-kicker">{typologies.kicker}</p>
+          <h2 id="ed-typologies-title"><Lines text={typologies.title} mode="hard" /></h2>
+          <p class="ed-h-intro-copy">{typologies.intro}</p>
+          <div class="ed-h-progress">
+            <span class="ed-h-counter"><b data-track-current>01</b><i aria-hidden="true">/</i><span>0{typologies.items.length}</span></span>
+            <span class="ed-h-rail" aria-hidden="true"><span data-track-rail></span></span>
+          </div>
+        </header>
+        <div class="ed-h-track" data-h-track>
+          <div class="ed-h-panel ed-h-panel--intro" data-h-panel>
+            <p class="section-kicker">{typologies.kicker}</p>
+            <h2><Lines text={typologies.title} mode="hard" /></h2>
+            <p class="ed-h-intro-copy">{typologies.intro}</p>
+            <span class="ed-h-hint">{ui.eredita.keepScrolling} <span aria-hidden="true">↓</span></span>
+          </div>
+          {typologies.items.map((item, index) => (
+            <article class="ed-h-panel" data-h-panel>
+              {/* Every medium is in the HTML; only the selected one is shown, so hidden images
+                  stay lazy and the video is fetched only once its panel is on screen. */}
+              <figure class="ed-h-media" data-media>
+                {item.media.map((medium, j) => (
+                  <div class="ed-h-medium" id={`${slug}-${item.id}-m${j}`} role="tabpanel" aria-labelledby={item.media.length > 1 ? `${slug}-${item.id}-t${j}` : undefined} hidden={j !== 0}>
+                    {medium.kind === 'video' ? (
+                      <>
+                        <video muted loop playsinline preload="none" poster={remoteImage(imageSrc(medium.poster), 1280, 70)} aria-label={item.title} data-video>
+                          <source src={medium.src} type="video/mp4" />
+                        </video>
+                        <button class="ed-h-play" type="button" data-play hidden><span aria-hidden="true">▶</span> {ui.eredita.media.play}</button>
+                      </>
+                    ) : (
+                      <CmsImg image={medium.image} base={960} widths={CARD_WIDTHS} quality={75} sat={SAT.card} sizes="(min-width: 900px) 50vw, 100vw" loading="lazy" width="1400" height="1400" />
+                    )}
+                  </div>
+                ))}
+                {item.media.length > 1 && (
+                  <div class="ed-h-thumbs" data-thumbs>
+                    <button class="ed-h-thumb-nav" type="button" data-thumbs-prev aria-label={ui.eredita.media.prev} hidden><span aria-hidden="true">←</span></button>
+                    <div class="ed-h-thumb-strip" role="tablist" aria-label={ui.eredita.media.aria(item.title)}>
+                      {item.media.map((medium, j) => {
+                        const src = imageSrc(thumbImage(medium));
+                        return (
+                          <button class:list={['ed-h-thumb', { 'is-video': medium.kind === 'video' }]} type="button" role="tab" id={`${slug}-${item.id}-t${j}`} aria-controls={`${slug}-${item.id}-m${j}`} aria-selected={j === 0 ? 'true' : 'false'} tabindex={j === 0 ? 0 : -1}>
+                            <img src={remoteImage(src, 160, 60)} srcset={remoteSrcset(src, THUMB_WIDTHS, 60)} sizes="4.5rem" width="160" height="120" alt="" loading="lazy" decoding="async" />
+                            <span class="visually-hidden">{thumbName(medium)}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <button class="ed-h-thumb-nav" type="button" data-thumbs-next aria-label={ui.eredita.media.next} hidden><span aria-hidden="true">→</span></button>
+                  </div>
+                )}
+              </figure>
+              <div class:list={['ed-h-copy', `is-${item.tone}`]}>
+                <div class="ed-h-copy-head">
+                  <span class="ed-h-index">0{index + 1}<i>/</i>0{typologies.items.length}</span>
+                  <span class="ed-h-tag">{item.tag}</span>
+                </div>
+                <h3>{item.title}</h3>
+                <p class="ed-h-subtitle">{item.subtitle}</p>
+                <p class="ed-h-desc">{item.description}</p>
+                <ul class="ed-h-specs">
+                  {item.specs.map((spec) => (
+                    <li><span>{spec.label}</span><b>{spec.value}</b></li>
+                  ))}
+                </ul>
+                <a class="ed-cta-link" href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.eredita.requestInfo} <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="ed-legal" aria-labelledby="ed-legal-title" data-header-theme="dark">
+        <header class="ed-legal-header" data-reveal-group>
+          <div>
+            <p class="section-kicker">{legal.kicker}</p>
+            <h2 id="ed-legal-title"><Lines text={legal.title} /></h2>
+          </div>
+          <p>{legal.lead}</p>
+        </header>
+        <div class="ed-legal-grid" data-reveal-group>
+          {legalDocs.map((doc) => (
+            <article class="ed-legal-card">
+              <strong>{doc.title}</strong>
+              <p>{doc.description}</p>
+              {doc.file ? (
+                <a href={doc.file.url} type="application/pdf" target="_blank" rel="noreferrer">
+                  <span>{ui.eredita.openPdf} <i aria-hidden="true">↗</i></span>
+                  <small>{[doc.version, doc.validFrom && formatDate(lang, doc.validFrom), megabytes(doc.file.size)].filter(Boolean).join(' · ')}</small>
+                </a>
+              ) : (
+                <span>{ui.soon}</span>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="ed-cta" aria-labelledby="ed-cta-title" data-reveal-group data-header-theme="light">
+        <div class="ed-cta-copy">
+          <p class="section-kicker">{cta.kicker}</p>
+          <h2 id="ed-cta-title"><Lines text={cta.title} /></h2>
+          <div class="cta-actions">
+            <a href={`mailto:${contact.email}`}>{ui.writeUs} <span aria-hidden="true">↗</span></a>
+            <a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <Picture class="cta-mark" src={erediteMark} widths={[320, 640]} sizes="(max-width: 767px) min(50vw, 14rem), min(45%, 18rem)" formats={['webp']} fallbackFormat="png" alt="" aria-hidden="true" />
+      </section>
+    </main>
+    <ContactFooter lang={lang} contact={contact} />
+    <script src="../scripts/eredita-motion.ts"></script>
+  </body>
+</html>

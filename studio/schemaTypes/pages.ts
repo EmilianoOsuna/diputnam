@@ -1,8 +1,8 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
 
-const kicker = defineField({ name: 'kicker', title: 'Kicker', type: 'localeString' });
-const title = defineField({ name: 'title', title: 'Título', type: 'localeTitle', validation: (rule) => rule.required() });
-const text = defineField({ name: 'text', title: 'Texto', type: 'localeText' });
+export const kicker = defineField({ name: 'kicker', title: 'Kicker', type: 'localeString' });
+export const title = defineField({ name: 'title', title: 'Título', type: 'localeTitle', validation: (rule) => rule.required() });
+export const text = defineField({ name: 'text', title: 'Texto', type: 'localeText' });
 const items = (name: string, label: string) => defineField({ name, title: label, type: 'array', of: [defineArrayMember({ type: 'titledItem' })] });
 const numberedItems = (name: string, label: string) =>
   defineField({
@@ -14,8 +14,22 @@ const numberedItems = (name: string, label: string) =>
       defineField({ name: 'image', title: 'Imagen', type: 'localeImage' }),
     ], preview: { select: { title: 'title.es', subtitle: 'number' } } })],
   });
-const section = (name: string, label: string, fields: ReturnType<typeof defineField>[]) =>
+export const section = (name: string, label: string, fields: ReturnType<typeof defineField>[]) =>
   defineField({ name, title: label, type: 'object', options: { collapsible: true, collapsed: false }, fields });
+
+// Hero and introduction are shared by the Ereditá line and by every project.
+export const erediteHeroFields = [
+  kicker, title,
+  defineField({ name: 'sub', title: 'Subtítulo', type: 'localeString' }),
+  defineField({ name: 'poster', title: 'Imagen', type: 'localeImage', validation: (rule) => rule.required() }),
+  defineField({ name: 'video', title: 'Video (opcional, mp4)', type: 'file', options: { accept: 'video/mp4' } }),
+];
+export const erediteIntroFields = [
+  kicker, title,
+  defineField({ name: 'lead', title: 'Entrada', type: 'localeText' }),
+  defineField({ name: 'bullets', title: 'Puntos', type: 'array', of: [defineArrayMember({ type: 'localeString' })] }),
+  defineField({ name: 'facts', title: 'Datos', type: 'array', of: [defineArrayMember({ type: 'labelValue' })] }),
+];
 
 export const home = defineType({
   name: 'home',
@@ -39,54 +53,19 @@ export const home = defineType({
   preview: { prepare: () => ({ title: 'Inicio' }) },
 });
 
+// Ereditá is a line of buildings: the singleton is the line's landing page, the
+// commercial content (gallery, typologies, documents) lives in each `proyecto`.
 export const eredita = defineType({
   name: 'eredita',
-  title: 'Ereditá',
+  title: 'Ereditá (línea)',
   type: 'document',
   fields: [
-    section('hero', 'Hero', [
-      kicker, title,
-      defineField({ name: 'sub', title: 'Subtítulo', type: 'localeString' }),
-      defineField({ name: 'poster', title: 'Imagen', type: 'localeImage', validation: (rule) => rule.required() }),
-      defineField({ name: 'video', title: 'Video (opcional, mp4)', type: 'file', options: { accept: 'video/mp4' } }),
-    ]),
-    section('intro', 'Introducción', [
-      kicker, title,
-      defineField({ name: 'lead', title: 'Entrada', type: 'localeText' }),
-      defineField({ name: 'bullets', title: 'Puntos', type: 'array', of: [defineArrayMember({ type: 'localeString' })] }),
-      defineField({ name: 'facts', title: 'Datos', type: 'array', of: [defineArrayMember({ type: 'labelValue' })] }),
-    ]),
-    section('gallery', 'Galería', [
-      kicker, title,
-      defineField({
-        name: 'items', title: 'Imágenes', type: 'array',
-        of: [defineArrayMember({ type: 'object', fields: [
-          defineField({ name: 'image', title: 'Imagen', type: 'localeImage', validation: (rule) => rule.required() }),
-          defineField({ name: 'tag', title: 'Etiqueta', type: 'localeString', description: 'Fotografía, Render…' }),
-        ], preview: { select: { title: 'tag.es', media: 'image' } } })],
-      }),
-    ]),
-    section('typologies', 'Tipologías', [
-      kicker, title,
-      defineField({ name: 'intro', title: 'Introducción', type: 'localeText' }),
-      defineField({
-        name: 'items', title: 'Tipologías', type: 'array',
-        of: [defineArrayMember({ type: 'object', fields: [
-          defineField({ name: 'id', title: 'Identificador', type: 'slug', validation: (rule) => rule.required() }),
-          defineField({ name: 'tag', title: 'Etiqueta', type: 'localeString' }),
-          defineField({ name: 'tone', title: 'Tono', type: 'string', options: { list: ['azul', 'verde'] }, initialValue: 'azul' }),
-          defineField({ name: 'title', title: 'Título', type: 'localeString', validation: (rule) => rule.required() }),
-          defineField({ name: 'subtitle', title: 'Subtítulo', type: 'localeString' }),
-          defineField({ name: 'image', title: 'Imagen', type: 'localeImage', validation: (rule) => rule.required() }),
-          defineField({ name: 'description', title: 'Descripción', type: 'localeText' }),
-          defineField({ name: 'specs', title: 'Ficha', type: 'array', of: [defineArrayMember({ type: 'labelValue' })] }),
-        ], preview: { select: { title: 'title.es', subtitle: 'subtitle.es', media: 'image' } } })],
-      }),
-    ]),
-    section('legal', 'Documentación para compradores', [kicker, title, defineField({ name: 'lead', title: 'Entrada', type: 'localeText' })]),
+    section('hero', 'Hero', erediteHeroFields),
+    section('intro', 'Introducción', erediteIntroFields),
+    section('projects', 'Proyectos', [kicker, title, text]),
     section('cta', 'Cierre', [kicker, title]),
   ],
-  preview: { prepare: () => ({ title: 'Ereditá' }) },
+  preview: { prepare: () => ({ title: 'Ereditá (línea)' }) },
 });
 
 export const putnam = defineType({

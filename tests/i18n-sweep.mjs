@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import { locales, otherLang, pages } from '../src/i18n/routes.ts';
+import { projectPairs } from './routes.mjs';
 
 const baseUrl = process.env.BASE_URL ?? 'http://127.0.0.1:4321';
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
@@ -14,7 +15,7 @@ const failures = [];
 try {
   for (const lang of locales) {
     const other = otherLang(lang);
-    for (const [key, route] of Object.entries(pages)) {
+    for (const [key, route] of Object.entries({ ...pages, ...projectPairs })) {
       const path = route[lang];
       const label = `${lang} ${path}`;
       try {

@@ -16,6 +16,8 @@ export const pages = {
 export type PageKey = keyof typeof pages;
 
 export const notaPath = (lang: Lang, slug: string) => `${pages.noticias[lang]}${slug}/`;
+// Ereditá projects share their slug across languages, so the pair is always derivable.
+export const projectPath = (lang: Lang, slug: string) => `${pages.eredita[lang]}${slug}/`;
 
 export const otherLang = (lang: Lang): Lang => (lang === 'es' ? 'en' : 'es');
 

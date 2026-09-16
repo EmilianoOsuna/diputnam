@@ -118,6 +118,7 @@ for (const route of ['/', '/eredita/', '/putnam/', '/noticias/', '/unete/', '/co
   if (llms && !llms.includes(`(${SITE}${route})`)) fail(`llms.txt: does not link ${route}`);
 }
 for (const route of indexable) if (llms && /^\/(?:noticias|en\/news)\/[^/]+\/$/.test(route) && !llms.includes(`${SITE}${route}`)) fail(`llms.txt: does not list note ${route}`);
+for (const route of indexable) if (llms && /^\/(?:en\/)?eredita\/[^/]+\/$/.test(route) && !llms.includes(`(${SITE}${route})`)) fail(`llms.txt: does not list project ${route}`);
 
 const notFound = await read('404.html');
 if (notFound && !/<meta name="robots" content="noindex/.test(notFound)) fail('404.html: not noindex');

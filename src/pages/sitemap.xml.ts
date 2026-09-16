@@ -2,8 +2,8 @@
 // route table and the CMS on each build. lastmod is the last publish time of the
 // document behind each page (never the build date).
 import type { APIRoute } from 'astro';
-import { locales, notaPath, pages, type Lang, type PageKey } from '../i18n';
-import { getNotas, getUpdatedAt } from '../lib/content';
+import { locales, notaPath, pages, projectPath, type Lang, type PageKey } from '../i18n';
+import { getNotas, getProyectos, getUpdatedAt } from '../lib/content';
 import { absolute } from '../lib/seo';
 
 interface Entry { loc: string; lastmod: string | null; alternates: Partial<Record<Lang, string>> }
@@ -16,6 +16,11 @@ export const GET: APIRoute = async () => {
   for (const key of Object.keys(pages) as PageKey[]) {
     const lastmod = await getUpdatedAt(documentOf[key]);
     for (const lang of locales) entries.push({ loc: absolute(pages[key][lang]), lastmod, alternates: { es: absolute(pages[key].es), en: absolute(pages[key].en) } });
+  }
+  // Ereditá projects share their slug across languages, so each has both alternates.
+  for (const project of await getProyectos('es')) {
+    const alternates = { es: absolute(projectPath('es', project.slug)), en: absolute(projectPath('en', project.slug)) };
+    for (const lang of locales) entries.push({ loc: alternates[lang], lastmod: project.updatedAt, alternates });
   }
   for (const lang of locales) {
     for (const nota of await getNotas(lang)) {

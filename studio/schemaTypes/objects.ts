@@ -21,19 +21,31 @@ export const localeText = localized('localeText', 'Texto largo', 'text');
 // Titles keep the editor's line breaks: each Enter is rendered as a line break on the site.
 export const localeTitle = localized('localeTitle', 'Título', 'text', 'Intro = salto de renglón en el sitio.');
 
+const imageFields = [
+  defineField({ name: 'alt', title: 'Texto alternativo', type: 'localeString', hidden: ({ parent }) => Boolean(parent?.decorative), validation: (rule) => rule.custom((value, context) => {
+    const parent = context.parent as { decorative?: boolean } | undefined;
+    if (parent?.decorative) return true;
+    return (value as { es?: string } | undefined)?.es ? true : 'Escribe el texto alternativo en español o marca la imagen como decorativa.';
+  }) }),
+  defineField({ name: 'decorative', title: 'Imagen decorativa (sin texto alternativo)', type: 'boolean', initialValue: false }),
+];
+
 export const localeImage = defineType({
   name: 'localeImage',
   title: 'Imagen',
   type: 'image',
   options: { hotspot: true },
-  fields: [
-    defineField({ name: 'alt', title: 'Texto alternativo', type: 'localeString', hidden: ({ parent }) => Boolean(parent?.decorative), validation: (rule) => rule.custom((value, context) => {
-      const parent = context.parent as { decorative?: boolean } | undefined;
-      if (parent?.decorative) return true;
-      return (value as { es?: string } | undefined)?.es ? true : 'Escribe el texto alternativo en español o marca la imagen como decorativa.';
-    }) }),
-    defineField({ name: 'decorative', title: 'Imagen decorativa (sin texto alternativo)', type: 'boolean', initialValue: false }),
-  ],
+  fields: imageFields,
+});
+
+// A typology render or photo: a localeImage plus the caption shown under its thumbnail.
+export const captionedImage = defineType({
+  name: 'captionedImage',
+  title: 'Render o foto',
+  type: 'image',
+  options: { hotspot: true },
+  fields: [defineField({ name: 'caption', title: 'Pie', type: 'localeString', description: 'P. ej. "Parrillero de la terraza".' }), ...imageFields],
+  preview: { select: { title: 'caption.es', subtitle: 'alt.es', media: 'asset' } },
 });
 
 export const kickerTitle = defineType({
@@ -91,4 +103,4 @@ export const richText = defineType({
   ],
 });
 
-export const objectTypes = [localeString, localeText, localeTitle, localeImage, kickerTitle, titledItem, labelValue, richText];
+export const objectTypes = [localeString, localeText, localeTitle, localeImage, captionedImage, kickerTitle, titledItem, labelValue, richText];

@@ -32,7 +32,12 @@ export const en: Dictionary = {
     contact: 'Write to us',
     sections: 'Site sections',
   },
-  eredita: { keepScrolling: 'Keep scrolling', requestInfo: 'Request information', openPdf: 'Open PDF' },
+  eredita: {
+    keepScrolling: 'Keep scrolling', requestInfo: 'Request information', openPdf: 'Open PDF',
+    viewProject: 'View project', backToLine: 'Back to Ereditá', projects: 'Ereditá projects',
+    projectTitle: (name: string) => `${name} · Ereditá | Putnam`,
+    media: { video: 'Video', play: 'Play video', prev: 'Previous thumbnails', next: 'Next thumbnails', aria: (typology: string) => `${typology} media` },
+  },
   putnam: {
     seeApproach: 'See our approach',
     imagePending: 'Image pending',
