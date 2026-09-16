@@ -9,12 +9,12 @@
 
 ## 2. Sanity Studio y modelo de contenido
 
-- [ ] 2.1 Crear proyecto Sanity (free tier, dataset `production`) y `studio/` con `package.json` propio (D3), scripts `studio:dev`/`studio:deploy` en la raíz, `.env.example` con `SANITY_PROJECT_ID`/`SANITY_DATASET`; verificar que `npm run studio:dev` abre el Studio vacío y que `npm ci` en la raíz no instala dependencias del Studio
+- [x] 2.1 Crear proyecto Sanity (free tier, dataset `production`) y `studio/` con `package.json` propio (D3), scripts `studio:dev`/`studio:deploy` en la raíz, `.env.example` con `SANITY_PROJECT_ID`/`SANITY_DATASET`; verificar que `npm run studio:dev` abre el Studio vacío y que `npm ci` en la raíz no instala dependencias del Studio
 - [x] 2.2 Definir tipos `localeString`, `localeText`, `localeImage` y singletons `home`, `eredita`, `putnam`, `unete`, `siteSettings` (D4) espejando `src/data/*.ts`, con validaciones (español obligatorio, `max` en títulos de escena) y estructura del Studio que oculta "crear nuevo" para singletons; verificar rellenando un documento en el Studio que no se puede publicar sin español y que las imágenes ofrecen hotspot/crop
 - [x] 2.3 Definir `nota` con `@sanity/document-internationalization` (es/en, `translation.metadata`), slug único por idioma, categoría, tags, `body` Portable Text con los bloques permitidos (D6) y `localeImage`; verificar creando una nota en español, su traducción vinculada y comprobando que el Studio bloquea slug duplicado y título vacío
 - [x] 2.4 Definir `documentoLegal` (D7) con `file` PDF opcional, `version`/`validFrom` obligatorios si hay archivo y validación de cambio de versión al reemplazar archivo vía `context.getClient()`; verificar en el Studio que publicar sin archivo es válido, que con archivo exige versión y fecha, y que reemplazar el PDF sin cambiar la versión bloquea la publicación con mensaje
 - [x] 2.5 Escribir `studio/scripts/seed.ts` y `seed.en.ts` (D11): subir las imágenes mock como assets, crear singletons, notas y los cuatro documentos legales (sin archivo) con ids deterministas; verificar ejecutándolo contra `production` y comprobando en el Studio que todo el contenido de `src/data` está presente, con el inglés propuesto marcado para revisión del usuario
-- [ ] 2.6 `sanity deploy` del Studio e invitar al administrador; verificar que el admin inicia sesión, ve los tipos ordenados por sección y publica un cambio de prueba
+- [x] 2.6 `sanity deploy` del Studio e invitar al administrador; verificar que el admin inicia sesión, ve los tipos ordenados por sección y publica un cambio de prueba
 
 ## 3. Sitio leyendo Sanity
 
