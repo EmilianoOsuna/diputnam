@@ -21,16 +21,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EmilianoOsuna/diputnam.git"
+    "url": "git+https://github.com/diputnam/diputnam.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "bugs": {
-    "url": "https://github.com/EmilianoOsuna/diputnam/issues"
+    "url": "https://github.com/diputnam/diputnam/issues"
   },
-  "homepage": "https://github.com/EmilianoOsuna/diputnam#readme",
+  "homepage": "https://github.com/diputnam/diputnam#readme",
   "dependencies": {
     "@sanity/client": "^8.6.1",
     "astro": "^7.3.1",
