@@ -75,7 +75,7 @@ Los tests corren contra `astro preview` (o `BASE_URL`).
 Solo se publica contenido con **Publish**. Cada publicación dispara un webhook que reconstruye el sitio:
 
 - **Vercel**: importa el repo (framework Astro, salida `dist/`) con las variables `SANITY_PROJECT_ID` y `SANITY_DATASET`; cada push a `main` despliega.
-- Webhook en [sanity.io/manage](https://www.sanity.io/manage) → API → Webhooks: URL del *Deploy Hook* de Vercel (Settings → Git → Deploy Hooks), método `POST`, sin cabeceras ni cuerpo, filtro GROQ `_type in ["home","eredita","proyecto","putnam","unete","contacto","noticias","siteSettings","nota","documentoLegal","translation.metadata"]`, disparar en create/update/delete.
+- Webhook `vercel-deploy` (ya creado; se ve en [sanity.io/manage](https://www.sanity.io/manage) → API → Webhooks): URL del *Deploy Hook* de Vercel (Settings → Git → Deploy Hooks), método `POST`, filtro GROQ `!(_type match "sanity.*")` (todo menos assets, así subir un archivo no dispara builds), solo publicados, en create/update/delete.
 - Cabeceras de caché y seguridad en `vercel.json`; `www` → apex se configura en Vercel → Domains.
 
 ## Dominio, SEO y motores generativos
