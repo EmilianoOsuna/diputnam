@@ -123,8 +123,9 @@ const notFound = await read('404.html');
 if (notFound && !/<meta name="robots" content="noindex/.test(notFound)) fail('404.html: not noindex');
 if (notFound && !/lang="en"/.test(notFound)) fail('404.html: no English block');
 
-const headers = await readFile(new URL('../vercel.json', import.meta.url), 'utf8').catch(() => '');
-if (!/"source": "\/_astro\/(.*)".*max-age=31536000, immutable/.test(headers)) fail('vercel.json: /_astro/* is not immutable');
+const vercel = JSON.parse(await readFile(new URL('../vercel.json', import.meta.url), 'utf8').catch(() => '{}'));
+const astroCache = (vercel.headers ?? []).find((rule) => rule.source.startsWith('/_astro/'))?.headers?.find((h) => h.key === 'Cache-Control')?.value ?? '';
+if (!/max-age=31536000, immutable/.test(astroCache)) fail('vercel.json: /_astro/* is not immutable');
 await read('site.webmanifest');
 
 if (failures.length) {
