@@ -253,11 +253,15 @@ La implementación no SHALL considerarse terminada hasta completar esta lista:
 
 ### Requirement: Rutas reales en la navegación compartida
 
-La marca y cada entrada del navbar SHALL producir los mismos destinos reales desde home, Ereditá, Putnam y Contacto: `/`, `/eredita/`, `/putnam/` y `/contacto/`. El enlace activo no SHALL depender de que la persona haya llegado desde una ruta específica, y el menú mobile SHALL conservar esos mismos destinos.
+La marca y cada entrada del navbar SHALL producir los mismos destinos reales desde cualquier página del mismo idioma: en español `/`, `/eredita/`, `/putnam/`, `/noticias/`, `/unete/` y `/contacto/`; en inglés `/en/`, `/en/eredita/`, `/en/putnam/`, `/en/news/`, `/en/join/` y `/en/contact/`. El enlace activo no SHALL depender de que la persona haya llegado desde una ruta específica, el menú mobile SHALL conservar esos mismos destinos y el selector de idioma SHALL estar presente en ambos. Los textos visibles de la página SHALL provenir del diccionario de interfaz y del CMS, no de literales en la plantilla.
 
 #### Scenario: Navegación cruzada
-- **WHEN** una persona abre cualquier página y selecciona cada entrada del navbar
-- **THEN** Ereditá, Putnam y Contacto abren sus rutas dedicadas y la marca vuelve a `/`
+- **WHEN** una persona abre cualquier página en español y selecciona cada entrada del navbar
+- **THEN** cada entrada abre su ruta dedicada en español y la marca vuelve a `/`
+
+#### Scenario: Navegación en inglés
+- **WHEN** una persona abre cualquier página bajo `/en/` y selecciona cada entrada del navbar
+- **THEN** cada entrada abre su ruta `/en/…` y la marca vuelve a `/en/`
 
 ### Requirement: Header limpio sobre cualquier fondo
 
@@ -290,4 +294,3 @@ En todas las páginas, enlaces, botones, campos, selects custom y controles de n
 #### Scenario: Interacción consistente entre rutas
 - **WHEN** se repiten los mismos controles en home, Ereditá, Putnam y Contacto
 - **THEN** comparten la misma respuesta visual y los mismos límites de movimiento
-

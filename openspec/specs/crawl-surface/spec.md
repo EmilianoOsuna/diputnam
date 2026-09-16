@@ -1,8 +1,9 @@
-## Purpose
+# crawl-surface Specification
 
+## Purpose
 Definir los archivos que el sitio expone en su raíz para rastreadores, asistentes de IA, navegadores y la plataforma de hosting, y la guarda que los mantiene coherentes con las rutas realmente publicadas.
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: robots.txt
 

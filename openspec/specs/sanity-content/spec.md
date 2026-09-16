@@ -1,8 +1,9 @@
-## Purpose
+# sanity-content Specification
 
+## Purpose
 Definir el CMS como fuente de verdad del contenido editorial: qué edita el administrador, cómo llega al sitio estático y cómo se regenera el sitio al publicar.
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Contenido editorial servido desde el CMS en build
 El sitio SHALL obtener todo el contenido editorial (textos de escenas y secciones, notas, tipologías, documentos, imágenes de contenido, datos de contacto) desde el CMS durante el build y SHALL seguir publicándose como HTML estático sin servidor ni funciones en runtime. `src/data/*.ts` no SHALL contener contenido editorial al cerrar el cambio.

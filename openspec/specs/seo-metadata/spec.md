@@ -1,8 +1,9 @@
-## Purpose
+# seo-metadata Specification
 
+## Purpose
 Definir qué declara el `<head>` de cada página publicada para que buscadores, redes sociales y motores generativos identifiquen la URL canónica, el idioma, el mercado y el tipo de contenido de Putnam sin ambigüedad.
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: URL canónica absoluta
 
