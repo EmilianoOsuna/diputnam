@@ -1,6 +1,6 @@
 // One-off migration for the "Ereditá as a line" model: moves the commercial content of
 // the published `eredita` singleton (gallery, typologies, legal heading; hero and intro
-// are copied) into the project `proyecto.eredita-art`, turning each typology's single
+// are copied) into the project `proyecto-eredita-art`, turning each typology's single
 // `image` into `images[0]`, and trims the singleton. Reads the published document, not
 // the seed, so nothing the admin edited in the Studio is lost.
 //
@@ -11,7 +11,7 @@
 // and `projects` is only set when missing.
 import { getCliClient } from 'sanity/cli';
 
-const PROJECT_ID = 'proyecto.eredita-art';
+const PROJECT_ID = 'proyecto-eredita-art';
 
 type Localized = { es: string; en?: string };
 type Typology = Record<string, unknown> & { _key: string; image?: Record<string, unknown>; images?: unknown[] };

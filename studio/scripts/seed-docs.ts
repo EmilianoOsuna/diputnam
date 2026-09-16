@@ -68,7 +68,7 @@ export const buildDocs = async (uploadImage: UploadImage, uploadFile?: UploadFil
     cta: { kicker: loc(erediteSections.cta.kicker, en.eredita.cta.kicker), title: loc(erediteSections.cta.title, en.eredita.cta.title) },
   });
   docs.push({
-    _id: 'proyecto.eredita-art', _type: 'proyecto',
+    _id: 'proyecto-eredita-art', _type: 'proyecto',
     name: erediteProject.name, slug: { _type: 'slug', current: erediteProject.slug }, order: 1,
     status: loc(erediteProject.status, en.eredita.project.status),
     card: { image: await image(erediteHeroData.poster, erediteHeroData.alt, en.eredita.hero.alt), text: loc(erediteProject.card, en.eredita.project.card) },

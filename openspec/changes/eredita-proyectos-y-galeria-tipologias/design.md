@@ -67,9 +67,9 @@ La tira va posicionada en la base de `.ed-h-media` (degradado inferior, altura f
 ### D8. Migración leyendo producción, no el seed
 `studio/scripts/migrate-proyectos.ts` (`sanity exec --with-user-token`):
 1. Lee `*[_id == "eredita"][0]` publicado.
-2. Si no existe `proyecto.eredita-art`, lo crea con `name: "EREDITÁ Art"`, `slug: eredita-art`, `order: 1`, `card.image = hero.poster`, `card.text = intro.lead`, y copia `hero`, `intro`, `gallery`, `typologies` (cada `image` → `images[0]` con `_key`, sin `image`), `legal`, `cta`. Si existe, no lo toca (idempotente; las ediciones posteriores del administrador mandan).
+2. Si no existe `proyecto-eredita-art`, lo crea con `name: "EREDITÁ Art"`, `slug: eredita-art`, `order: 1`, `card.image = hero.poster`, `card.text = intro.lead`, y copia `hero`, `intro`, `gallery`, `typologies` (cada `image` → `images[0]` con `_key`, sin `image`), `legal`, `cta`. Si existe, no lo toca (idempotente; las ediciones posteriores del administrador mandan).
 3. En la misma transacción, `unset` de `gallery`, `typologies`, `legal` en el singleton y `setIfMissing` de `projects: { kicker, title, text }` con textos por defecto.
-`seed-docs.ts` produce el mismo par (singleton recortado + `proyecto.eredita-art`); `seed-local.ts` fabrica además un asset de video (`sanity.fileAsset`, `.mp4`) para una tipología, de modo que el dataset local ejercita el camino con video (los assets locales ya son URLs ficticias que no se descargan durante los tests, y con `preload="none"` el video tampoco se solicita hasta que el panel está activo).
+`seed-docs.ts` produce el mismo par (singleton recortado + `proyecto-eredita-art`); `seed-local.ts` fabrica además un asset de video (`sanity.fileAsset`, `.mp4`) para una tipología, de modo que el dataset local ejercita el camino con video (los assets locales ya son URLs ficticias que no se descargan durante los tests, y con `preload="none"` el video tampoco se solicita hasta que el panel está activo).
 
 ### D9. Diccionario de interfaz
 Nuevas claves en `es.ts`/`en.ts` (`index.ts` ya aborta el build si `en` no las espeja): `eredita.viewProject` ("Ver proyecto"), `eredita.backToLine` ("Volver a Ereditá"), `eredita.media.video` ("Video"), `eredita.media.play` ("Reproducir"), `eredita.media.prev`/`next`, `eredita.media.aria` ("Medios de la tipología"), `eredita.projectTitle(name)` para el `<title>`.
@@ -81,7 +81,7 @@ Nuevas claves en `es.ts`/`en.ts` (`index.ts` ya aborta el build si `en` no las e
 - [Scroll anidado en la pista móvil (tira dentro de la tarjeta)] → `overscroll-behavior-x: contain` y `touch-action: pan-x` en la tira; verificar en iOS Safari, que ignora `overscroll-behavior` parcialmente: si encadena, alternativa de respaldo es limitar la tira en móvil a botones prev/next sin scroll táctil.
 - [Paneles con vídeo y reduced motion en desktop pinado] → el botón "Reproducir" es un elemento normal del panel; el `wheel` capturado no afecta al click.
 - [Ventana entre desplegar el Studio con el nuevo schema y ejecutar la migración] → el singleton conserva sus campos hasta el `unset`; el Studio sólo los muestra como "campos desconocidos". El sitio no se despliega hasta que la migración termina (ver plan).
-- [Rollback] → el contenido movido sigue en el historial del documento `eredita` en Sanity (restaurable desde el Studio) y `proyecto.eredita-art` puede borrarse; el código se revierte con `git revert`.
+- [Rollback] → el contenido movido sigue en el historial del documento `eredita` en Sanity (restaurable desde el Studio) y `proyecto-eredita-art` puede borrarse; el código se revierte con `git revert`.
 - [Ereditá con un solo proyecto durante meses] → la portada se diseña para verse completa con una tarjeta (hero + intro + una tarjeta ancha + cierre), no como una rejilla vacía.
 
 ## Migration Plan
