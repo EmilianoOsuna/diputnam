@@ -1,19 +1,21 @@
 // Content images come from the Sanity image CDN: width/quality per breakpoint, automatic
-// modern format, and the tonal treatment (desaturation) baked into the URL so no
-// full-screen CSS `filter` is needed at render time. `rect` (editor crop) survives.
+// modern format; `rect` (editor crop) survives. The tonal treatment is a CSS `filter` on
+// the <img> (see `saturation`): Sanity's CDN only accepts `sat=-100`, never partial values.
 import type { CmsImage } from './content';
 
-export const remoteImage = (src: string, width: number, quality: number, sat = 0) => {
+export const remoteImage = (src: string, width: number, quality: number) => {
   const url = new URL(src);
   url.searchParams.set('w', String(width));
   url.searchParams.set('q', String(quality));
   url.searchParams.set('auto', 'format');
-  if (sat) url.searchParams.set('sat', String(sat));
   return url.toString().replaceAll('%2C', ',');
 };
 
-export const remoteSrcset = (src: string, widths: readonly number[], quality: number, sat = 0) =>
-  widths.map((width) => `${remoteImage(src, width, quality, sat)} ${width}w`).join(', ');
+export const remoteSrcset = (src: string, widths: readonly number[], quality: number) =>
+  widths.map((width) => `${remoteImage(src, width, quality)} ${width}w`).join(', ');
+
+// ponytail: per-image CSS saturate; bake it into the assets at seed/upload time if test:perf flags it.
+export const saturation = (sat: number) => (sat ? `filter: saturate(${(1 + sat / 100).toFixed(2)})` : '');
 
 // Base URL of a CMS image with the editor's crop applied; width/quality are added per variant.
 export const imageSrc = (image: Pick<CmsImage, 'url' | 'width' | 'height' | 'crop'>) => {
@@ -58,6 +60,6 @@ export const altOf = (image: Pick<CmsImage, 'alt' | 'decorative'>) => (image.dec
 export const HERO_WIDTHS = [640, 960, 1280, 1600, 2000] as const;
 export const CARD_WIDTHS = [480, 720, 960, 1200] as const;
 
-// `sat` equivalents of the former CSS filters: saturate(0.78) → -22, saturate(0.65) → -35,
+// `sat` in percent points, as the CSS filters were: saturate(0.78) → -22, saturate(0.65) → -35,
 // saturate(0.62) → -38, saturate(0.85) → -15, saturate(0.92) → -8.
 export const SAT = { panel: -22, hero: -35, process: -38, card: -15, gallery: -8 } as const;
