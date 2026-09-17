@@ -117,6 +117,8 @@
 .ed-h-specs li { display: flex; flex-direction: column; gap: 0.35rem; padding-bottom: 0.9rem; border-bottom: 1px solid rgba(244, 238, 223, 0.18); }
 .ed-h-specs li span { font-size: 0.64rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(244, 238, 223, 0.5); }
 .ed-h-specs li b { font-weight: 500; font-size: 0.95rem; text-align: left; color: var(--ed-paper); }
+.ed-h-more { display: grid; gap: 1.1rem; }
+.ed-h-more > summary { display: none; }
 .ed-cta-link { display: inline-flex; width: max-content; align-items: center; gap: 0.5rem; margin-top: 0.4rem; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ed-paper); }
 .ed-cta-link span { transition: transform 180ms ease; }
 .ed-cta-link:hover span { transform: translateX(0.2rem); }
@@ -183,29 +185,48 @@
   .ed-intro { display: block; min-height: 0; }
   .ed-intro-copy { margin-top: 3rem; }
   .ed-legal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  /* Mobile: no sticky stage, no swipe track — a single vertical flow, so nothing needs to
-     fit inside one screen and nothing floats over the fixed header. Each typology keeps its
-     own media (JS never reparents it below 900px), sized generously since it's the priority. */
-  .ed-typologies { display: block; padding: clamp(4rem, 12vw, 6rem) 1.25rem clamp(3rem, 10vw, 4.5rem); }
-  .ed-typ-stage { height: auto; padding: 0 0 2.5rem; }
-  .ed-typ-head h2 { margin: 1.2rem 0 1rem; font-size: clamp(2.6rem, 11vw, 4rem); font-weight: 500; line-height: 0.96; letter-spacing: -0.045em; }
-  .ed-h-intro-copy { max-width: 28rem; margin: 1.2rem 0 0; }
-  /* No single "active" typology in a normal-flow list, and it floated over the header —
-     each card already carries its own 0N/0N index (`.ed-h-index`), so this is redundant. */
-  .ed-h-progress { display: none; }
-  .ed-h-track { display: block; }
-  .ed-h-panel { display: block; min-height: 0; padding: 0 0 3rem; align-items: initial; }
-  .ed-h-panel:last-child { padding-bottom: 0; }
-  .ed-h-media { position: relative; min-height: 0; aspect-ratio: 4 / 3; margin: 0 0 1.5rem; }
+  /* Mobile: one screen. Header (kicker, title, intro, big counter + rail) on top and a native
+     swipe track below (`horizontal-track.ts`); the track takes whatever height is left and each
+     card gives that height to its medium, with a compact copy row underneath. Description and
+     specs sit in a <details> the script closes below 900px. */
+  .ed-typologies { display: flex; flex-direction: column; min-height: 100dvh; padding: 5.5rem 0 1.25rem; }
+  .ed-typ-stage { flex: 0 0 auto; height: auto; padding: 0 1.25rem 1rem; }
+  .ed-typ-head h2 { margin: 0.8rem 0 0; font-size: clamp(1.9rem, 7.5vw, 2.6rem); line-height: 0.98; }
+  .ed-h-intro-copy { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; max-width: 28rem; margin: 0.6rem 0 0; overflow: hidden; font-size: 0.88rem; line-height: 1.45; }
+  .ed-typ-media-slot { display: none; }
+  .ed-h-progress { display: block; margin-top: 1rem; }
+  .ed-h-counter { gap: 0.5rem; }
+  .ed-h-counter b { font-size: 3.2rem; line-height: 0.85; letter-spacing: -0.06em; }
+  .ed-h-rail { display: block; margin-top: 0.9rem; }
+  .ed-h-track { --track-gutter: 1.25rem; display: flex; flex: 1 1 auto; min-height: 0; gap: 0.75rem; padding: 0 var(--track-gutter); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--track-gutter); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .ed-h-track::-webkit-scrollbar { display: none; }
+  .ed-h-track::after { content: ''; flex: 0 0 0.01px; }
+  .ed-h-track:focus-visible { outline: 1px solid var(--ed-paper); outline-offset: 4px; }
+  /* Fixed copy row so every card's medium and copy start at the same height; it only grows
+     when the details open. */
+  .ed-h-panel { display: grid; grid-template-rows: minmax(12rem, 1fr) minmax(9.5rem, auto); flex: 0 0 calc(100vw - 2 * var(--track-gutter)); min-height: 0; padding: 0; border: 0; scroll-snap-align: start; scroll-snap-stop: always; }
+  .ed-h-media { position: relative; height: 100%; min-height: 0; margin: 0; }
   .ed-h-thumbs { --thumb: 3rem; padding: 0.5rem 0.6rem; height: calc(var(--thumb) + 1rem); }
   .ed-h-thumb-nav { display: none; }
   .ed-project-link { grid-template-columns: 1fr; }
-  .ed-h-copy { gap: 0.75rem; }
-  .ed-h-copy h3 { font-size: clamp(1.8rem, 7.4vw, 2.4rem); }
-  .ed-h-subtitle { font-size: 0.95rem; }
-  .ed-h-desc { font-size: 0.88rem; line-height: 1.5; }
-  .ed-h-specs { gap: 0.7rem 1.2rem; margin-top: 0.2rem; padding-top: 0.9rem; }
-  .ed-h-specs li { gap: 0.25rem; padding-bottom: 0.6rem; }
+  .ed-h-copy { align-items: flex-start; gap: 0.35rem; padding-top: 0.9rem; text-align: left; }
+  .ed-h-copy-head, .ed-h-specs { justify-content: flex-start; }
+  .ed-h-copy-head { min-height: 1.75rem; } /* same height with or without a tag */
+  .ed-h-copy h3 { margin: 0; font-size: clamp(1.5rem, 6.4vw, 2rem); }
+  .ed-h-subtitle { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: 0.88rem; line-height: 1.35; }
+  .ed-h-more { gap: 0.6rem; }
+  .ed-h-more > summary { display: inline-flex; align-items: center; gap: 0.4rem; width: max-content; margin-top: 0.2rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ed-paper); list-style: none; cursor: pointer; }
+  .ed-h-more > summary::-webkit-details-marker { display: none; }
+  .ed-h-more[open] > summary span { display: inline-block; transform: rotate(45deg); }
+  /* Native open/close animation (Chrome/Safari with `::details-content`); elsewhere it just toggles. */
+  .ed-h-more { interpolate-size: allow-keywords; }
+  .ed-h-more::details-content { block-size: 0; overflow: hidden; opacity: 0; transition: block-size 320ms ease, opacity 320ms ease, content-visibility 320ms allow-discrete; }
+  .ed-h-more[open]::details-content { block-size: auto; opacity: 1; }
+  .ed-h-more > summary span { display: inline-block; transition: transform 240ms ease; }
+  .ed-h-desc { font-size: 0.85rem; line-height: 1.45; }
+  .ed-h-specs { gap: 0.6rem 1.2rem; margin-top: 0; padding-top: 0.8rem; }
+  .ed-h-specs li { gap: 0.2rem; padding-bottom: 0.5rem; }
+  .ed-h-specs li b { font-size: 0.9rem; }
   .ed-cta-link { margin-top: 0.2rem; }
 }
 

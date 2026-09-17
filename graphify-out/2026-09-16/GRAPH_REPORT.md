@@ -1,11 +1,11 @@
 # Graph Report - diputnam  (2026-09-16)
 
 ## Corpus Check
-- 236 files · ~2,318,580 words
+- 236 files · ~2,318,541 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2091 nodes · 2406 edges · 172 communities (169 shown, 3 thin omitted)
+- 2091 nodes · 2406 edges · 173 communities (170 shown, 3 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 9 edges (avg confidence: 0.63)
 - Token cost: 0 input · 0 output
 
@@ -169,6 +169,7 @@
 - proposal.md
 - design.md
 - tasks.md
+- sitemap.xml.ts
 
 ## God Nodes (most connected - your core abstractions)
 1. `../components/SiteHead.astro` - 34 edges
@@ -197,7 +198,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (172 total, 3 thin omitted)
+## Communities (173 total, 3 thin omitted)
 
 ### Community 0 - "ADDED Requirements"
 Cohesion: 0.05
@@ -216,8 +217,8 @@ Cohesion: 0.06
 Nodes (33): groq-js, author, bugs, url, description, devDependencies, groq-js, homepage (+25 more)
 
 ### Community 4 - "ADDED Requirements"
-Cohesion: 0.10
-Nodes (33): ../lib/seo, ../components/SiteHead.astro, alternates, canonical, graph, image, pair, path (+25 more)
+Cohesion: 0.12
+Nodes (21): ../lib/seo, ../components/SiteHead.astro, alternates, canonical, graph, image, pair, path (+13 more)
 
 ### Community 5 - "Requirements"
 Cohesion: 0.06
@@ -803,6 +804,10 @@ Nodes (5): Context, Decisions, Goals / Non-Goals, Migration Plan, Risks / Trade-
 Cohesion: 0.50
 Nodes (3): 1. Marcado y estilos, 2. Auto-ocultado en desktop, 3. Verificación integrada
 
+### Community 172 - "sitemap.xml.ts"
+Cohesion: 0.28
+Nodes (12): notaPath(), PageKey, projectPath(), getNotas(), getProyectos(), getUpdatedAt(), absolute(), getStaticPaths() (+4 more)
+
 ## Knowledge Gaps
 - **1209 isolated node(s):** `name`, `version`, `description`, `dev`, `build` (+1204 more)
   These have ≤1 connection - possible missing edges or undocumented components.
@@ -813,7 +818,7 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `dependencies` connect `ADDED Requirements` to `package.json`?**
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
-- **Why does `../components/SiteHead.astro` connect `ADDED Requirements` to `ADDED Requirements`, `eredita.astro`, `proposal.md`, `check-dist.mjs`?**
+- **Why does `../components/SiteHead.astro` connect `ADDED Requirements` to `eredita.astro`, `ADDED Requirements`, `sitemap.xml.ts`, `check-dist.mjs`, `proposal.md`?**
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
   _1209 weakly-connected nodes found - possible documentation gaps or missing edges._

@@ -171,5 +171,13 @@
   "169": "design.md",
   "170": "tasks.md",
   "171": "scroll-rail.ts",
-  "172": "sitemap.xml.ts"
+  "172": "sitemap.xml.ts",
+  "173": "Requirement: Pista horizontal con swipe nativo en móvil",
+  "174": "Requirement: Pie de página compartido delgado con redes y crédito",
+  "175": "Requirement: Reveals por scroll en móvil",
+  "176": "proposal.md",
+  "177": "design.md",
+  "178": "tasks.md",
+  "179": "Requirement: Renglones de hero sin solaparse en móvil",
+  "180": "SocialLinks.astro"
 }

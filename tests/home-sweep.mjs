@@ -17,7 +17,11 @@ try {
   assert.equal(await menuToggle.getAttribute('aria-expanded'), 'true');
   assert.equal(await page.locator('.site-nav.is-open').count(), 1);
   assert.equal(await page.evaluate(() => document.body.style.overflow), 'hidden');
-  assert.equal(await page.locator('.mobile-menu-contact a').count(), 3);
+  // Menu carries what the (mobile-hidden) home footer used to: mail, phone, social icons, credit.
+  assert.equal(await page.locator('.mobile-menu-contact > a').count(), 2);
+  assert.ok(await page.locator('.mobile-menu-links .footer-social a[aria-label="WhatsApp"]').count() >= 1);
+  assert.equal(await page.locator('.mobile-menu-links .footer-credit').count(), 1);
+  assert.equal(await page.locator('.site-footer').evaluate((el) => getComputedStyle(el).display), 'none');
   await page.keyboard.press('Escape');
   assert.equal(await menuToggle.getAttribute('aria-expanded'), 'false');
   assert.equal(await page.evaluate(() => document.body.style.overflow), '');

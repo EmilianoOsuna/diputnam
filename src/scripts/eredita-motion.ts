@@ -1,3 +1,4 @@
+import { mountHorizontalTrack } from './horizontal-track';
 import { mountTypologyMedia } from './typology-media';
 import { mountAnchors, mountReveals, releaseTitles, settleLines, splitTitles } from './mobile-motion';
 
@@ -12,6 +13,36 @@ let motion: { refresh: () => void } | null = null;
 // so it keeps working even when every animation is off. The sticky media stage/pin is
 // desktop-only motion (see desktop/eredita.ts); mobile keeps each typology's media in place.
 if (root) mountTypologyMedia(root);
+
+// Mobile typologies: native swipe track with the shared counter/rail. The description and
+// specs <details> ship open (desktop shows everything) and are closed here so the medium
+// stays the dominant element; they reopen if the viewport crosses back to desktop.
+if (root) {
+  const track = root.querySelector<HTMLElement>('[data-h-track]');
+  const details = Array.from(root.querySelectorAll<HTMLDetailsElement>('details.ed-h-more'));
+  const mobile = window.matchMedia('(max-width: 899px)');
+  let unmount: (() => void) | null = null;
+  const sync = () => {
+    if (mobile.matches && track && !unmount) {
+      details.forEach((item) => { item.open = false; });
+      unmount = mountHorizontalTrack({
+        track,
+        cards: Array.from(track.querySelectorAll<HTMLElement>('[data-h-panel]')),
+        current: root.querySelector<HTMLElement>('[data-pin-current]'),
+        rail: root.querySelector<HTMLElement>('[data-pin-rail]'),
+        label: 'Tipología',
+        reducedMotion,
+      });
+    } else if (!mobile.matches && unmount) {
+      unmount();
+      unmount = null;
+      details.forEach((item) => { item.open = true; });
+    }
+    motion?.refresh();
+  };
+  sync();
+  mobile.addEventListener('change', sync);
+}
 
 // Gallery lightbox: click a photo to view it full-screen; close via the × button, the
 // backdrop or Escape.

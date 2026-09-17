@@ -50,8 +50,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
           </header>
           <div class="process-media-slot" data-media-slot></div>
           <div class="process-progress">
-            <div class="process-counter"><span data-pin-current>01</span><span aria-hidden="true">/</span><span>{pad(process.steps.length)}</span></div>
-            <div class="process-rail" aria-hidden="true"><span data-pin-rail></span></div>
+            <div class="process-counter"><span data-pin-current data-track-current>01</span><span aria-hidden="true">/</span><span>{pad(process.steps.length)}</span></div>
+            <div class="process-rail" aria-hidden="true"><span data-pin-rail data-track-rail></span></div>
           </div>
         </div>
         <div class="process-track" data-h-track>

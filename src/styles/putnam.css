@@ -98,6 +98,7 @@
 .difference p { max-width: 28rem; margin: 0; color: rgba(0, 58, 54, 0.68); line-height: 1.55; }
 
 .institutional-cta { position: relative; min-height: 82svh; padding: 8rem clamp(1.25rem, 3vw, 3.5rem) 9rem; color: var(--putnam-paper); background: var(--putnam-green); overflow: hidden; }
+.institutional-cta h2, .institutional-cta .cta-actions { position: relative; z-index: 1; }
 .institutional-cta h2 { max-width: 72rem; margin: 8rem 0 5rem; font-size: clamp(3.4rem, 8.2vw, 8.4rem); font-weight: 500; line-height: 0.89; letter-spacing: -0.06em; }
 .cta-actions { display: flex; gap: 1rem; }
 .cta-actions a { display: flex; justify-content: space-between; width: min(18rem, 100%); padding: 1rem 0; border-top: 1px solid currentColor; font-size: 0.83rem; letter-spacing: 0.08em; text-transform: uppercase; }
@@ -120,23 +121,30 @@
   .putnam-page .site-header--light { color: var(--putnam-paper); }
   .institutional-hero { display: block; min-height: 100svh; padding: 0; }
   .hero-copy { right: 1rem; bottom: 11rem; left: 1rem; width: auto; transform: none; }
-  .hero-copy h1 { font-size: clamp(3rem, 15vw, 5.2rem); line-height: 0.92; }
+  .hero-copy h1 { font-size: clamp(3rem, 15vw, 5.2rem); line-height: 0.98; }
   .hero-details { right: 1rem; bottom: 2rem; left: 1rem; width: auto; margin: 0; }
   .hero-lead { width: min(28rem, 92%); }
   .hero-index { margin-top: 1rem; }
   .hero-frame { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; }
   .hero-frame img { height: 100%; transform: none; }
   .structural-line--hero { right: 14%; bottom: 17rem; left: -2rem; transform: rotate(-9deg); }
-  /* No sticky stage, no counter — a single vertical flow, so no step needs to fit inside
-     one screen and nothing floats over the fixed header. Each step keeps its own image. */
-  .process { display: block; padding: clamp(4rem, 12vw, 6rem) 1rem clamp(3rem, 10vw, 4.5rem); }
-  .process-stage { height: auto; padding: 0 0 2.5rem; }
-  .process-media-slot, .process-progress { display: none; }
-  .process-track { display: block; }
-  .process-panel { display: block; min-height: 0; padding: 0 0 3rem; }
-  .process-panel:last-child { padding-bottom: 0; }
-  .process-media { min-height: 0; aspect-ratio: 4 / 3; margin: 0 0 1.5rem; }
-  .process-copy h3 { font-size: clamp(2.4rem, 11vw, 3.6rem); }
+  /* No sticky stage: kicker + big counter + rail on top, then a native swipe track
+     (`horizontal-track.ts`). Each step keeps its own image inside its card. */
+  .process { display: block; padding: 5.5rem 0 clamp(3rem, 10vw, 4.5rem); }
+  .process-stage { height: auto; padding: 0 1rem 1.75rem; }
+  .process-media-slot { display: none; }
+  .process-progress { display: flex; flex-direction: column; align-items: stretch; gap: 0; margin-top: 1.75rem; }
+  .process-counter [data-pin-current] { font-size: 4rem; }
+  .process-rail { margin-top: 1.2rem; }
+  .process-track { --track-gutter: 1rem; display: flex; gap: 0.75rem; padding: 0 var(--track-gutter); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--track-gutter); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .process-track::-webkit-scrollbar { display: none; }
+  .process-track::after { content: ''; flex: 0 0 0.01px; }
+  .process-track:focus-visible { outline: 1px solid var(--putnam-paper); outline-offset: 4px; }
+  .process-panel { display: grid; grid-template-rows: auto 1fr; align-content: start; flex: 0 0 calc(100vw - 2 * var(--track-gutter)); min-height: 0; padding: 0; border: 0; scroll-snap-align: start; scroll-snap-stop: always; }
+  .process-media { min-height: 0; aspect-ratio: 4 / 3; margin: 0 0 1.25rem; }
+  .process-copy { gap: 0.6rem; }
+  .process-copy h3 { font-size: clamp(2rem, 9vw, 3rem); }
+  .process-copy p { font-size: 0.95rem; }
   .principles { display: block; padding: 6rem 1rem; }
   .principle, .values { margin: 5rem 0 0; }
   .values > h3 { width: 100%; margin: 2.5rem 0 4rem; }
@@ -149,8 +157,8 @@
   .difference-list { margin-left: 0; }
   .difference { grid-template-columns: 2.5rem 1fr; gap: 0.8rem; }
   .difference p { grid-column: 2; }
-  .institutional-cta { min-height: 90svh; padding: 6rem 1rem 7rem; }
-  .institutional-cta h2 { margin: 7rem 0 4rem; font-size: clamp(3rem, 15vw, 5.5rem); }
+  .institutional-cta { min-height: 0; padding: 6rem 1rem 7rem; }
+  .institutional-cta h2 { margin: 1.25rem 0 2.5rem; font-size: clamp(3rem, 15vw, 5.5rem); }
   .cta-actions { flex-direction: column; }
   .cta-mark { right: -4%; bottom: 8%; width: 72vw; }
   .principles, .differences, .institutional-cta, .site-footer--flow { content-visibility: auto; contain-intrinsic-size: auto 50rem; }

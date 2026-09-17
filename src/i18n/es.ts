@@ -35,7 +35,7 @@ export const es = {
     sections: 'Secciones del sitio',
   },
   eredita: {
-    keepScrolling: 'Sigue bajando', requestInfo: 'Solicitar información', openPdf: 'Abrir PDF',
+    keepScrolling: 'Sigue bajando', requestInfo: 'Solicitar información', details: 'Detalles', openPdf: 'Abrir PDF',
     viewProject: 'Ver proyecto', backToLine: 'Volver a Ereditá', projects: 'Proyectos Ereditá',
     projectTitle: (name: string) => `${name} · Ereditá | Putnam`,
     media: { video: 'Video', play: 'Reproducir video', prev: 'Miniaturas anteriores', next: 'Miniaturas siguientes', aria: (typology: string) => `Medios de ${typology}` },

@@ -25,13 +25,13 @@
     "semantic_hash": ""
   },
   "src/components/ContactFooter.astro": {
-    "mtime": 1789604423.1611464,
-    "ast_hash": "e9ad196360c79f78a9b3b83f5b83e353",
+    "mtime": 1789623571.715242,
+    "ast_hash": "038e89a9582b3cf2f5e8ec357a18b63e",
     "semantic_hash": ""
   },
   "src/components/SiteHeader.astro": {
-    "mtime": 1789607956.8415527,
-    "ast_hash": "f0e5ac1873fc5c48a2dee1f5bf4dc0fc",
+    "mtime": 1789623571.715242,
+    "ast_hash": "6e11f6e729ed489be4115c5d2755c026",
     "semantic_hash": ""
   },
   "src/pages/contacto.astro": {
@@ -70,8 +70,8 @@
     "semantic_hash": ""
   },
   "src/scripts/eredita-motion.ts": {
-    "mtime": 1789598459.7266064,
-    "ast_hash": "53fb325cebb32508d30c8b5b49df9486",
+    "mtime": 1789623571.7174487,
+    "ast_hash": "8ace30b5551a2ff174e1713cb16be40b",
     "semantic_hash": ""
   },
   "src/scripts/menu.ts": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "src/scripts/putnam-motion.ts": {
-    "mtime": 1789593885.73591,
-    "ast_hash": "75751ba03decf9582cd0dfaa0495980b",
+    "mtime": 1789623571.7174487,
+    "ast_hash": "8dc158395dc8e1bfad3612daff60daad",
     "semantic_hash": ""
   },
   "tests/contacto-sweep.mjs": {
@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "tests/home-sweep.mjs": {
-    "mtime": 1789608469.1847708,
-    "ast_hash": "435d414a7223901df76e880f6a440734",
+    "mtime": 1789623591.7439244,
+    "ast_hash": "cecf917d8b927e1dffe9525c1d389b98",
     "semantic_hash": ""
   },
   ".agents/skills/openspec-apply-change/SKILL.md": {
@@ -640,13 +640,13 @@
     "semantic_hash": ""
   },
   "src/i18n/en.ts": {
-    "mtime": 1789582561.1127613,
-    "ast_hash": "e965efc3e1b1b37f7d221a1798f8d5b8",
+    "mtime": 1789623571.7162418,
+    "ast_hash": "3f0f8e40aeb21d7669d4dad4faa279c1",
     "semantic_hash": ""
   },
   "src/i18n/es.ts": {
-    "mtime": 1789582542.6593235,
-    "ast_hash": "639a77907974c3d1515b371387e9e482",
+    "mtime": 1789623571.7173555,
+    "ast_hash": "bd469f0870bf9a63a08b024d014771a4",
     "semantic_hash": ""
   },
   "src/i18n/index.ts": {
@@ -815,13 +815,13 @@
     "semantic_hash": ""
   },
   "src/views/proyecto.astro": {
-    "mtime": 1789602890.5585868,
-    "ast_hash": "cbee683c3d36250dcc91fce2fa07407e",
+    "mtime": 1789623571.7174487,
+    "ast_hash": "045c3b23b78d0ec93674a92bf839ef2f",
     "semantic_hash": ""
   },
   "src/views/putnam.astro": {
-    "mtime": 1789598406.9980316,
-    "ast_hash": "55c3c28149829b0adf26298f4cb8c492",
+    "mtime": 1789623571.7174487,
+    "ast_hash": "145ff9a4388914e6c01367fc0549a628",
     "semantic_hash": ""
   },
   "src/views/unete.astro": {
@@ -970,8 +970,8 @@
     "semantic_hash": ""
   },
   "tests/mobile-audit.mjs": {
-    "mtime": 1789609328.9001431,
-    "ast_hash": "68380180e7368e09377ef914b2833939",
+    "mtime": 1789623571.7174487,
+    "ast_hash": "798e90c29e2abf18fa4c0666977e41ea",
     "semantic_hash": ""
   },
   "tests/mobile-perf.mjs": {
@@ -1637,6 +1637,51 @@
   "openspec/specs/unete-careers-page/spec.md": {
     "mtime": 1789606009.4615479,
     "ast_hash": "d334d12cc6d309e4cc811c985a176853",
+    "semantic_hash": ""
+  },
+  "src/components/SocialLinks.astro": {
+    "mtime": 1789622017.1979313,
+    "ast_hash": "386254b56937b846fe172cffc14ebe1d",
+    "semantic_hash": ""
+  },
+  "openspec/changes/mobile-optimization/.openspec.yaml": {
+    "mtime": 1789618686.9061098,
+    "ast_hash": "aaa4edfe5c3e7ac675bd181f4a146f61",
+    "semantic_hash": ""
+  },
+  "openspec/changes/mobile-optimization/design.md": {
+    "mtime": 1789618906.9360034,
+    "ast_hash": "f4789a2eb4e7f8fadcb432b8d403794b",
+    "semantic_hash": ""
+  },
+  "openspec/changes/mobile-optimization/proposal.md": {
+    "mtime": 1789618748.0086253,
+    "ast_hash": "98d751c5116d8bd846d5e33ce391e634",
+    "semantic_hash": ""
+  },
+  "openspec/changes/mobile-optimization/specs/mobile-horizontal-tracks/spec.md": {
+    "mtime": 1789618832.242868,
+    "ast_hash": "8d8d85942b0a845573117001aadf3af8",
+    "semantic_hash": ""
+  },
+  "openspec/changes/mobile-optimization/specs/mobile-page-motion/spec.md": {
+    "mtime": 1789618840.0292375,
+    "ast_hash": "ec0f8dbba54e2ab3476e6f4a84718e0b",
+    "semantic_hash": ""
+  },
+  "openspec/changes/mobile-optimization/specs/site-shell-chrome/spec.md": {
+    "mtime": 1789618832.2435966,
+    "ast_hash": "edd99d52895310b4cb20edd325fe1599",
+    "semantic_hash": ""
+  },
+  "openspec/changes/mobile-optimization/specs/title-line-reveal/spec.md": {
+    "mtime": 1789618832.2443497,
+    "ast_hash": "b3d416dabdce3404eb1747d69cc83477",
+    "semantic_hash": ""
+  },
+  "openspec/changes/mobile-optimization/tasks.md": {
+    "mtime": 1789624662.6713037,
+    "ast_hash": "846cc7200b0cf66347f2b35438d5c8c0",
     "semantic_hash": ""
   }
 }

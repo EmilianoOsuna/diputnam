@@ -4,6 +4,7 @@ import type { Settings } from '../lib/content';
 import { otherLang, pages, t, type Lang, type PageKey } from '../i18n';
 import logoDarkSrc from '../assets/putnam-dark.png';
 import logoLightSrc from '../assets/putnam-light.png';
+import SocialLinks from './SocialLinks.astro';
 
 // `alternate` is where the language switch goes when this page has no direct pair
 // (a note without translation falls back to the section index).
@@ -44,7 +45,12 @@ const marks = { dark: await mark(logoDarkSrc), light: await mark(logoLightSrc) }
       <a href={`mailto:${contact.email}`}>{contact.email}</a>
       <a href={`tel:${contact.phone.replaceAll(' ', '')}`}>{contact.phone}</a>
       <span>{contact.city}</span>
-      <a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} ↗</a>
+      <div class="mobile-menu-links">
+        <SocialLinks lang={lang} contact={contact} />
+        <a class="footer-credit" href="https://emilianoosuna.com" target="_blank" rel="noreferrer" aria-label={`${ui.footer.credit}: Emiliano Osuna`}>
+          <img src="/assets/emiliano-osuna.png" alt="" width="20" height="20" loading="lazy" decoding="async" />
+        </a>
+      </div>
     </div>
   </nav>
   <button class="menu-toggle" type="button" aria-label={ui.nav.open} data-menu-label-open={ui.nav.open} data-menu-label-close={ui.nav.close} aria-expanded="false" aria-controls="site-navigation" data-menu-toggle><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></button>

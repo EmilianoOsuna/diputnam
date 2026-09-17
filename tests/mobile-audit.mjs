@@ -84,7 +84,7 @@ const trackChecks = async (route, trackSelector, total) => {
   await page.screenshot({ path: `${shots}${route.replace(/\//g, '_')}track.png` });
 };
 
-// Typology media gallery (typology-media-gallery). Panels stack vertically on mobile.
+// Typology media gallery (typology-media-gallery) inside the mobile swipe track.
 const galleryChecks = async (route) => {
   const requests = [];
   const onRequest = (request) => { if (/\.mp4(\?|$)/.test(request.url())) requests.push(request.url()); };
@@ -298,6 +298,13 @@ try {
         const bad = rows.filter((r) => r.issues.length).map((r) => `${r.id}: ${r.issues.join(' | ')}`);
         assert.deepEqual(bad, []);
       });
+      // A `[data-reveal-group]` with no element children reveals itself; it must end visible.
+      if (width === 390) {
+        const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal-group]')]
+          .filter((el) => !el.children.length && el.getClientRects().length && getComputedStyle(el).opacity !== '1')
+          .map((el) => el.textContent.trim().slice(0, 30)));
+        await check(`${route} childless reveal groups end visible`, () => assert.deepEqual(hidden, []));
+      }
     }
   }
   await page.setViewportSize({ width: 390, height: 844 });
@@ -339,13 +346,34 @@ try {
   console.log('\nhorizontal tracks');
   if (project) {
     await page.goto(baseUrl + project, { waitUntil: 'domcontentloaded' });
-    // Typologies stack vertically on mobile (no swipe track) since the ui-ux-polish redesign.
     await galleryChecks(project);
+    // Typologies: swipe track that fits one screen, the medium being the dominant element.
+    const typologies = await page.locator('.ed-h-panel').count();
+    await trackChecks(project, '.ed-h-track', typologies);
+    await check(`${project} typologies: section fits 100dvh, medium over half the card, details closed`, async () => {
+      const state = await page.evaluate(() => {
+        const section = document.querySelector('[data-typologies]');
+        section.scrollIntoView({ block: 'start' });
+        const card = document.querySelector('.ed-h-panel');
+        const media = card.querySelector('.ed-h-media');
+        return {
+          section: section.getBoundingClientRect().height, viewport: innerHeight,
+          card: card.getBoundingClientRect().height, media: media.getBoundingClientRect().height,
+          open: [...document.querySelectorAll('details.ed-h-more')].filter((d) => d.open).length,
+          summaryVisible: getComputedStyle(document.querySelector('details.ed-h-more > summary')).display !== 'none',
+        };
+      });
+      assert.ok(state.section <= state.viewport + 1, `section ${state.section} > viewport ${state.viewport}`);
+      assert.ok(state.media > state.card / 2, `media ${state.media} vs card ${state.card}`);
+      assert.equal(state.open, 0, 'details should be closed on mobile');
+      assert.equal(state.summaryVisible, true, 'summary visible on mobile');
+    });
   } else {
     failures.push('no Ereditá project page in dist/');
   }
   await trackChecks('/unete/', '.traits', 4);
   await trackChecks('/contacto/', '.reasons', 3);
+  await trackChecks('/putnam/', '.process-track', 6);
 } finally {
   await browser.close();
 }

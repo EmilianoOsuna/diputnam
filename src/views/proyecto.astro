@@ -100,8 +100,8 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
           </header>
           <div class="ed-typ-media-slot" data-media-slot></div>
           <div class="ed-h-progress">
-            <span class="ed-h-counter"><b data-pin-current>01</b><i aria-hidden="true">/</i><span>0{typologies.items.length}</span></span>
-            <span class="ed-h-rail" aria-hidden="true"><span data-pin-rail></span></span>
+            <span class="ed-h-counter"><b data-pin-current data-track-current>01</b><i aria-hidden="true">/</i><span>0{typologies.items.length}</span></span>
+            <span class="ed-h-rail" aria-hidden="true"><span data-pin-rail data-track-rail></span></span>
           </div>
         </div>
         <div class="ed-h-track" data-h-track data-traits>
@@ -147,12 +147,17 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
                 </div>
                 <h3>{item.title}</h3>
                 <p class="ed-h-subtitle">{item.subtitle}</p>
-                <p class="ed-h-desc">{item.description}</p>
-                <ul class="ed-h-specs">
-                  {item.specs.map((spec) => (
-                    <li><span>{spec.label}</span><b>{spec.value}</b></li>
-                  ))}
-                </ul>
+                {/* Open by default (desktop shows everything); the mobile track closes it so the
+                    medium stays the dominant element and the section fits one screen. */}
+                <details class="ed-h-more" open>
+                  <summary>{ui.eredita.details} <span aria-hidden="true">+</span></summary>
+                  <p class="ed-h-desc">{item.description}</p>
+                  <ul class="ed-h-specs">
+                    {item.specs.map((spec) => (
+                      <li><span>{spec.label}</span><b>{spec.value}</b></li>
+                    ))}
+                  </ul>
+                </details>
                 <a class="ed-cta-link" href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.eredita.requestInfo} <span aria-hidden="true">→</span></a>
               </div>
             </article>

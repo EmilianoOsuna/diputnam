@@ -34,7 +34,7 @@ export const en: Dictionary = {
     sections: 'Site sections',
   },
   eredita: {
-    keepScrolling: 'Keep scrolling', requestInfo: 'Request information', openPdf: 'Open PDF',
+    keepScrolling: 'Keep scrolling', requestInfo: 'Request information', details: 'Details', openPdf: 'Open PDF',
     viewProject: 'View project', backToLine: 'Back to Ereditá', projects: 'Ereditá projects',
     projectTitle: (name: string) => `${name} · Ereditá | Putnam`,
     media: { video: 'Video', play: 'Play video', prev: 'Previous thumbnails', next: 'Next thumbnails', aria: (typology: string) => `${typology} media` },

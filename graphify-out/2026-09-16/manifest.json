@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "tests/home-sweep.mjs": {
-    "mtime": 1789527312.647417,
-    "ast_hash": "0544d6028dd4e610b514aa41e4062225",
+    "mtime": 1789608469.1847708,
+    "ast_hash": "435d414a7223901df76e880f6a440734",
     "semantic_hash": ""
   },
   ".agents/skills/openspec-apply-change/SKILL.md": {
@@ -745,8 +745,8 @@
     "semantic_hash": ""
   },
   "src/scripts/desktop/eredita.ts": {
-    "mtime": 1789593663.9484246,
-    "ast_hash": "f5988dd6b72e0be3cc45ca232cfbea1f",
+    "mtime": 1789615195.6692896,
+    "ast_hash": "e2742fe2a72e2cae43fa4b384db2aad0",
     "semantic_hash": ""
   },
   "src/scripts/desktop/home.ts": {
@@ -785,8 +785,8 @@
     "semantic_hash": ""
   },
   "src/scripts/typology-media.ts": {
-    "mtime": 1789543469.8741946,
-    "ast_hash": "1f70d93030d516d9c5048d5af2fb45cf",
+    "mtime": 1789615195.6690898,
+    "ast_hash": "d86861586385300193c04499dd5fc512",
     "semantic_hash": ""
   },
   "src/views/contacto.astro": {
@@ -960,8 +960,8 @@
     "semantic_hash": ""
   },
   "tests/eredita-gallery.mjs": {
-    "mtime": 1789543469.8751945,
-    "ast_hash": "0e99bdb4fdb8b443005604b702143d05",
+    "mtime": 1789615221.788032,
+    "ast_hash": "ec84c4122537e9a0b512197cdb13639b",
     "semantic_hash": ""
   },
   "tests/i18n-sweep.mjs": {
@@ -970,13 +970,13 @@
     "semantic_hash": ""
   },
   "tests/mobile-audit.mjs": {
-    "mtime": 1789543469.8751945,
-    "ast_hash": "0775c08e7f90ecbd7bcf04b8de5436fe",
+    "mtime": 1789609328.9001431,
+    "ast_hash": "68380180e7368e09377ef914b2833939",
     "semantic_hash": ""
   },
   "tests/mobile-perf.mjs": {
-    "mtime": 1789543469.8751945,
-    "ast_hash": "d48eeef701bb181fec08ca69fa5431fc",
+    "mtime": 1789614794.4822183,
+    "ast_hash": "3c30df6f829e5906aab2a783078ee288",
     "semantic_hash": ""
   },
   "tests/routes.mjs": {
@@ -1625,8 +1625,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/custom-scrollbar/tasks.md": {
-    "mtime": 1789608026.303396,
-    "ast_hash": "e940ecbaa324914f5acccef0852f09e8",
+    "mtime": 1789608032.877745,
+    "ast_hash": "fd80cdc4954bbbd64641bf511667af54",
     "semantic_hash": ""
   },
   "openspec/specs/site-shell-chrome/spec.md": {
