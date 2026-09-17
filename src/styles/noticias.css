@@ -69,7 +69,7 @@
 a.index-row strong, a.index-row i { transition: opacity 180ms ease, transform 180ms ease; }
 a.index-row:hover strong, a.index-row:focus-visible strong { opacity: 0.62; }
 a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, -0.2rem); }
-.index-foot { display: flex; justify-content: space-between; margin: 1.6rem 0 0 12%; color: rgba(244, 238, 223, 0.5); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+.index-foot { display: flex; justify-content: space-between; margin: 1.6rem 0 0 12%; color: rgba(244, 238, 223, 0.62); font-size: 0.66rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
 
 /* CTA */
 .nw-cta { position: relative; display: flex; min-height: 100dvh; overflow: hidden; padding: 8rem var(--gutter) 6rem; flex-direction: column; justify-content: flex-end; color: var(--putnam-paper); background: var(--putnam-green); }

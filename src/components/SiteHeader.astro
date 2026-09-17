@@ -33,7 +33,9 @@ const marks = { dark: await mark(logoDarkSrc), light: await mark(logoLightSrc) }
         <img src={marks[theme].png} width={MARK_SIZE} height={MARK_SIZE} alt="" decoding="async" />
       </picture>
     ))}
-    <span class="brand-copy"><strong>Putnam</strong><small>{ui.brand.tagline}</small></span>
+    {/* The space between the lines keeps the visible text "Putnam Desarrollos…" (axe joins
+        siblings without it), so the aria-label below contains it (WCAG 2.5.3). */}
+    <span class="brand-copy"><strong>Putnam</strong> <small>{ui.brand.tagline}</small></span>
   </a>
   <nav class="site-nav" id="site-navigation" aria-label={ui.nav.aria}>
     {links.map((link) => <a href={link.href} aria-current={path === link.href ? 'page' : undefined}>{link.label}</a>)}

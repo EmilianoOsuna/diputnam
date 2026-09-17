@@ -1,0 +1,13 @@
+---
+// Google Maps embed that loads only when it comes near the viewport. `loading="lazy"` alone
+// is not enough: Chrome's lazy threshold (up to 2500px on slow connections) pulls in
+// ~450 KB of Maps JS during the initial load on every page with a map. The `src` lives
+// in `data-src` and `mountLazyMaps` (scripts/lazy-map.ts) sets it on approach; without
+// JS the <noscript> copy loads normally.
+import type { Settings } from '../lib/content';
+interface Props { coordinates: Settings['coordinates']; title: string; }
+const { coordinates, title } = Astro.props;
+const src = `https://www.google.com/maps?q=${coordinates.lat},${coordinates.lng}&output=embed`;
+---
+<iframe data-src={src} title={title} loading="lazy" referrerpolicy="no-referrer-when-downgrade" data-lazy-map></iframe>
+<noscript><iframe src={src} title={title} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></noscript>

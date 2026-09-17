@@ -6,11 +6,12 @@ import erediteMark from '../assets/eredita-logo.png';
 import CmsImg from '../components/CmsImg.astro';
 import ContactFooter from '../components/ContactFooter.astro';
 import Lines from '../components/Lines.astro';
+import MapEmbed from '../components/MapEmbed.astro';
 import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { projectPath, t, type Lang } from '../i18n';
 import { getEredita, getProyectos, getSettings } from '../lib/content';
-import { CARD_WIDTHS, HERO_WIDTHS, SAT, imageSrc } from '../lib/images';
+import { CARD_WIDTHS, HERO_WIDTHS, SAT, imageSrc, remoteImage } from '../lib/images';
 import '../styles/global.css';
 import '../styles/eredita.css';
 
@@ -32,7 +33,7 @@ const { hero, intro, cta } = page;
       <section class="ed-hero" aria-labelledby="ed-hero-title" data-header-theme="light">
         <div class="ed-hero-media" data-parallax>
           {hero.video ? (
-            <video poster={imageSrc(hero.poster)} autoplay muted loop playsinline aria-hidden="true">
+            <video poster={remoteImage(imageSrc(hero.poster), 1280, 70)} autoplay muted loop playsinline aria-hidden="true">
               <source src={hero.video} type="video/mp4" />
             </video>
           ) : (
@@ -40,7 +41,7 @@ const { hero, intro, cta } = page;
           )}
           <div class="ed-hero-shade"></div>
         </div>
-        <Picture class="ed-hero-mark" src={erediteMark} widths={[320, 640, 960]} sizes="(max-width: 767px) 40vw, min(26vw, 24rem)" formats={['webp']} fallbackFormat="png" alt="Ereditá" loading="eager" />
+        <Picture class="ed-hero-mark" src={erediteMark} widths={[320, 640, 960]} sizes="(max-width: 767px) 40vw, min(26vw, 24rem)" formats={['webp']} fallbackFormat="png" alt="Ereditá" loading="eager" fetchpriority="high" />
         <div class="ed-hero-content" data-reveal-group>
           <p class="section-kicker">{hero.kicker}</p>
           <h1 id="ed-hero-title"><Lines text={hero.title} /></h1>
@@ -50,7 +51,7 @@ const { hero, intro, cta } = page;
 
       <section class="ed-intro" aria-labelledby="ed-intro-title" data-header-theme="dark">
         <figure class="ed-map" data-reveal-group>
-          <iframe src={`https://www.google.com/maps?q=${contact.coordinates.lat},${contact.coordinates.lng}&output=embed`} title="Ubicación del proyecto" loading="lazy" />
+          <MapEmbed coordinates={contact.coordinates} title={ui.eredita.mapTitle} />
         </figure>
         <div class="ed-intro-copy" data-reveal-group>
           <p class="section-kicker">{intro.kicker}</p>

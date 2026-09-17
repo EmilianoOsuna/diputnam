@@ -3,7 +3,7 @@
 // every key; src/i18n/index.ts verifies that at load time.
 export const es = {
   skipLink: 'Saltar al contenido',
-  brand: { tagline: 'Desarrollos inmobiliarios', homeAria: 'Putnam, inicio' },
+  brand: { tagline: 'Desarrollos inmobiliarios', homeAria: 'Putnam Desarrollos inmobiliarios, inicio' },
   nav: {
     home: 'Inicio', eredita: 'Ereditá', putnam: 'Putnam', noticias: 'Noticias', unete: 'Únete', contacto: 'Contacto',
     aria: 'Navegación principal', open: 'Abrir menú', close: 'Cerrar menú',
@@ -36,7 +36,7 @@ export const es = {
   },
   eredita: {
     keepScrolling: 'Sigue bajando', requestInfo: 'Solicitar información', details: 'Detalles', openPdf: 'Abrir PDF',
-    viewProject: 'Ver proyecto', backToLine: 'Volver a Ereditá', projects: 'Proyectos Ereditá',
+    viewProject: 'Ver proyecto', backToLine: 'Volver a Ereditá', projects: 'Proyectos Ereditá', mapTitle: 'Ubicación del proyecto',
     projectTitle: (name: string) => `${name} · Ereditá | Putnam`,
     media: { video: 'Video', play: 'Reproducir video', prev: 'Miniaturas anteriores', next: 'Miniaturas siguientes', aria: (typology: string) => `Medios de ${typology}` },
   },

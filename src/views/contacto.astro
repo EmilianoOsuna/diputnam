@@ -4,6 +4,7 @@ import putnamMark from '../assets/putnam-light.png';
 import CmsImg from '../components/CmsImg.astro';
 import ContactFooter from '../components/ContactFooter.astro';
 import Lines from '../components/Lines.astro';
+import MapEmbed from '../components/MapEmbed.astro';
 import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { t, type Lang } from '../i18n';
@@ -17,7 +18,6 @@ const { lang } = Astro.props;
 const ui = t(lang);
 const form = ui.contacto.form;
 const [{ hero, channels, reasons, location, form: formCopy, cta }, contact] = await Promise.all([getContacto(lang), getSettings(lang)]);
-const mapEmbed = `https://www.google.com/maps?q=${contact.coordinates.lat},${contact.coordinates.lng}&output=embed`;
 const pad = (index: number) => String(index + 1).padStart(2, '0');
 // On narrow phones the address is wider than its column; a break opportunity before `@`
 // wraps it as user / @domain instead of mid-word.
@@ -42,7 +42,7 @@ const [emailUser, emailDomain] = contact.email.split('@');
           <div class="hero-meta"><span>{contact.hoursShort}</span><span>{ui.contacto.responseIn(contact.responseTime)}</span></div>
         </div>
         <figure class="hero-frame" data-parallax>
-          <CmsImg image={hero.image} base={1280} widths={HERO_WIDTHS} quality={78} sat={SAT.hero} sizes="100vw" width="2200" height="1467" loading="eager" fetchpriority="high" />
+          <CmsImg image={hero.image} base={1280} widths={HERO_WIDTHS} quality={72} sat={SAT.hero} sizes="100vw" width="2200" height="1467" loading="eager" fetchpriority="high" />
         </figure>
       </section>
 
@@ -75,7 +75,7 @@ const [emailUser, emailDomain] = contact.email.split('@');
       </section>
 
       <section class="ct-location grid-12" id="ubicacion" aria-labelledby="ct-location-title" data-header-theme="dark">
-        <figure class="ct-map"><iframe src={mapEmbed} title={ui.contacto.mapTitle} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></figure>
+        <figure class="ct-map"><MapEmbed coordinates={contact.coordinates} title={ui.contacto.mapTitle} /></figure>
         <div class="ct-location-copy">
           <p class="section-kicker">{location.kicker}</p>
           <h2 id="ct-location-title"><Lines text={location.title} /></h2>

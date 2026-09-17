@@ -6,6 +6,7 @@ import erediteMark from '../assets/eredita-logo.png';
 import CmsImg from '../components/CmsImg.astro';
 import ContactFooter from '../components/ContactFooter.astro';
 import Lines from '../components/Lines.astro';
+import MapEmbed from '../components/MapEmbed.astro';
 import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { formatDate, pages, projectPath, t, type Lang } from '../i18n';
@@ -43,7 +44,7 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
       <section class="ed-hero" aria-labelledby="ed-hero-title" data-header-theme="light">
         <div class="ed-hero-media" data-parallax>
           {hero.video ? (
-            <video poster={imageSrc(hero.poster)} autoplay muted loop playsinline aria-hidden="true">
+            <video poster={remoteImage(imageSrc(hero.poster), 1280, 70)} autoplay muted loop playsinline aria-hidden="true">
               <source src={hero.video} type="video/mp4" />
             </video>
           ) : (
@@ -51,7 +52,7 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
           )}
           <div class="ed-hero-shade"></div>
         </div>
-        <Picture class="ed-hero-mark" src={erediteMark} widths={[320, 640, 960]} sizes="(max-width: 767px) 40vw, min(26vw, 24rem)" formats={['webp']} fallbackFormat="png" alt="Ereditá" loading="eager" />
+        <Picture class="ed-hero-mark" src={erediteMark} widths={[320, 640, 960]} sizes="(max-width: 767px) 40vw, min(26vw, 24rem)" formats={['webp']} fallbackFormat="png" alt="Ereditá" loading="eager" fetchpriority="high" />
         <div class="ed-hero-content" data-reveal-group>
           <a class="ed-back" href={pages.eredita[lang]}><span aria-hidden="true">←</span> {ui.eredita.backToLine}</a>
           <p class="section-kicker">{hero.kicker}</p>
@@ -62,7 +63,7 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
 
       <section class="ed-intro" aria-labelledby="ed-intro-title" data-header-theme="dark">
         <figure class="ed-map" data-reveal-group>
-          <iframe src={`https://www.google.com/maps?q=${contact.coordinates.lat},${contact.coordinates.lng}&output=embed`} title="Ubicación del proyecto" loading="lazy" />
+          <MapEmbed coordinates={contact.coordinates} title={ui.eredita.mapTitle} />
         </figure>
         <div class="ed-intro-copy" data-reveal-group>
           <p class="section-kicker">{intro.kicker}</p>
@@ -82,9 +83,9 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
           <h2 id="ed-gallery-title"><Lines text={gallery.title} /></h2>
         </header>
         <div class="ed-masonry" data-reveal-group>
-          {gallery.items.map((item) => (
+          {gallery.items.map((item, index) => (
             <figure class="ed-masonry-item">
-              <CmsImg image={item.image} base={960} widths={CARD_WIDTHS} quality={75} sat={SAT.gallery} sizes="(min-width: 900px) 50vw, 100vw" loading="lazy" width="1200" height="900" />
+              <CmsImg image={item.image} base={960} widths={CARD_WIDTHS} quality={75} sat={SAT.gallery} sizes={index % 6 === 0 || index % 6 === 3 ? '(min-width: 1100px) 66vw, 100vw' : '(min-width: 1100px) 33vw, 50vw'} loading="lazy" width="1200" height="900" />
               <figcaption>{item.tag}</figcaption>
             </figure>
           ))}
@@ -120,7 +121,7 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
                         <button class="ed-h-play" type="button" data-play hidden><span aria-hidden="true">▶</span> {ui.eredita.media.play}</button>
                       </>
                     ) : (
-                      <CmsImg image={medium.image} base={960} widths={CARD_WIDTHS} quality={75} sat={SAT.card} sizes="(min-width: 900px) 50vw, 100vw" loading="lazy" width="1400" height="1400" />
+                      <CmsImg image={medium.image} base={960} widths={CARD_WIDTHS} quality={75} sat={SAT.card} sizes="(min-width: 900px) 66vw, 100vw" loading="lazy" width="1400" height="1400" />
                     )}
                   </div>
                 ))}

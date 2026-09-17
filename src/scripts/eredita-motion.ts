@@ -1,4 +1,5 @@
 import { mountHorizontalTrack } from './horizontal-track';
+import { mountLazyMaps } from './lazy-map';
 import { mountTypologyMedia } from './typology-media';
 import { mountAnchors, mountReveals, releaseTitles, settleLines, splitTitles } from './mobile-motion';
 
@@ -8,6 +9,8 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 // and loaded on demand. Crossing the breakpoint after load needs a reload.
 const desktop = window.matchMedia('(min-width: 768px)').matches;
 let motion: { refresh: () => void } | null = null;
+
+mountLazyMaps();
 
 // Typology media (video + renders) within each panel: independent of GSAP/reduced motion,
 // so it keeps working even when every animation is off. The sticky media stage/pin is

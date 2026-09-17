@@ -63,7 +63,7 @@
 .process-panel { display: flex; align-items: center; min-height: 100dvh; padding: 4rem 0; border-bottom: 1px solid rgba(244, 238, 223, 0.14); }
 .process-panel:last-child { border-bottom: 0; }
 .process-copy { display: flex; flex-direction: column; gap: 0.9rem; width: 100%; }
-.step-number { font-size: 0.72rem; letter-spacing: 0.14em; color: rgba(244, 238, 223, 0.55); }
+.step-number { font-size: 0.72rem; letter-spacing: 0.14em; color: rgba(244, 238, 223, 0.62); }
 .process-copy h3 { margin: 0.4rem 0 0; font-size: clamp(2.2rem, 3.6vw, 3.6rem); font-weight: 500; line-height: 0.94; letter-spacing: -0.04em; }
 .process-copy p { max-width: 28rem; margin: 0; color: rgba(244, 238, 223, 0.8); font-size: 1.02rem; line-height: 1.55; }
 .process-progress { display: flex; align-items: center; gap: 1rem; }
@@ -94,7 +94,7 @@
 .difference { display: grid; grid-template-columns: 4rem 1.2fr 1fr; gap: 1.5rem; align-items: start; padding: 2rem 0; border-bottom: 1px solid rgba(0, 58, 54, 0.35); }
 .difference > span { font-size: 0.68rem; letter-spacing: 0.12em; }
 .difference h3 { margin: 0; font-size: clamp(1.5rem, 2.4vw, 2.4rem); font-weight: 500; line-height: 1.05; letter-spacing: -0.035em; }
-.difference p { max-width: 28rem; margin: 0; color: rgba(0, 58, 54, 0.68); line-height: 1.55; }
+.difference p { max-width: 28rem; margin: 0; color: rgba(0, 58, 54, 0.72); line-height: 1.55; }
 
 .institutional-cta { position: relative; min-height: 82svh; padding: 8rem clamp(1.25rem, 3vw, 3.5rem) 9rem; color: var(--putnam-paper); background: var(--putnam-green); overflow: hidden; }
 .institutional-cta h2, .institutional-cta .cta-actions { position: relative; z-index: 1; }

@@ -8,7 +8,7 @@ import SiteHead from '../components/SiteHead.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { t, type Lang } from '../i18n';
 import { getPutnam, getSettings } from '../lib/content';
-import { SAT } from '../lib/images';
+import { CARD_WIDTHS, SAT } from '../lib/images';
 import '../styles/global.css';
 import '../styles/putnam.css';
 
@@ -38,7 +38,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
           <a class="hero-index" href="#enfoque">{ui.putnam.seeApproach} <span aria-hidden="true">→</span></a>
         </div>
         <figure class="hero-frame">
-          <CmsImg image={hero.image} base={1280} widths={[640, 960, 1280]} quality={82} sat={SAT.hero} sizes="100vw" width="1800" height="1200" loading="eager" fetchpriority="high" />
+          <CmsImg image={hero.image} base={1280} widths={[640, 960, 1280]} quality={72} sat={SAT.hero} sizes="100vw" width="1800" height="1200" loading="eager" fetchpriority="high" />
         </figure>
       </section>
 
@@ -58,7 +58,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
           {process.steps.map((step) => (
             <article class="process-panel" data-h-panel>
               <figure class="process-media">
-                {step.image ? <CmsImg image={step.image} base={960} widths={[640, 960, 1280]} quality={78} sat={SAT.process} sizes="(max-width: 767px) 100vw, calc(100vw * 0.57)" width="1800" height="1200" loading="lazy" fetchpriority="low" /> : <div class="media-placeholder" role="img" aria-label={ui.putnam.imagePendingFor(step.title)}><span>{ui.putnam.imagePending}</span><b>{step.number}</b><small>{step.title}</small></div>}
+                {step.image ? <CmsImg image={step.image} base={960} widths={CARD_WIDTHS} quality={75} sat={SAT.process} sizes="(max-width: 767px) 100vw, calc(100vw * 0.57)" width="1800" height="1200" loading="lazy" fetchpriority="low" /> : <div class="media-placeholder" role="img" aria-label={ui.putnam.imagePendingFor(step.title)}><span>{ui.putnam.imagePending}</span><b>{step.number}</b><small>{step.title}</small></div>}
                 <div class="process-shade" aria-hidden="true"></div>
               </figure>
               <div class="process-copy">

@@ -58,7 +58,7 @@ export const ogUrl = (image: Pick<CmsImage, 'url' | 'width' | 'height' | 'crop' 
 export const altOf = (image: Pick<CmsImage, 'alt' | 'decorative'>) => (image.decorative ? '' : image.alt);
 
 export const HERO_WIDTHS = [640, 960, 1280, 1600, 2000] as const;
-export const CARD_WIDTHS = [480, 720, 960, 1200] as const;
+export const CARD_WIDTHS = [480, 640, 800, 960, 1200] as const;
 
 // `sat` in percent points, as the CSS filters were: saturate(0.78) → -22, saturate(0.65) → -35,
 // saturate(0.62) → -38, saturate(0.85) → -15, saturate(0.92) → -8.

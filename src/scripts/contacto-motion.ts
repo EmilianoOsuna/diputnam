@@ -1,4 +1,5 @@
 import { mountHorizontalTrack } from './horizontal-track';
+import { mountLazyMaps } from './lazy-map';
 import { mountAnchors, mountReveals, releaseTitles, settleLines, splitTitles } from './mobile-motion';
 
 const root = document.querySelector<HTMLElement>('[data-contacto]');
@@ -7,6 +8,8 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 // and loaded on demand. Crossing the breakpoint after load needs a reload.
 const desktop = window.matchMedia('(min-width: 768px)').matches;
 let motion: { refresh: () => void } | null = null;
+
+mountLazyMaps();
 
 // Mobile reasons: native swipe track. Independent of GSAP/reduced motion so the
 // counter and rail keep working even when every animation is off.

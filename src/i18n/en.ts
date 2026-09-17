@@ -2,7 +2,7 @@ import type { Dictionary } from './es';
 
 export const en: Dictionary = {
   skipLink: 'Skip to content',
-  brand: { tagline: 'Real estate development', homeAria: 'Putnam, home' },
+  brand: { tagline: 'Real estate development', homeAria: 'Putnam Real estate development, home' },
   nav: {
     home: 'Home', eredita: 'Ereditá', putnam: 'Putnam', noticias: 'News', unete: 'Join us', contacto: 'Contact',
     aria: 'Main navigation', open: 'Open menu', close: 'Close menu',
@@ -35,7 +35,7 @@ export const en: Dictionary = {
   },
   eredita: {
     keepScrolling: 'Keep scrolling', requestInfo: 'Request information', details: 'Details', openPdf: 'Open PDF',
-    viewProject: 'View project', backToLine: 'Back to Ereditá', projects: 'Ereditá projects',
+    viewProject: 'View project', backToLine: 'Back to Ereditá', projects: 'Ereditá projects', mapTitle: 'Project location',
     projectTitle: (name: string) => `${name} · Ereditá | Putnam`,
     media: { video: 'Video', play: 'Play video', prev: 'Previous thumbnails', next: 'Next thumbnails', aria: (typology: string) => `${typology} media` },
   },
