@@ -8,8 +8,7 @@
   overflow-x: clip;
 }
 
-.putnam-page .site-header { color: var(--putnam-deep); text-shadow: none; transition: color 220ms ease; }
-.putnam-page .site-header::before { display: none; }
+.putnam-page .site-header { color: var(--putnam-deep); text-shadow: none; }
 .putnam-page .site-header--light { color: var(--putnam-paper); }
 .putnam-page .brand { box-shadow: none; border: 0; }
 .skip-link { position: fixed; z-index: 100; top: 0.5rem; left: 50%; padding: 0.7rem 1rem; color: var(--putnam-paper); background: var(--putnam-deep); transform: translate(-50%, -150%); }

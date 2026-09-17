@@ -9,8 +9,7 @@
   overflow-x: clip;
 }
 
-.eredita-page .site-header { color: var(--ed-ink); text-shadow: none; transition: color 220ms ease; }
-.eredita-page .site-header:not(.site-header--light)::before { display: none; }
+.eredita-page .site-header { color: var(--ed-ink); text-shadow: none; }
 .eredita-page .site-header--light { color: var(--ed-paper); }
 .eredita-page .brand { box-shadow: none; border: 0; }
 
