@@ -151,7 +151,12 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 }
 
 @media (max-width: 767px) {
-  .ct-hero { padding: 6rem 1rem 2rem; }
+  /* `svh` instead of `dvh`: the hero keeps one height while the address bar shows/hides, so
+     the cover image never re-crops mid-scroll. `min-height` (not `height`) lets long copy
+     (a note title + lead + meta) grow the hero instead of overflowing under the header. */
+  .ct-hero { height: auto; min-height: 100svh; padding: 6rem 1rem 2rem; }
+  .ct-hero .hero-frame { inset: 0; height: auto; }
+  .ct-hero .hero-frame img { height: 100%; }
   .ct-hero .hero-copy { width: auto; }
   .ct-hero h1 { font-size: clamp(3rem, 15vw, 5.2rem); line-height: 0.98; }
   .ct-hero .hero-details { flex-direction: column; align-items: flex-start; }

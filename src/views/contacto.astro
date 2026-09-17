@@ -19,6 +19,9 @@ const form = ui.contacto.form;
 const [{ hero, channels, reasons, location, form: formCopy, cta }, contact] = await Promise.all([getContacto(lang), getSettings(lang)]);
 const mapEmbed = `https://www.google.com/maps?q=${contact.coordinates.lat},${contact.coordinates.lng}&output=embed`;
 const pad = (index: number) => String(index + 1).padStart(2, '0');
+// On narrow phones the address is wider than its column; a break opportunity before `@`
+// wraps it as user / @domain instead of mid-word.
+const [emailUser, emailDomain] = contact.email.split('@');
 ---
 <html lang={lang}>
   <head>
@@ -50,7 +53,7 @@ const pad = (index: number) => String(index + 1).padStart(2, '0');
         </header>
         <div class="index-list" data-reveal-group>
           <a class="index-row" href={contact.whatsapp} target="_blank" rel="noreferrer"><span>01</span><div><small>{ui.whatsapp}</small><strong>{contact.phone}</strong></div><i aria-hidden="true">↗</i></a>
-          <a class="index-row" href={`mailto:${contact.email}`}><span>02</span><div><small>{ui.contacto.email}</small><strong>{contact.email}</strong></div><i aria-hidden="true">↗</i></a>
+          <a class="index-row" href={`mailto:${contact.email}`}><span>02</span><div><small>{ui.contacto.email}</small><strong>{emailUser}<wbr />@{emailDomain}</strong></div><i aria-hidden="true">↗</i></a>
           <div class="index-row"><span>03</span><div><small>{ui.contacto.office}</small><strong>{contact.address}</strong></div><i aria-hidden="true"></i></div>
           <div class="index-row"><span>04</span><div><small>{ui.contacto.hours}</small><strong>{contact.hours}</strong></div><i aria-hidden="true"></i></div>
         </div>

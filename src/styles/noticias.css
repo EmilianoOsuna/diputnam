@@ -85,7 +85,10 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 }
 
 @media (max-width: 767px) {
-  .nw-hero { padding: 6rem 1rem 2rem; }
+  /* `svh` instead of `dvh`: the hero keeps one height while the address bar shows/hides, so
+     the cover image never re-crops mid-scroll. `min-height` (not `height`) lets long copy
+     (a note title + lead + meta) grow the hero instead of overflowing under the header. */
+  .nw-hero { height: auto; min-height: 100svh; padding: 6rem 1rem 2rem; }
   .nw-hero .hero-copy { width: auto; }
   .nw-hero h1 { font-size: clamp(3rem, 15vw, 5.2rem); line-height: 0.98; }
   .nw-hero .hero-details { flex-direction: column; align-items: flex-start; }
@@ -119,7 +122,7 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 
 /* Nota */
 .nw-hero--nota h1 { font-size: clamp(2.6rem, min(5.4vw, 11dvh), 5.6rem); line-height: 0.98; letter-spacing: -0.04em; }
-.nw-hero--plain { height: auto; min-height: 70dvh; color: var(--putnam-deep); background: var(--putnam-paper); }
+.nw-hero--plain { height: auto; min-height: 70svh; color: var(--putnam-deep); background: var(--putnam-paper); }
 .nw-hero--plain .hero-lead { color: rgba(0, 58, 54, 0.72); }
 .nw-hero--plain .hero-meta { color: rgba(0, 58, 54, 0.6); }
 .nw-hero--plain h1 { text-shadow: none; }
