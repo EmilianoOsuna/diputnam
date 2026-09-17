@@ -1,16 +1,16 @@
 # Graph Report - diputnam  (2026-09-16)
 
 ## Corpus Check
-- 229 files · ~2,313,886 words
+- 236 files · ~2,318,580 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2019 nodes · 2341 edges · 166 communities (163 shown, 3 thin omitted)
+- 2091 nodes · 2406 edges · 172 communities (169 shown, 3 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 9 edges (avg confidence: 0.63)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `126464e2`
+- Built from commit: `4a915c5c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -164,16 +164,21 @@
 - tasks.md
 - vercel.json
 - rename-proyecto-id.ts
+- Requirement: Movimiento editorial y smooth scroll
+- tasks.md
+- proposal.md
+- design.md
+- tasks.md
 
 ## God Nodes (most connected - your core abstractions)
 1. `../components/SiteHead.astro` - 34 edges
-2. `../components/SiteHeader.astro` - 24 edges
-3. `../components/CmsImg.astro` - 19 edges
-4. `scripts` - 17 edges
-5. `../components/ContactFooter.astro` - 17 edges
-6. `revealHeroLines()` - 17 edges
-7. `ADDED Requirements` - 17 edges
-8. `Requirements` - 17 edges
+2. `../components/CmsImg.astro` - 19 edges
+3. `../components/ContactFooter.astro` - 18 edges
+4. `../components/SiteHeader.astro` - 18 edges
+5. `Requirements` - 18 edges
+6. `scripts` - 17 edges
+7. `revealHeroLines()` - 17 edges
+8. `ADDED Requirements` - 17 edges
 9. `revealTitles()` - 15 edges
 10. `t()` - 14 edges
 
@@ -192,7 +197,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (166 total, 3 thin omitted)
+## Communities (172 total, 3 thin omitted)
 
 ### Community 0 - "ADDED Requirements"
 Cohesion: 0.05
@@ -200,19 +205,19 @@ Nodes (43): ADDED Requirements, contacto-page Specification, Decision needed: Co
 
 ### Community 1 - "Requirements"
 Cohesion: 0.04
-Nodes (44): contacto-page Specification, Decision needed: Cortes de línea de h2, Decision needed: Envío del formulario, Decision needed: URL embed de Google Maps, Purpose, Requirement: Accesibilidad y reducción de movimiento, Requirement: Aceptación visual, responsive y de movimiento, Requirement: Altura real del viewport, sin clamp del canvas (+36 more)
+Nodes (48): contacto-page Specification, Decision needed: Cortes de línea de h2, Decision needed: Envío del formulario, Decision needed: URL embed de Google Maps, Purpose, Requirement: Accesibilidad y reducción de movimiento, Requirement: Aceptación visual, responsive y de movimiento, Requirement: Altura real del viewport, sin clamp del canvas (+40 more)
 
 ### Community 2 - "eredita.astro"
-Cohesion: 0.10
-Nodes (23): ../assets/putnam-dark.png, ../assets/putnam-light.png, ../i18n, ../styles/contacto.css, ../styles/global.css, ../styles/not-found.css, ../styles/putnam.css, ../styles/unete.css (+15 more)
+Cohesion: 0.12
+Nodes (27): ../assets/putnam-dark.png, ../assets/putnam-light.png, ../i18n, ../lib/content, ../lib/images, ../styles/contacto.css, ../styles/global.css, ../styles/not-found.css (+19 more)
 
 ### Community 3 - "package.json"
 Cohesion: 0.06
 Nodes (33): groq-js, author, bugs, url, description, devDependencies, groq-js, homepage (+25 more)
 
 ### Community 4 - "ADDED Requirements"
-Cohesion: 0.12
-Nodes (32): ../components/SiteHead.astro, alternates, canonical, graph, image, pair, path, ui (+24 more)
+Cohesion: 0.10
+Nodes (33): ../lib/seo, ../components/SiteHead.astro, alternates, canonical, graph, image, pair, path (+25 more)
 
 ### Community 5 - "Requirements"
 Cohesion: 0.06
@@ -223,8 +228,8 @@ Cohesion: 0.08
 Nodes (25): home-ui-motion-readability Specification, Purpose, Requirement: Legibilidad sobre imágenes, Requirement: Movimiento premium y controlado, Requirement: Responsive y movimiento reducido, Requirement: Stage de slides con título persistente, Requirement: Tipografía editorial de la referencia, Requirements (+17 more)
 
 ### Community 7 - "Requirements"
-Cohesion: 0.07
-Nodes (25): otherLang(), routes, failures, failures, navKeys, check(), failures, galleryChecks() (+17 more)
+Cohesion: 0.08
+Nodes (27): locales, otherLang(), pages, routes, failures, failures, navKeys, check() (+19 more)
 
 ### Community 8 - "ADDED Requirements"
 Cohesion: 0.09
@@ -239,8 +244,8 @@ Cohesion: 0.06
 Nodes (33): react, react-dom, sanity, @sanity/document-internationalization, @sanity/vision, allowScripts, esbuild@0.28.2, dependencies (+25 more)
 
 ### Community 11 - "ADDED Requirements"
-Cohesion: 0.07
-Nodes (27): eredita-project-lines Specification, Purpose, Requirement: Documentos legales por proyecto, Requirement: Metadatos y superficie de rastreo de las páginas de proyecto, Requirement: Migración del contenido existente sin pérdida, Requirement: Portada de la línea en la ruta de Ereditá, Requirement: Proyecto como documento editable, Requirement: Página de proyecto por idioma (+19 more)
+Cohesion: 0.05
+Nodes (36): eredita-project-lines Specification, Purpose, Requirement: Contador y barra de progreso visibles en todos los anchos, Requirement: Documentos legales por proyecto, Requirement: Masonry de galería consistente en móvil, Requirement: Metadatos y superficie de rastreo de las páginas de proyecto, Requirement: Migración del contenido existente sin pérdida, Requirement: Portada de la línea en la ruta de Ereditá (+28 more)
 
 ### Community 12 - "ADDED Requirements"
 Cohesion: 0.07
@@ -279,8 +284,8 @@ Cohesion: 0.09
 Nodes (22): mobile-horizontal-tracks Specification, Purpose, Requirement: Comportamiento en desktop y accesibilidad, Requirement: Contador y barra de progreso sincronizados con la tarjeta activa, Requirement: Encabezado de sección visible y ordenado en móvil, Requirement: Pista horizontal con swipe nativo en móvil, Requirement: Tarjeta completa en pantalla y alturas uniformes, Requirements (+14 more)
 
 ### Community 21 - "Decisions"
-Cohesion: 0.09
-Nodes (22): Purpose, putnam-institutional-page Specification, Requirement: Accesibilidad y mejora progresiva, Requirement: Dirección de arte clara, verde y con carácter, Requirement: Movimiento editorial y smooth scroll, Requirement: Narrativa institucional completa y editable, Requirement: Responsive sin pérdida de información, Requirement: Ruta institucional y continuidad de marca (+14 more)
+Cohesion: 0.08
+Nodes (24): Purpose, putnam-institutional-page Specification, Requirement: Accesibilidad y mejora progresiva, Requirement: Dirección de arte clara, verde y con carácter, Requirement: Movimiento editorial y smooth scroll, Requirement: Narrativa institucional completa y editable, Requirement: Responsive sin pérdida de información, Requirement: Ruta institucional y continuidad de marca (+16 more)
 
 ### Community 22 - "Requirement: Contenido inicial de la home"
 Cohesion: 0.09
@@ -296,11 +301,11 @@ Nodes (21): crawl-surface Specification, Purpose, Requirement: Cabeceras y redir
 
 ### Community 25 - "motion.ts"
 Cohesion: 0.10
-Nodes (31): root, root, mountHorizontalTrack(), pad(), TrackOptions, lineHost(), mountAnchors(), mountReveals() (+23 more)
+Nodes (32): root, gallery, root, mountHorizontalTrack(), pad(), TrackOptions, lineHost(), mountAnchors() (+24 more)
 
 ### Community 26 - "proposal.md"
-Cohesion: 0.18
-Nodes (16): ../assets/eredita-logo.png, ../lib/seo, ../styles/eredita.css, ../components/CmsImg.astro, position, src, CmsImage, TypologyMedia (+8 more)
+Cohesion: 0.19
+Nodes (15): ../assets/eredita-logo.png, ../styles/eredita.css, ../components/CmsImg.astro, position, src, CmsImage, TypologyMedia, altOf() (+7 more)
 
 ### Community 27 - "proposal.md"
 Cohesion: 0.10
@@ -355,8 +360,8 @@ Cohesion: 0.12
 Nodes (15): ADDED Requirements, Purpose, Requirement: Barrido vertical de imagen sobre el copy, Requirement: Contenido accesible durante la transición, Requirement: Estado inicial determinista, Requirement: Texto central persistente, Requirement: Verificación del recorrido completo, Scenario: Aceptación visual y funcional (+7 more)
 
 ### Community 40 - "tasks.md"
-Cohesion: 0.22
-Nodes (10): ../lib/content, ../lib/images, ../styles/noticias.css, ../components/BodyImage.astro, formatDate(), getNotas(), CARD_WIDTHS, truncate() (+2 more)
+Cohesion: 0.12
+Nodes (15): ADDED Requirements, Purpose, Requirement: Auto-ocultado del riel, Requirement: Barra de scroll nativa oculta con fallback, Requirement: Contraste y capas del riel, Requirement: Punto que refleja el progreso de scroll, Scenario: Extremos del documento, Scenario: Móvil sin riel (+7 more)
 
 ### Community 41 - "design.md"
 Cohesion: 0.12
@@ -411,8 +416,8 @@ Cohesion: 0.15
 Nodes (12): MODIFIED Requirements, Requirement: Experiencia responsive y movimiento reducido, Requirement: Navegación y contacto legibles, Scenario: Apertura del menú mobile, Scenario: Bloqueo de interacción subyacente, Scenario: Cambio a desktop, Scenario: Cierre del menú mobile, Scenario: Contacto desde el menú (+4 more)
 
 ### Community 55 - "SKILL.md"
-Cohesion: 0.15
-Nodes (12): ADDED Requirements, Purpose, Requirement: Datos de redes sociales reutilizados sin nuevos campos de CMS, Requirement: Isotipo del header con presencia visual suficiente, Requirement: Pie de página compartido delgado con redes y crédito, Scenario: Crédito de autoría visible, Scenario: Grosor reducido sin overflow, Scenario: Header en desktop (+4 more)
+Cohesion: 0.14
+Nodes (13): Purpose, Requirement: Datos de redes sociales reutilizados sin nuevos campos de CMS, Requirement: Isotipo del header con presencia visual suficiente, Requirement: Pie de página compartido delgado con redes y crédito, Requirements, Scenario: Crédito de autoría visible, Scenario: Grosor reducido sin overflow, Scenario: Header en desktop (+5 more)
 
 ### Community 56 - "SKILL.md"
 Cohesion: 0.15
@@ -463,8 +468,8 @@ Cohesion: 0.17
 Nodes (11): Contenido local estructurado, Context, Decisions, Dirección de arte: “la línea que sostiene”, Goals / Non-Goals, Migration Plan, Motion progresivo y aislado por página, Navegación y accesibilidad (+3 more)
 
 ### Community 71 - "putnam-performance.mjs"
-Cohesion: 0.17
-Nodes (11): ADDED Requirements, Purpose, Requirement: Alineación de título y tarjetas en "Qué valoramos", Requirement: CTA final equilibrado, Requirement: Estado sin vacantes compacto, Requirement: Imagen en la sección de cultura, Scenario: Alineación desktop, Scenario: Balance del CTA final en desktop (+3 more)
+Cohesion: 0.15
+Nodes (12): ADDED Requirements, Purpose, Requirement: Datos de redes sociales reutilizados sin nuevos campos de CMS, Requirement: Isotipo del header con presencia visual suficiente, Requirement: Pie de página compartido delgado con redes y crédito, Scenario: Crédito de autoría visible, Scenario: Grosor reducido sin overflow, Scenario: Header en desktop (+4 more)
 
 ### Community 72 - "Requirements"
 Cohesion: 0.17
@@ -507,16 +512,16 @@ Cohesion: 0.18
 Nodes (10): ADDED Requirements, Purpose, Requirement: Listado generado desde el CMS, Requirement: Nota editable con cuerpo, Requirement: Página de detalle por nota, Scenario: Detalle en español con traducción, Scenario: Nota completa, Scenario: Orden y destacada (+2 more)
 
 ### Community 82 - "Decisions"
-Cohesion: 0.18
-Nodes (10): 1. Tipologías (Ereditá) y Proceso (Putnam) migran al track horizontal nativo, no a una nueva librería, 2. Cultura de Únete: solo se le agrega imagen, no se toca su mecánica, 3. Redes sociales del footer: se derivan de `organization.sameAs`, no de un campo nuevo, 4. Crédito de autoría: texto simple, sin icono nuevo hasta que se provea uno, 5. Formulario: barrido de texto en verde vía CSS, sin JS, Context, Decisions, Goals / Non-Goals (+2 more)
+Cohesion: 0.15
+Nodes (12): Purpose, Requirement: Alineación de título y tarjetas en "Qué valoramos", Requirement: CTA final equilibrado, Requirement: Estado sin vacantes compacto, Requirement: Imagen en la sección de cultura, Requirements, Scenario: Alineación desktop, Scenario: Balance del CTA final en desktop (+4 more)
 
 ### Community 83 - "MODIFIED Requirements"
-Cohesion: 0.18
-Nodes (10): ADDED Requirements, MODIFIED Requirements, Requirement: Barrido de texto en verde al interactuar con los campos, Requirement: Fidelidad visual y valores CSS aprobados, Requirement: Responsive derivado del mockup mobile, Scenario: Correo visible en el listado de canales, Scenario: Fidelidad desktop, Scenario: Fidelidad mobile (+2 more)
+Cohesion: 0.17
+Nodes (11): ADDED Requirements, Purpose, Requirement: Alineación de título y tarjetas en "Qué valoramos", Requirement: CTA final equilibrado, Requirement: Estado sin vacantes compacto, Requirement: Imagen en la sección de cultura, Scenario: Alineación desktop, Scenario: Balance del CTA final en desktop (+3 more)
 
 ### Community 84 - "ADDED Requirements"
 Cohesion: 0.18
-Nodes (10): ADDED Requirements, Requirement: Contador y barra de progreso visibles en todos los anchos, Requirement: Masonry de galería consistente en móvil, Requirement: Prioridad visual a imagen y video en cada tipología, Requirement: Tipologías sin secuestro de scroll en desktop, Scenario: Avance por gesto horizontal en desktop, Scenario: Entrada y salida de la sección, Scenario: Galería en móvil (+2 more)
+Nodes (10): 1. Tipologías (Ereditá) y Proceso (Putnam) migran al track horizontal nativo, no a una nueva librería, 2. Cultura de Únete: solo se le agrega imagen, no se toca su mecánica, 3. Redes sociales del footer: se derivan de `organization.sameAs`, no de un campo nuevo, 4. Crédito de autoría: texto simple, sin icono nuevo hasta que se provea uno, 5. Formulario: barrido de texto en verde vía CSS, sin JS, Context, Decisions, Goals / Non-Goals (+2 more)
 
 ### Community 85 - "check-dist.mjs"
 Cohesion: 0.18
@@ -663,16 +668,16 @@ Cohesion: 0.29
 Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
 
 ### Community 121 - "proposal.md"
-Cohesion: 0.29
-Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+Cohesion: 0.18
+Nodes (10): ADDED Requirements, MODIFIED Requirements, Requirement: Barrido de texto en verde al interactuar con los campos, Requirement: Fidelidad visual y valores CSS aprobados, Requirement: Responsive derivado del mockup mobile, Scenario: Correo visible en el listado de canales, Scenario: Fidelidad desktop, Scenario: Fidelidad mobile (+2 more)
 
 ### Community 122 - "Requirement: Movimiento editorial y smooth scroll"
-Cohesion: 0.29
-Nodes (6): MODIFIED Requirements, Requirement: Movimiento editorial y smooth scroll, Scenario: Navegación por anclas o regreso, Scenario: Proceso en una sola pantalla, Scenario: Recorrido con movimiento habilitado, Scenario: Sin scroll vertical adicional retenido
+Cohesion: 0.18
+Nodes (10): ADDED Requirements, Requirement: Contador y barra de progreso visibles en todos los anchos, Requirement: Masonry de galería consistente en móvil, Requirement: Prioridad visual a imagen y video en cada tipología, Requirement: Tipologías sin secuestro de scroll en desktop, Scenario: Avance por gesto horizontal en desktop, Scenario: Entrada y salida de la sección, Scenario: Galería en móvil (+2 more)
 
 ### Community 123 - "tasks.md"
 Cohesion: 0.29
-Nodes (6): 1. Header y footer compartidos (`site-shell-chrome`), 2. Ereditá — galería y tipologías (`eredita-project-lines`), 3. Putnam — sección de proceso (`putnam-institutional-page`), 4. Únete — cultura, alineación, vacíos y CTA (`unete-careers-page`), 5. Contacto — canales móviles, formulario y footer (`contacto-page`), 6. Cierre
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
 
 ### Community 124 - "og.mjs"
 Cohesion: 0.38
@@ -778,25 +783,45 @@ Nodes (3): 1. Estructura y estilos mobile, 2. Comportamiento accesible, 3. Verif
 Cohesion: 0.50
 Nodes (3): 1. Helper y estilos compartidos, 2. Páginas, 3. Verificación
 
+### Community 166 - "Requirement: Movimiento editorial y smooth scroll"
+Cohesion: 0.29
+Nodes (6): MODIFIED Requirements, Requirement: Movimiento editorial y smooth scroll, Scenario: Navegación por anclas o regreso, Scenario: Proceso en una sola pantalla, Scenario: Recorrido con movimiento habilitado, Scenario: Sin scroll vertical adicional retenido
+
+### Community 167 - "tasks.md"
+Cohesion: 0.29
+Nodes (6): 1. Header y footer compartidos (`site-shell-chrome`), 2. Ereditá — galería y tipologías (`eredita-project-lines`), 3. Putnam — sección de proceso (`putnam-institutional-page`), 4. Únete — cultura, alineación, vacíos y CTA (`unete-careers-page`), 5. Contacto — canales móviles, formulario y footer (`contacto-page`), 6. Cierre
+
+### Community 168 - "proposal.md"
+Cohesion: 0.29
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+
+### Community 169 - "design.md"
+Cohesion: 0.33
+Nodes (5): Context, Decisions, Goals / Non-Goals, Migration Plan, Risks / Trade-offs
+
+### Community 170 - "tasks.md"
+Cohesion: 0.50
+Nodes (3): 1. Marcado y estilos, 2. Auto-ocultado en desktop, 3. Verificación integrada
+
 ## Knowledge Gaps
-- **1165 isolated node(s):** `name`, `version`, `description`, `dev`, `build` (+1160 more)
+- **1209 isolated node(s):** `name`, `version`, `description`, `dev`, `build` (+1204 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `../components/SiteHead.astro` connect `ADDED Requirements` to `eredita.astro`, `tasks.md`, `ADDED Requirements`, `check-dist.mjs`, `proposal.md`?**
-  _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **Why does `dependencies` connect `ADDED Requirements` to `package.json`?**
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
+- **Why does `../components/SiteHead.astro` connect `ADDED Requirements` to `ADDED Requirements`, `eredita.astro`, `proposal.md`, `check-dist.mjs`?**
+  _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _1165 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1209 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ADDED Requirements` be split into smaller, more focused modules?**
   _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
 - **Should `Requirements` be split into smaller, more focused modules?**
-  _Cohesion score 0.044444444444444446 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.04081632653061224 - nodes in this community are weakly interconnected._
 - **Should `eredita.astro` be split into smaller, more focused modules?**
-  _Cohesion score 0.09672830725462304 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1202020202020202 - nodes in this community are weakly interconnected._
 - **Should `package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._

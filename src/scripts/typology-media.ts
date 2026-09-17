@@ -16,9 +16,12 @@ export const mountTypologyMedia = (root: HTMLElement) => {
     const video = gallery.querySelector<HTMLVideoElement>('video[data-video]');
     if (!video) return;
     const shown = !(video.closest('[role="tabpanel"]') as HTMLElement).hidden;
+    // Inside the desktop pinned slot every gallery intersects at once; only the one the
+    // engine marked `is-active` counts as on screen (see desktop/eredita.ts).
+    const onScreen = visible.has(gallery) && (!gallery.parentElement?.hasAttribute('data-media-slot') || gallery.classList.contains('is-active'));
     const play = gallery.querySelector<HTMLElement>('[data-play]');
-    if (shown && visible.has(gallery) && !reducedMotion) video.play().catch(() => {});
-    else if (!shown || !visible.has(gallery)) { video.pause(); if (play && reducedMotion) play.hidden = false; }
+    if (shown && onScreen && !reducedMotion) video.play().catch(() => {});
+    else if (!shown || !onScreen) { video.pause(); if (play && reducedMotion) play.hidden = false; }
   };
 
   const cleanups: (() => void)[] = [];
@@ -75,7 +78,11 @@ export const mountTypologyMedia = (root: HTMLElement) => {
       sync(gallery);
     });
   }, { threshold: [0, PANEL_VISIBLE] });
-  galleries.forEach((gallery) => observer.observe(gallery));
+  galleries.forEach((gallery) => {
+    observer.observe(gallery);
+    // The desktop engine toggles `is-active` and asks for a resync instead of driving playback.
+    gallery.addEventListener('typology-sync', () => sync(gallery));
+  });
 
   return () => { observer.disconnect(); cleanups.forEach((cleanup) => cleanup()); };
 };

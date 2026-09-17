@@ -74,14 +74,14 @@ La geometría y tipografía desktop SHALL conservar exactamente:
 | `.ct-form` | `min-height: 100dvh`, mismo padding vertical aprobado; head margin-bottom `clamp(3.5rem, 6vw, 5.5rem)`, columnas `1/9` y `9/13`; `h2` `clamp(3.4rem, 7.6vw, 8rem)/0.9`, tracking `-0.06em`; form margin-left `12%`. |
 | Campos | filas `4rem 16rem 1fr`, gap `1.5rem`, padding `1.5rem 0`; controles transparentes, sin border/radius, `clamp(1.3rem, 1.9vw, 1.9rem)/1.15`, tracking `-0.025em`; textarea `min-height: 6rem`; select con appearance none y chevron aprobado; submit conserva grid, padding y colores exactos. |
 | `.ct-cta` | `min-height: 100dvh`, padding `8rem var(--gutter) 6rem`, alineado al fondo, paper sobre green; `h2` max-width `72rem`, margin `3rem 0 2rem`, `clamp(3.4rem, 8.2vw, 8.4rem)/0.89`, tracking `-0.06em`; `.cta-mark` derecha `clamp(1rem, 4vw, 5rem)`, bottom `9%`, ancho `min(42vw, 42rem)`, opacity `0.2`. |
-| Footer | `.site-footer--flow` en flujo, min-height `14rem`, padding `4rem var(--gutter)`, paper sobre deep; sin gradiente `::before`, conforme a las páginas internas existentes. |
+| Footer | `.site-footer--flow` en flujo, delgado conforme al estándar compartido de `site-shell-chrome` (no `min-height: 14rem` fijo), paper sobre deep, con la fila de iconos de redes y el crédito de autoría de `site-shell-chrome`; sin gradiente `::before`. |
 
-Todos los bordes, opacidades rgba, filtros, márgenes, paddings, line-heights, letter-spacing, hover y focus del mockup SHALL trasladarse literalmente cuando no estén enumerados arriba. No se añadirán cards, iconos, sombras, radios, tipografías, colores ni decoraciones no presentes.
+Todos los bordes, opacidades rgba, filtros, márgenes, paddings, line-heights, letter-spacing, hover y focus del mockup SHALL trasladarse literalmente cuando no estén enumerados arriba, salvo la fila de Footer, que sigue el estándar compartido descrito arriba. No se añadirán cards, iconos, sombras, radios, tipografías, colores ni decoraciones no presentes salvo los iconos de redes y el crédito de autoría ya previstos en `site-shell-chrome`.
 
 #### Scenario: Fidelidad desktop
 
 - **WHEN** `/contacto/` se captura a `1440px` de ancho con fuentes e imágenes cargadas
-- **THEN** composición, cortes de texto, espacios, retícula, escala, colores, gradientes, bordes, filtros y footer coinciden visualmente con `Main.dc.html`
+- **THEN** composición, cortes de texto, espacios, retícula, escala, colores, gradientes, bordes, filtros coinciden visualmente con `Main.dc.html`, y el footer sigue el estándar delgado compartido con iconos de redes y crédito de autoría
 
 ### Requirement: Altura real del viewport, sin clamp del canvas
 
@@ -112,9 +112,10 @@ En `max-width: 767px`:
 - `.ct-hero`: padding `6rem 1rem 2rem`; `.hero-copy` width auto; `h1` `clamp(3.3rem, 15vw, 5.2rem)/0.92`; `.hero-details` columna y alineado al inicio; lead `min(28rem, 92%)`; meta alineada a la izquierda.
 - `.ct-channels`, `.ct-location` y `.ct-form`: padding `6rem 1rem`; `.ct-reasons`: padding `0 1rem 3rem`.
 - `.index-list`, `.kpis` y form: margin-left `0`; filas del índice `2.5rem 1fr 2rem`, gap `0.8rem`; KPIs una columna, gap `1.4rem`; número del pin `4rem`.
+- El valor de cada canal (`.index-row strong`, incluido el correo) SHALL permanecer completamente visible entre 320px y 767px, sin recortarse ni ocultarse: SHALL ajustar tamaño de fuente y/o partir en varias líneas (`overflow-wrap: anywhere` o equivalente) en vez de desbordar o quedar tapado por columnas vecinas.
 - `.f-row` y `.f-submit`: columnas `2.5rem 1fr`, gaps `0.8rem`; inputs/select/textarea y texto auxiliar en columna `2`; botón columnas `1 / 3` y margin-top `1.2rem`.
 - `.ct-cta`: padding `6rem 1rem 5rem`; `h2` margin `5rem 0 2rem`, `clamp(3.4rem, 16vw, 5.5rem)`; marca right `-4%`, bottom `8%`, width `72vw`; `.cta-actions` columna.
-- Footer: dos columnas, gap `0.8rem`, min-height `18rem`, padding `4rem 1rem`, font-size `0.8rem`; `.footer-address` sin margin-left.
+- Footer: delgado conforme al estándar compartido de `site-shell-chrome` (no `min-height: 18rem` fijo), dos columnas de contacto más la fila de iconos de redes y el crédito de autoría, sin overflow horizontal; `.footer-address` sin margin-left.
 
 La página SHALL funcionar sin overflow horizontal desde `320px`; ninguna interacción SHALL depender de hover. Los estados hover del mockup SHALL conservar equivalentes `:focus-visible`.
 
@@ -122,6 +123,10 @@ La página SHALL funcionar sin overflow horizontal desde `320px`; ninguna intera
 
 - **WHEN** `/contacto/` se captura a `390px` y se compara con `Mobile.dc.html`
 - **THEN** el contenido, orden, reflow, tipografía, espaciado y proporciones coinciden sin overflow ni elementos cortados
+
+#### Scenario: Correo visible en el listado de canales
+- **WHEN** `/contacto/` se abre entre 320px y 767px y se inspecciona la fila de correo en `.ct-channels`
+- **THEN** la dirección completa (`Desarrollos.Putnam@outlook.com` u otra configurada) es legible en su totalidad, sin recortarse por el borde de la fila ni superponerse con la columna del icono
 
 ### Requirement: Arquitectura Lenis + GSAP compartida por convención
 
@@ -294,3 +299,15 @@ En todas las páginas, enlaces, botones, campos, selects custom y controles de n
 #### Scenario: Interacción consistente entre rutas
 - **WHEN** se repiten los mismos controles en home, Ereditá, Putnam y Contacto
 - **THEN** comparten la misma respuesta visual y los mismos límites de movimiento
+
+### Requirement: Barrido de texto en verde al interactuar con los campos
+
+Cada fila de campo del formulario (`.f-row`) SHALL comunicar su estado hover/foco mediante un barrido de color de izquierda a derecha que pinta el texto de la etiqueta y del valor/placeholder en `var(--putnam-green)`, en vez de depender de una línea que aparezca o se resalte debajo del campo al interactuar. La transición SHALL ser suave (no instantánea) y SHALL tener un equivalente `:focus-within`/`:focus-visible` para que la interacción no dependa exclusivamente de hover, conforme al requisito de "Estados interactivos compartidos".
+
+#### Scenario: Hover sobre un campo
+- **WHEN** una persona pasa el cursor sobre una fila de campo del formulario
+- **THEN** la etiqueta y el texto del campo se pintan de verde mediante un barrido animado de izquierda a derecha, sin que aparezca o se anime una línea inferior como señal principal de la interacción
+
+#### Scenario: Foco por teclado
+- **WHEN** una persona llega a un campo del formulario con Tab
+- **THEN** el campo recibe la misma transición de color que el hover (o un equivalente accesible) además de conservar el foco visible del sistema

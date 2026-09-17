@@ -136,7 +136,7 @@ export const erediteLegalDocs = {
 } as const;
 
 export const erediteProject = {
-  name: 'EREDITÁ Art',
+  name: 'Ereditá Art',
   slug: 'eredita-art',
   status: 'En preventa',
   card: 'El primer edificio de la línea Ereditá: monoambientes, 1 y 2 dormitorios con áreas comunes pensadas para la vida en comunidad.',

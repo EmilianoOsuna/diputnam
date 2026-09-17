@@ -36,6 +36,9 @@ const percentile = (values, p) => {
 await mkdir(artifacts, { recursive: true });
 const browser = await chromium.launch(executablePath ? { executablePath, args: ['--no-sandbox'] } : {});
 const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+// The Google Maps embed (.ed-map, contact map) runs in the page's process under headless and
+// its boot shows up as long tasks/slow frames; the audit measures the site's own code.
+await context.route(/^https:\/\/(www\.google\.com\/maps|maps\.(googleapis|gstatic)\.com)/, (route) => route.abort());
 const page = await context.newPage();
 const cdp = await context.newCDPSession(page);
 await cdp.send('Emulation.setCPUThrottlingRate', { rate: CPU_RATE });

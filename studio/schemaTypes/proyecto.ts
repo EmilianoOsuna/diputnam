@@ -41,7 +41,7 @@ export const proyecto = defineType({
   title: 'Proyecto Ereditá',
   type: 'document',
   fields: [
-    defineField({ name: 'name', title: 'Nombre', type: 'string', description: 'P. ej. "EREDITÁ Art".', validation: (rule) => rule.required() }),
+    defineField({ name: 'name', title: 'Nombre', type: 'string', description: 'P. ej. "Ereditá Art".', validation: (rule) => rule.required() }),
     defineField({
       name: 'slug', title: 'Ruta', type: 'slug', description: 'Se publica en /eredita/<ruta>/ en ambos idiomas.',
       options: { source: 'name', maxLength: 60 },

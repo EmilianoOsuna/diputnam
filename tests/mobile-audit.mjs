@@ -84,7 +84,7 @@ const trackChecks = async (route, trackSelector, total) => {
   await page.screenshot({ path: `${shots}${route.replace(/\//g, '_')}track.png` });
 };
 
-// Typology media gallery on the swipe track (typology-media-gallery + mobile-horizontal-tracks).
+// Typology media gallery (typology-media-gallery). Panels stack vertically on mobile.
 const galleryChecks = async (route) => {
   const requests = [];
   const onRequest = (request) => { if (/\.mp4(\?|$)/.test(request.url())) requests.push(request.url()); };
@@ -112,54 +112,35 @@ const galleryChecks = async (route) => {
     }
     assert.ok(new Set(state.panels.map((p) => p.media)).size > 1, 'dataset should mix media counts');
   });
-  await check(`${route} gallery: card heights and copy offsets do not depend on the number of media`, async () => {
-    const rects = await page.evaluate(() => [...document.querySelectorAll('.ed-h-panel:not(.ed-h-panel--intro)')].map((panel) => {
-      const card = panel.getBoundingClientRect();
-      const copy = panel.querySelector('.ed-h-copy').getBoundingClientRect();
-      return { height: Math.round(card.height), copyTop: Math.round(copy.top - card.top) };
-    }));
-    assert.equal(new Set(rects.map((r) => r.height)).size, 1, `heights ${rects.map((r) => r.height).join(',')}`);
-    assert.equal(new Set(rects.map((r) => r.copyTop)).size, 1, `copy tops ${rects.map((r) => r.copyTop).join(',')}`);
+  await check(`${route} gallery: copy offset does not depend on the number of media`, async () => {
+    const tops = await page.evaluate(() => [...document.querySelectorAll('.ed-h-panel')].map((panel) => Math.round(panel.querySelector('.ed-h-copy').getBoundingClientRect().top - panel.getBoundingClientRect().top)));
+    assert.equal(new Set(tops).size, 1, `copy tops ${tops.join(',')}`);
   });
-  await check(`${route} gallery: selecting the third thumbnail swaps the visible medium and keeps focus`, async () => {
-    const panel = page.locator('.ed-h-panel:not(.ed-h-panel--intro)').filter({ has: page.locator('[role="tab"]:nth-child(3)') }).first();
-    await panel.evaluate((el) => el.scrollIntoView({ block: 'center', inline: 'start' }));
+  await check(`${route} gallery: selecting another thumbnail swaps the visible medium and keeps focus`, async () => {
+    const panel = page.locator('.ed-h-panel').filter({ has: page.locator('[role="tab"]:nth-child(2)') }).first();
+    await panel.evaluate((el) => el.scrollIntoView({ block: 'center' }));
     await page.waitForTimeout(400);
+    const tab = panel.locator('[role="tab"]').last();
     const before = await panel.locator('[role="tabpanel"]:not([hidden]) img, [role="tabpanel"]:not([hidden]) video').first().evaluate((el) => el.currentSrc || el.src || el.querySelector('source')?.src);
-    await panel.locator('[role="tab"]').nth(2).click();
+    await tab.click();
     await page.waitForTimeout(200);
-    const after = await panel.locator('[role="tabpanel"]:not([hidden]) img').first().evaluate((el) => el.currentSrc || el.src);
+    const after = await panel.locator('[role="tabpanel"]:not([hidden]) img, [role="tabpanel"]:not([hidden]) video').first().evaluate((el) => el.currentSrc || el.src || el.querySelector('source')?.src);
     assert.notEqual(after, before, 'medium changed');
-    assert.equal(await panel.locator('[role="tab"]').nth(2).getAttribute('aria-selected'), 'true');
-    assert.equal(await panel.locator('[role="tab"]').nth(2).evaluate((el) => el === document.activeElement), true, 'focus stays on the tab');
-  });
-  await check(`${route} gallery: swiping the thumbnail strip does not move the track`, async () => {
-    const track = page.locator('.ed-h-track');
-    await track.evaluate((el) => { el.scrollTo({ left: 0, behavior: 'auto' }); });
-    await page.waitForTimeout(300);
-    const strip = page.locator('.ed-h-panel:not(.ed-h-panel--intro)').first().locator('.ed-h-thumb-strip');
-    const box = await strip.boundingBox();
-    assert.ok(box, 'first card has a strip');
-    const y = box.y + box.height / 2;
-    const client = await page.context().newCDPSession(page);
-    await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: box.x + box.width - 10, y }] });
-    for (let step = 1; step <= 8; step++) await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: box.x + box.width - 10 - step * 20, y }] });
-    await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-    await page.waitForTimeout(600);
-    assert.equal(await track.evaluate((el) => el.scrollLeft), 0, 'track stayed on the first card');
+    assert.equal(await tab.getAttribute('aria-selected'), 'true');
+    assert.equal(await tab.evaluate((el) => el === document.activeElement), true, 'focus stays on the tab');
   });
   await check(`${route} gallery: the video plays only while its panel is the visible one`, async () => {
     const video = page.locator('.ed-h-panel video[data-video]').first();
     assert.equal(await video.count(), 1, 'dataset has one typology with video');
     const panel = page.locator('.ed-h-panel', { has: page.locator('video[data-video]') }).first();
-    await panel.evaluate((el) => el.scrollIntoView({ block: 'center', inline: 'start' }));
+    await panel.evaluate((el) => el.scrollIntoView({ block: 'center' }));
     await page.waitForTimeout(600);
     assert.equal(await panel.locator('[role="tab"]').first().evaluate((tab) => tab.classList.contains('is-video')), true, 'video is the first medium');
     await panel.locator('[role="tab"]').first().click();
     await page.waitForTimeout(300);
     assert.equal(await video.evaluate((el) => el.paused), false, 'plays when visible and selected');
     assert.ok(requests.some((url) => url.endsWith('.mp4')), 'mp4 requested once visible');
-    await page.locator('.ed-h-track').evaluate((el) => el.scrollTo({ left: 0, behavior: 'auto' }));
+    await page.evaluate(() => scrollTo(0, 0));
     await page.waitForTimeout(600);
     assert.equal(await video.evaluate((el) => el.paused), true, 'pauses when the panel leaves');
   });
@@ -330,15 +311,15 @@ try {
   await page.evaluate(() => scrollTo(0, 0));
   await page.waitForTimeout(300);
   const onHero = await headerTheme();
-  await page.evaluate(() => scrollTo(0, document.querySelector('.process').offsetTop + 200));
+  await page.evaluate(() => scrollTo(0, document.querySelector('.principles').offsetTop + 200));
   await page.waitForTimeout(400);
-  const onProcess = await headerTheme();
+  const onPrinciples = await headerTheme();
   await page.evaluate(() => scrollTo(0, 0));
   await page.waitForTimeout(400);
   const backOnHero = await headerTheme();
-  await check('putnam header switches light → dark → light across hero/process', () => {
+  await check('putnam header switches light → dark → light across hero/principles', () => {
     assert.deepEqual(onHero, { light: true, logo: 'light' }, 'hero');
-    assert.deepEqual(onProcess, { light: false, logo: 'dark' }, 'process');
+    assert.deepEqual(onPrinciples, { light: false, logo: 'dark' }, 'principles');
     assert.deepEqual(backOnHero, { light: true, logo: 'light' }, 'back on hero');
   });
 
@@ -358,7 +339,7 @@ try {
   console.log('\nhorizontal tracks');
   if (project) {
     await page.goto(baseUrl + project, { waitUntil: 'domcontentloaded' });
-    await trackChecks(project, '.ed-h-track', await page.locator('.ed-h-panel:not(.ed-h-panel--intro)').count());
+    // Typologies stack vertically on mobile (no swipe track) since the ui-ux-polish redesign.
     await galleryChecks(project);
   } else {
     failures.push('no Ereditá project page in dist/');

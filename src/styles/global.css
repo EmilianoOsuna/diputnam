@@ -401,3 +401,42 @@ button { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* Custom scroll rail (mirrors tierra-taza): hidden at rest, fades in while scrolling, gone 1 s
+   after the last scroll event. Dot position is compositor-driven via scroll(root). */
+.scroll-rail {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  inset: 0.5rem 0.75rem 0.5rem auto;
+  width: 1rem;
+  container-type: size;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+.scroll-rail__dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0.625rem;
+  height: 0.625rem;
+  margin-left: -0.3125rem;
+  border-radius: 50%;
+  background: var(--putnam-sage);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  animation: scroll-rail-dot linear both;
+}
+/* Separate rule: the CSS minifier folds `animation-timeline` into the `animation` shorthand
+   when both share a block, and Chrome drops the whole declaration. */
+.scroll-rail > .scroll-rail__dot { animation-timeline: scroll(root); }
+@keyframes scroll-rail-dot { to { translate: 0 calc(100cqh - 100%); } }
+/* Desktop only: mobile keeps its native overlay scrollbar and registers no scroll listener. */
+@media (min-width: 768px) {
+  @supports (animation-timeline: scroll()) {
+    html { scrollbar-width: none; }
+    html::-webkit-scrollbar { display: none; }
+    .scroll-rail { display: block; }
+  }
+  html.is-scrolling .scroll-rail { opacity: 1; }
+}

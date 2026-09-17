@@ -25,13 +25,13 @@
     "semantic_hash": ""
   },
   "src/components/ContactFooter.astro": {
-    "mtime": 1789591618.8419647,
-    "ast_hash": "805c9bf124db80b4e3f7e072856adbab",
+    "mtime": 1789604423.1611464,
+    "ast_hash": "e9ad196360c79f78a9b3b83f5b83e353",
     "semantic_hash": ""
   },
   "src/components/SiteHeader.astro": {
-    "mtime": 1789527312.6414168,
-    "ast_hash": "57748ae75fa0706b4b765d93d0a2ccf6",
+    "mtime": 1789607956.8415527,
+    "ast_hash": "f0e5ac1873fc5c48a2dee1f5bf4dc0fc",
     "semantic_hash": ""
   },
   "src/pages/contacto.astro": {
@@ -70,8 +70,8 @@
     "semantic_hash": ""
   },
   "src/scripts/eredita-motion.ts": {
-    "mtime": 1789593405.570661,
-    "ast_hash": "127d1a7d2144a48a9957ce85ba4b59a4",
+    "mtime": 1789598459.7266064,
+    "ast_hash": "53fb325cebb32508d30c8b5b49df9486",
     "semantic_hash": ""
   },
   "src/scripts/menu.ts": {
@@ -320,8 +320,8 @@
     "semantic_hash": ""
   },
   "openspec/specs/contacto-page/spec.md": {
-    "mtime": 1789578358.4276848,
-    "ast_hash": "ed25f44506bcf2e222e6b295b10bed06",
+    "mtime": 1789607956.8415527,
+    "ast_hash": "d8ed0bccf6f31543bc2f4072af3c97fa",
     "semantic_hash": ""
   },
   "openspec/specs/dual-scene-sweep/spec.md": {
@@ -795,13 +795,13 @@
     "semantic_hash": ""
   },
   "src/views/eredita.astro": {
-    "mtime": 1789543469.8741946,
-    "ast_hash": "34ed65240a4158a8daae4089e0ecbd2c",
+    "mtime": 1789602890.5583122,
+    "ast_hash": "23b61463972d5d18409ac387b79d2532",
     "semantic_hash": ""
   },
   "src/views/home.astro": {
-    "mtime": 1789527312.6451092,
-    "ast_hash": "59eb77b29127bb40f8762de08e458a21",
+    "mtime": 1789598423.7882154,
+    "ast_hash": "60a42f8aa029e58b241346d8d21032af",
     "semantic_hash": ""
   },
   "src/views/nota.astro": {
@@ -815,13 +815,13 @@
     "semantic_hash": ""
   },
   "src/views/proyecto.astro": {
-    "mtime": 1789597594.0861683,
-    "ast_hash": "fa96ab889d50bc1b289c777fcf802d00",
+    "mtime": 1789602890.5585868,
+    "ast_hash": "cbee683c3d36250dcc91fce2fa07407e",
     "semantic_hash": ""
   },
   "src/views/putnam.astro": {
-    "mtime": 1789593726.9598122,
-    "ast_hash": "d813e554fef2dd906f1b38f9012a221a",
+    "mtime": 1789598406.9980316,
+    "ast_hash": "55c3c28149829b0adf26298f4cb8c492",
     "semantic_hash": ""
   },
   "src/views/unete.astro": {
@@ -875,8 +875,8 @@
     "semantic_hash": ""
   },
   "studio/schemaTypes/proyecto.ts": {
-    "mtime": 1789543469.8741946,
-    "ast_hash": "3ac3e4a406bdd87cb4accaccd1a680dc",
+    "mtime": 1789607956.8415527,
+    "ast_hash": "95cd99979fa6ade19b881f3fcb5b887c",
     "semantic_hash": ""
   },
   "studio/schemaTypes/siteSettings.ts": {
@@ -885,8 +885,8 @@
     "semantic_hash": ""
   },
   "studio/scripts/migrate-proyectos.ts": {
-    "mtime": 1789573142.3337967,
-    "ast_hash": "39199fbc832efacadac875cec52301e3",
+    "mtime": 1789607956.8415527,
+    "ast_hash": "a94d4a80633f39ffc03976c2803c43e3",
     "semantic_hash": ""
   },
   "studio/scripts/rename-proyecto-id.ts": {
@@ -900,8 +900,8 @@
     "semantic_hash": ""
   },
   "studio/scripts/seed-data/eredita.ts": {
-    "mtime": 1789543469.8751945,
-    "ast_hash": "debe15cfd3645ec0df2df209837d69b9",
+    "mtime": 1789607956.8415527,
+    "ast_hash": "0e0b795105d35bada13b6e7f59d4a4ea",
     "semantic_hash": ""
   },
   "studio/scripts/seed-data/home.ts": {
@@ -1354,51 +1354,6 @@
     "ast_hash": "44f10ba03c6f744d15056cf8ca37eb38",
     "semantic_hash": ""
   },
-  "openspec/changes/ui-ux-polish/.openspec.yaml": {
-    "mtime": 1789581891.7512805,
-    "ast_hash": "aaa4edfe5c3e7ac675bd181f4a146f61",
-    "semantic_hash": ""
-  },
-  "openspec/changes/ui-ux-polish/design.md": {
-    "mtime": 1789582184.6306937,
-    "ast_hash": "de7fb06af4e50df58717e7a62aa691ea",
-    "semantic_hash": ""
-  },
-  "openspec/changes/ui-ux-polish/proposal.md": {
-    "mtime": 1789581937.6851318,
-    "ast_hash": "d6ee41cc4b2e0b27b9babb3e64ec9262",
-    "semantic_hash": ""
-  },
-  "openspec/changes/ui-ux-polish/specs/contacto-page/spec.md": {
-    "mtime": 1789582138.9972615,
-    "ast_hash": "d2b23c8594390e6854f12c3d128a30de",
-    "semantic_hash": ""
-  },
-  "openspec/changes/ui-ux-polish/specs/eredita-project-lines/spec.md": {
-    "mtime": 1789582077.1092205,
-    "ast_hash": "2a72f8f0229b1bab03e88e3466a1394e",
-    "semantic_hash": ""
-  },
-  "openspec/changes/ui-ux-polish/specs/putnam-institutional-page/spec.md": {
-    "mtime": 1789582097.3549013,
-    "ast_hash": "eacbde64878f1f59ea4b79d092037a84",
-    "semantic_hash": ""
-  },
-  "openspec/changes/ui-ux-polish/specs/site-shell-chrome/spec.md": {
-    "mtime": 1789582042.1260116,
-    "ast_hash": "76922269987a7a5f37386744e157340c",
-    "semantic_hash": ""
-  },
-  "openspec/changes/ui-ux-polish/specs/unete-careers-page/spec.md": {
-    "mtime": 1789582060.128639,
-    "ast_hash": "cea124484b9c357671565001add2a98c",
-    "semantic_hash": ""
-  },
-  "openspec/changes/ui-ux-polish/tasks.md": {
-    "mtime": 1789590203.5998206,
-    "ast_hash": "6319382e2b219133e41cf26513b7a246",
-    "semantic_hash": ""
-  },
   "openspec/specs/brand-marks/spec.md": {
     "mtime": 1789527312.6282616,
     "ast_hash": "f1d6003752700b34f4e66a5fc39f375c",
@@ -1415,8 +1370,8 @@
     "semantic_hash": ""
   },
   "openspec/specs/eredita-project-lines/spec.md": {
-    "mtime": 1789578236.0095363,
-    "ast_hash": "e6dada202e2848985af66ff2f15b8773",
+    "mtime": 1789607956.8415527,
+    "ast_hash": "f4faa837d6d4ee4d4de144013535fbb9",
     "semantic_hash": ""
   },
   "openspec/specs/legal-docs/spec.md": {
@@ -1445,8 +1400,8 @@
     "semantic_hash": ""
   },
   "openspec/specs/putnam-institutional-page/spec.md": {
-    "mtime": 1789527312.6282616,
-    "ast_hash": "8473256a9a676c5be605d8111a90061a",
+    "mtime": 1789607956.8415527,
+    "ast_hash": "efe639faaa28818403cd266b1f5e9373",
     "semantic_hash": ""
   },
   "openspec/specs/sanity-content/spec.md": {
@@ -1597,6 +1552,91 @@
   "public/assets/emiliano-osuna.png": {
     "mtime": 1789591295.1471474,
     "ast_hash": "ab773e2e5f6a7272dc8f9b5fdaa9614f",
+    "semantic_hash": ""
+  },
+  "src/scripts/scroll-rail.ts": {
+    "mtime": 1789607025.611954,
+    "ast_hash": "e7061bab8c8f98fd0b50231ba19aee43",
+    "semantic_hash": ""
+  },
+  "openspec/changes/archive/2026-09-16-ui-ux-polish/.openspec.yaml": {
+    "mtime": 1789581891.7512805,
+    "ast_hash": "aaa4edfe5c3e7ac675bd181f4a146f61",
+    "semantic_hash": ""
+  },
+  "openspec/changes/archive/2026-09-16-ui-ux-polish/design.md": {
+    "mtime": 1789582184.6306937,
+    "ast_hash": "de7fb06af4e50df58717e7a62aa691ea",
+    "semantic_hash": ""
+  },
+  "openspec/changes/archive/2026-09-16-ui-ux-polish/proposal.md": {
+    "mtime": 1789581937.6851318,
+    "ast_hash": "d6ee41cc4b2e0b27b9babb3e64ec9262",
+    "semantic_hash": ""
+  },
+  "openspec/changes/archive/2026-09-16-ui-ux-polish/specs/contacto-page/spec.md": {
+    "mtime": 1789582138.9972615,
+    "ast_hash": "d2b23c8594390e6854f12c3d128a30de",
+    "semantic_hash": ""
+  },
+  "openspec/changes/archive/2026-09-16-ui-ux-polish/specs/eredita-project-lines/spec.md": {
+    "mtime": 1789582077.1092205,
+    "ast_hash": "2a72f8f0229b1bab03e88e3466a1394e",
+    "semantic_hash": ""
+  },
+  "openspec/changes/archive/2026-09-16-ui-ux-polish/specs/putnam-institutional-page/spec.md": {
+    "mtime": 1789582097.3549013,
+    "ast_hash": "eacbde64878f1f59ea4b79d092037a84",
+    "semantic_hash": ""
+  },
+  "openspec/changes/archive/2026-09-16-ui-ux-polish/specs/site-shell-chrome/spec.md": {
+    "mtime": 1789582042.1260116,
+    "ast_hash": "76922269987a7a5f37386744e157340c",
+    "semantic_hash": ""
+  },
+  "openspec/changes/archive/2026-09-16-ui-ux-polish/specs/unete-careers-page/spec.md": {
+    "mtime": 1789582060.128639,
+    "ast_hash": "cea124484b9c357671565001add2a98c",
+    "semantic_hash": ""
+  },
+  "openspec/changes/archive/2026-09-16-ui-ux-polish/tasks.md": {
+    "mtime": 1789590203.5998206,
+    "ast_hash": "6319382e2b219133e41cf26513b7a246",
+    "semantic_hash": ""
+  },
+  "openspec/changes/custom-scrollbar/.openspec.yaml": {
+    "mtime": 1789606125.2938564,
+    "ast_hash": "aaa4edfe5c3e7ac675bd181f4a146f61",
+    "semantic_hash": ""
+  },
+  "openspec/changes/custom-scrollbar/design.md": {
+    "mtime": 1789608026.3032596,
+    "ast_hash": "fa924f9f403593edeb7212990f832d84",
+    "semantic_hash": ""
+  },
+  "openspec/changes/custom-scrollbar/proposal.md": {
+    "mtime": 1789608026.3013923,
+    "ast_hash": "e263eea651ab716206937173a7461d42",
+    "semantic_hash": ""
+  },
+  "openspec/changes/custom-scrollbar/specs/site-scroll-rail/spec.md": {
+    "mtime": 1789608026.302234,
+    "ast_hash": "f576aa15407d94e5f922038bc81c2888",
+    "semantic_hash": ""
+  },
+  "openspec/changes/custom-scrollbar/tasks.md": {
+    "mtime": 1789608026.303396,
+    "ast_hash": "e940ecbaa324914f5acccef0852f09e8",
+    "semantic_hash": ""
+  },
+  "openspec/specs/site-shell-chrome/spec.md": {
+    "mtime": 1789606009.4613628,
+    "ast_hash": "200d413f677f7c34f62eef5214856088",
+    "semantic_hash": ""
+  },
+  "openspec/specs/unete-careers-page/spec.md": {
+    "mtime": 1789606009.4615479,
+    "ast_hash": "d334d12cc6d309e4cc811c985a176853",
     "semantic_hash": ""
   }
 }

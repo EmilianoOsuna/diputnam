@@ -43,9 +43,9 @@ export const plan = (eredita: Eredita, projectExists: boolean): Plan => {
     if (!poster) throw new Error('`eredita.hero.poster` is missing; cannot build the project card.');
     result.creates.push({
       _id: PROJECT_ID, _type: 'proyecto',
-      name: 'EREDITÁ Art', slug: { _type: 'slug', current: 'eredita-art' }, order: 1,
+      name: 'Ereditá Art', slug: { _type: 'slug', current: 'eredita-art' }, order: 1,
       status: { es: 'En preventa', en: 'Pre-sale' },
-      card: { image: poster, text: eredita.intro?.lead ?? { es: 'EREDITÁ Art' } },
+      card: { image: poster, text: eredita.intro?.lead ?? { es: 'Ereditá Art' } },
       hero: eredita.hero, intro: eredita.intro,
       gallery: eredita.gallery,
       typologies: eredita.typologies && { ...eredita.typologies, items: (eredita.typologies.items ?? []).map(toProjectTypology) },

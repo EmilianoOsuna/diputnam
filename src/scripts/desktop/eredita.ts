@@ -83,13 +83,8 @@ export const mount = (root: HTMLElement) => {
           const active = i === index;
           el?.classList.toggle('is-active', active);
           // All stacked media sit in the same viewport position once slotted, so
-          // `typology-media.ts`'s own IntersectionObserver can't tell which is "visible" —
-          // pause every video except the active one explicitly instead.
-          const video = el?.querySelector<HTMLVideoElement>('video[data-video]');
-          if (!video) return;
-          const isSelectedMedium = !(video.closest('[role="tabpanel"]') as HTMLElement | null)?.hidden;
-          if (active && isSelectedMedium) video.play().catch(() => {});
-          else video.pause();
+          // `typology-media.ts` only plays the `is-active` one; ask it to resync.
+          el?.dispatchEvent(new Event('typology-sync'));
         });
         if (current) current.textContent = String(index + 1).padStart(2, '0');
       };

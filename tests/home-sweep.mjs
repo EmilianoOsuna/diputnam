@@ -25,7 +25,7 @@ try {
   await page.setViewportSize({ width: 1440, height: 900 });
 
   assert.deepEqual(await page.locator('[data-panel] h1 a, [data-panel] h2 a').evaluateAll((links) => links.map((link) => link.getAttribute('href'))), [
-    '#inicio', '/eredita/', '/putnam/', '#contacto',
+    '#inicio', '/eredita/', '/putnam/', '/contacto/',
   ]);
   assert.equal(await page.locator('.panel-eyebrow, .panel-description, .panel-link, .panel-index').count(), 0);
   assert.equal(await page.locator('[data-scroll-cue]').count(), 1);
