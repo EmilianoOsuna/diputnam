@@ -3231,17 +3231,6 @@
       "norm_label": "observeactive()"
     },
     {
-      "label": "mountSwipe()",
-      "file_type": "code",
-      "source_file": "src/scripts/motion.ts",
-      "source_location": "L49",
-      "_origin": "ast",
-      "id": "src_scripts_motion_mountswipe",
-      "community": 25,
-      "community_name": "motion.ts",
-      "norm_label": "mountswipe()"
-    },
-    {
       "label": "noticias-motion.ts",
       "file_type": "code",
       "source_file": "src/scripts/noticias-motion.ts",
@@ -31854,17 +31843,6 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/scripts/motion.ts",
-      "source_location": "L49",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_scripts_motion",
-      "target": "src_scripts_motion_mountswipe",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/scripts/motion.ts",
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
@@ -51572,5 +51550,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "4d0e73ca2dbc70d86fd12470a38fd6cd10003896"
+  "built_at_commit": "927c136d1776e6daf8cb15d3a6a09984d037b83b"
 }

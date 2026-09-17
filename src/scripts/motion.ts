@@ -41,6 +41,49 @@ const observeActive = (targets: HTMLElement[]) => {
   targets.forEach((target) => observer.observe(target));
 };
 
+// One swipe = one scene, Swiper-style: the page follows the finger 1:1 (native scrolling is
+// off via touch-action), and on release the document glides to the next/previous marker top
+// with the browser's smooth scroll, so the sweep lands without any fling or snap bounce.
+// A quick flick (< 300 ms) always changes scene; a slow drag needs half a screen. No rAF, no
+// scroll listener: the CSS scroll-driven animations do the drawing.
+const mountSwipe = (targets: HTMLElement[]) => {
+  document.body.classList.add('is-swipe');
+  let startY = 0;
+  let startScroll = 0;
+  let startTime = 0;
+  let tops: number[] = [];
+  let maxScroll = 0;
+  let dragging = false;
+  const nearest = (y: number) => tops.reduce((best, top, index) => (Math.abs(top - y) < Math.abs(tops[best] - y) ? index : best), 0);
+  const onStart = (event: TouchEvent) => {
+    if (document.body.classList.contains('menu-open') || event.touches.length !== 1) return;
+    dragging = true;
+    startY = event.touches[0].clientY;
+    startScroll = window.scrollY;
+    startTime = event.timeStamp;
+    tops = targets.map((target) => target.offsetTop);
+    maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  };
+  const onMove = (event: TouchEvent) => {
+    if (!dragging) return;
+    window.scrollTo({ top: Math.min(maxScroll, Math.max(0, startScroll + startY - event.touches[0].clientY)), behavior: 'auto' });
+  };
+  const onEnd = (event: TouchEvent) => {
+    if (!dragging) return;
+    dragging = false;
+    const delta = startY - event.changedTouches[0].clientY;
+    const quick = event.timeStamp - startTime < 300 && Math.abs(delta) > 10;
+    const from = nearest(startScroll);
+    let to = from;
+    if (quick || Math.abs(delta) > window.innerHeight / 2) to = Math.min(targets.length - 1, Math.max(0, from + Math.sign(delta)));
+    window.scrollTo({ top: Math.min(maxScroll, tops[to]), behavior: 'smooth' });
+  };
+  document.addEventListener('touchstart', onStart, { passive: true });
+  document.addEventListener('touchmove', onMove, { passive: true });
+  document.addEventListener('touchend', onEnd, { passive: true });
+  document.addEventListener('touchcancel', onEnd, { passive: true });
+};
+
 if (!reducedMotion && home && panels.length > 1 && markers.length === panels.length && markerTrack) {
   if (desktop) {
     Promise.all([splitTitles(home, settleLines), import('./desktop/home')]).then(([, { mount }]) => {
@@ -57,8 +100,8 @@ if (!reducedMotion && home && panels.length > 1 && markers.length === panels.len
     });
     if (supportsScrollTimeline()) {
       home.classList.add('is-enhanced', 'is-css-sweep');
-      document.documentElement.classList.add('home-snap');
       observeActive(markers);
+      mountSwipe(markers);
     } else {
       home.classList.add('is-stacked');
       document.documentElement.classList.add('home-snap');
