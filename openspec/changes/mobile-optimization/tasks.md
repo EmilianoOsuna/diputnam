@@ -33,7 +33,7 @@
 - [x] 5.3 Capturas a 1280 px de home, `/putnam/`, `/eredita/eredita-art/`, `/unete/` y `/contacto/` comparadas con `main` para confirmar que desktop no cambió.
 - [x] 5.4 `graphify update .` para refrescar el grafo.
 
-## 6. Home: una escena por swipe (añadido durante la implementación)
+## 6. Home: slider a pantalla completa (añadido durante la implementación)
 
-- [x] 6.1 `motion.ts` `mountSwipe()`: `touch-action: pinch-zoom` en `body`, la escena sigue al dedo en `touchmove` y al soltar un tween rAF de 500 ms con curva `ease` (Swiper) aterriza en el marcador siguiente/anterior; flick < 300 ms siempre cambia, arrastre lento necesita media pantalla; clamp en los extremos; ignora el menú abierto. Verificado con toques sintéticos (flick → siguiente, arrastre corto → vuelve, tope sin rebote).
-- [x] 6.2 `tests/mobile-perf.mjs`: en `/` y `/en/` se admiten ≤ 36 rAF por gesto (el tween) y 0 en reposo; `test:perf`, `test:mobile` y `test:sweep` en verde.
+- [x] 6.1 `motion.ts` `mountSlider()` (modelo Swiper vertical: speed 500, resistanceRatio 0, parallax 60 % / 100 % / −60 px): el documento no se desplaza (`body.is-slider`, `touch-action: pinch-zoom`), la pila de paneles se mueve con `translate`, arrastre 1:1 sin transición y aterrizaje con `transition: translate 500ms ease` en el compositor; flick < 300 ms siempre cambia, arrastre lento necesita media pantalla; clamp en los extremos; ignora el menú abierto; la flecha y los anclas `#id` usan `slideTo`. Verificado con toques sintéticos.
+- [x] 6.2 `global.css`: bloque `.home.is-slider` (sustituye al sweep scroll-driven y al fallback apilado). `tests/mobile-audit.mjs`: modo slider, documento sin scroll, cada escena cubre el viewport a 844 y 754 px, flecha una escena por pulsación. `test:mobile`, `test:perf` (0 rAF/scroll en la home) y `test:sweep` en verde.

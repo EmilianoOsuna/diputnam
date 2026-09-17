@@ -359,34 +359,20 @@ button { font: inherit; }
   .scroll-cue { right: 1rem; bottom: 1rem; }
 }
 
-/* Home on phones: the scene sweep runs in the compositor as CSS scroll-driven animations.
-   Panel n enters over the view timeline of scene marker n and exits over marker n+1 (the
-   timelines are assigned inline in index.astro); both play from "marker top at the
-   viewport bottom" to "marker top at the viewport top", so the sweep ends exactly where
-   the JS engine's did. Enter/exit are summed (`animation-composition: add`) so the fill
-   states never fight: before entering 100% + 0, settled 0 + 0, after exiting 0 − 100%.
-   The copy travels the opposite way minus 60px, which keeps the title anchored. */
+/* Home on phones: a full-screen vertical slider (see `mountSlider` in motion.ts). The
+   document never scrolls, so the address bar stays put and the stage is exactly one
+   screen. The wrapper and the parallax layers (media, copy, title) move with `translate`;
+   the 500 ms `ease` transition is Swiper's default slide speed/curve and is switched off
+   while a finger drags. */
 @media (max-width: 767px) {
-  @keyframes scene-enter { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  @keyframes scene-exit { from { transform: translateY(0); } to { transform: translateY(-100%); } }
-  @keyframes title-in { from { transform: translateY(calc(-100lvh + 60px)); } to { transform: translateY(0); } }
-  @keyframes title-out { from { transform: translateY(0); } to { transform: translateY(calc(100lvh - 60px)); } }
-  .home.is-css-sweep .panel { opacity: 1; visibility: visible; animation: scene-enter linear both, scene-exit linear both; animation-composition: add; }
-  .home.is-css-sweep .panel-content { animation: title-in linear both, title-out linear both; animation-composition: add; }
-  /* Separate rules on purpose: the minifier would fold `animation-range` into the
-     `animation` shorthand, which browsers reject. */
-  .home.is-css-sweep [data-panel] { animation-range: entry 0% exit 0%; }
-  .home.is-css-sweep [data-panel] > .panel-content { animation-range: entry 0% exit 0%; }
-
-  /* No `animation-timeline` support: scenes stack full-screen with vertical snap. */
-  .home.is-stacked .home-stage { position: relative; height: auto; overflow: visible; }
-  .home.is-stacked .panel { position: relative; height: 100svh; min-height: 100svh; scroll-snap-align: start; }
-  .home.is-stacked .scene-markers { display: none; }
-  /* One swipe = one scene. Scroll-driven mode: `motion.ts` drives the scroll from touch
-     (native touch scrolling off, pinch-zoom kept); stacked fallback: native mandatory snap. */
-  body.is-swipe { touch-action: pinch-zoom; }
-  .home.is-stacked .panel { scroll-snap-stop: always; }
-  html.home-snap { scroll-snap-type: y mandatory; }
+  body.is-slider { height: 100dvh; overflow: hidden; touch-action: pinch-zoom; }
+  .home.is-slider .home-experience { position: fixed; inset: 0; overflow: hidden; background: #0d1116; }
+  .home.is-slider .home-stage { display: flex; flex-direction: column; height: 100%; will-change: translate; transition: translate 500ms ease; }
+  .home.is-slider .panel { flex: 0 0 100%; height: 100%; min-height: 0; }
+  .home.is-slider :is(.panel-media, .panel-content, .panel h1, .panel h2) { will-change: translate; transition: translate 500ms ease; }
+  .home.is-slider .is-dragging, .home.is-slider .is-dragging :is(.panel-media, .panel-content, .panel h1, .panel h2) { transition: none; }
+  .home.is-slider :is(.scene-markers, [data-scroll-end]) { display: none; }
+  .home.is-slider .panel:not(.is-active) .panel-content { pointer-events: none; }
 }
 
 @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {

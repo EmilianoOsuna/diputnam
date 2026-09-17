@@ -3231,26 +3231,26 @@
       "norm_label": "observeactive()"
     },
     {
-      "label": "ease()",
+      "label": "mountSlider()",
       "file_type": "code",
       "source_file": "src/scripts/motion.ts",
-      "source_location": "L45",
+      "source_location": "L51",
       "_origin": "ast",
-      "id": "src_scripts_motion_ease",
+      "id": "src_scripts_motion_mountslider",
       "community": 25,
       "community_name": "motion.ts",
-      "norm_label": "ease()"
+      "norm_label": "mountslider()"
     },
     {
-      "label": "mountSwipe()",
+      "label": "setCue()",
       "file_type": "code",
       "source_file": "src/scripts/motion.ts",
-      "source_location": "L58",
+      "source_location": "L117",
       "_origin": "ast",
-      "id": "src_scripts_motion_mountswipe",
+      "id": "src_scripts_motion_setcue",
       "community": 25,
       "community_name": "motion.ts",
-      "norm_label": "mountswipe()"
+      "norm_label": "setcue()"
     },
     {
       "label": "noticias-motion.ts",
@@ -15903,6 +15903,17 @@
       "norm_label": "scenario: ultima escena"
     },
     {
+      "label": "Scenario: Sin trabajo por frame",
+      "file_type": "document",
+      "source_file": "openspec/changes/mobile-optimization/specs/home-ui-motion-readability/spec.md",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "openspec_changes_mobile_optimization_specs_home_ui_motion_readability_spec_scenario_sin_trabajo_por_frame",
+      "community": 181,
+      "community_name": "Requirement: Una escena por swipe en m\u00f3vil",
+      "norm_label": "scenario: sin trabajo por frame"
+    },
+    {
       "label": "spec.md",
       "file_type": "document",
       "source_file": "openspec/changes/mobile-optimization/specs/mobile-horizontal-tracks/spec.md",
@@ -16301,72 +16312,6 @@
     {
       "label": "spec.md",
       "file_type": "document",
-      "source_file": "openspec/changes/mobile-optimization/specs/mobile-rendering-performance/spec.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec",
-      "community": 182,
-      "community_name": "Requirement: Scroll m\u00f3vil sin trabajo por frame en el hilo principal",
-      "norm_label": "spec.md"
-    },
-    {
-      "label": "MODIFIED Requirements",
-      "file_type": "document",
-      "source_file": "openspec/changes/mobile-optimization/specs/mobile-rendering-performance/spec.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_modified_requirements",
-      "community": 182,
-      "community_name": "Requirement: Scroll m\u00f3vil sin trabajo por frame en el hilo principal",
-      "norm_label": "modified requirements"
-    },
-    {
-      "label": "Requirement: Scroll m\u00f3vil sin trabajo por frame en el hilo principal",
-      "file_type": "document",
-      "source_file": "openspec/changes/mobile-optimization/specs/mobile-rendering-performance/spec.md",
-      "source_location": "L3",
-      "_origin": "ast",
-      "id": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_requirement_scroll_m\u00f3vil_sin_trabajo_por_frame_en_el_hilo_principal",
-      "community": 182,
-      "community_name": "Requirement: Scroll m\u00f3vil sin trabajo por frame en el hilo principal",
-      "norm_label": "requirement: scroll movil sin trabajo por frame en el hilo principal"
-    },
-    {
-      "label": "Scenario: Scroll vertical de la home",
-      "file_type": "document",
-      "source_file": "openspec/changes/mobile-optimization/specs/mobile-rendering-performance/spec.md",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_scenario_scroll_vertical_de_la_home",
-      "community": 182,
-      "community_name": "Requirement: Scroll m\u00f3vil sin trabajo por frame en el hilo principal",
-      "norm_label": "scenario: scroll vertical de la home"
-    },
-    {
-      "label": "Scenario: Scroll vertical de una p\u00e1gina interior",
-      "file_type": "document",
-      "source_file": "openspec/changes/mobile-optimization/specs/mobile-rendering-performance/spec.md",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_scenario_scroll_vertical_de_una_p\u00e1gina_interior",
-      "community": 182,
-      "community_name": "Requirement: Scroll m\u00f3vil sin trabajo por frame en el hilo principal",
-      "norm_label": "scenario: scroll vertical de una pagina interior"
-    },
-    {
-      "label": "Scenario: Swipe en una pista horizontal",
-      "file_type": "document",
-      "source_file": "openspec/changes/mobile-optimization/specs/mobile-rendering-performance/spec.md",
-      "source_location": "L14",
-      "_origin": "ast",
-      "id": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_scenario_swipe_en_una_pista_horizontal",
-      "community": 182,
-      "community_name": "Requirement: Scroll m\u00f3vil sin trabajo por frame en el hilo principal",
-      "norm_label": "scenario: swipe en una pista horizontal"
-    },
-    {
-      "label": "spec.md",
-      "file_type": "document",
       "source_file": "openspec/changes/mobile-optimization/specs/site-shell-chrome/spec.md",
       "source_location": "L1",
       "_origin": "ast",
@@ -16629,15 +16574,15 @@
       "norm_label": "5. verificacion integrada"
     },
     {
-      "label": "6. Home: una escena por swipe (a\u00f1adido durante la implementaci\u00f3n)",
+      "label": "6. Home: slider a pantalla completa (a\u00f1adido durante la implementaci\u00f3n)",
       "file_type": "document",
       "source_file": "openspec/changes/mobile-optimization/tasks.md",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "openspec_changes_mobile_optimization_tasks_6_home_una_escena_por_swipe_a\u00f1adido_durante_la_implementaci\u00f3n",
+      "id": "openspec_changes_mobile_optimization_tasks_6_home_slider_a_pantalla_completa_a\u00f1adido_durante_la_implementaci\u00f3n",
       "community": 178,
       "community_name": "tasks.md",
-      "norm_label": "6. home: una escena por swipe (anadido durante la implementacion)"
+      "norm_label": "6. home: slider a pantalla completa (anadido durante la implementacion)"
     },
     {
       "label": "design.md",
@@ -26864,18 +26809,6 @@
       "target": "src_i18n_index_t"
     },
     {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/scripts/motion.ts",
-      "source_location": "L72",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_scripts_motion_mountswipe",
-      "target": "src_i18n_index_t"
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -31672,18 +31605,6 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/scripts/motion.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_scripts_motion",
-      "target": "src_scripts_mobile_motion_supportsscrolltimeline",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -31987,17 +31908,6 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/scripts/motion.ts",
-      "source_location": "L45",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_scripts_motion",
-      "target": "src_scripts_motion_ease",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/scripts/motion.ts",
       "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
@@ -32031,11 +31941,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/scripts/motion.ts",
-      "source_location": "L58",
+      "source_location": "L51",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_scripts_motion",
-      "target": "src_scripts_motion_mountswipe",
+      "target": "src_scripts_motion_mountslider",
       "confidence_score": 1.0
     },
     {
@@ -32108,11 +32018,34 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/scripts/motion.ts",
+      "source_location": "L117",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_scripts_motion",
+      "target": "src_scripts_motion_setcue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scripts/motion.ts",
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_scripts_motion",
       "target": "src_scripts_motion_stage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scripts/motion.ts",
+      "source_location": "L80",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_scripts_motion_mountslider",
+      "target": "src_scripts_motion_setactive",
       "confidence_score": 1.0
     },
     {
@@ -32132,11 +32065,11 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/scripts/motion.ts",
-      "source_location": "L72",
+      "source_location": "L81",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_scripts_motion_mountswipe",
-      "target": "src_scripts_motion_ease",
+      "source": "src_scripts_motion_mountslider",
+      "target": "src_scripts_motion_setcue",
       "confidence_score": 1.0
     },
     {
@@ -44294,6 +44227,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "openspec/changes/mobile-optimization/specs/home-ui-motion-readability/spec.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "openspec_changes_mobile_optimization_specs_home_ui_motion_readability_spec_requirement_una_escena_por_swipe_en_m\u00f3vil",
+      "target": "openspec_changes_mobile_optimization_specs_home_ui_motion_readability_spec_scenario_sin_trabajo_por_frame",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "openspec/changes/mobile-optimization/specs/home-ui-motion-readability/spec.md",
       "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
@@ -44678,61 +44622,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "openspec/changes/mobile-optimization/specs/mobile-rendering-performance/spec.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec",
-      "target": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_modified_requirements",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "openspec/changes/mobile-optimization/specs/mobile-rendering-performance/spec.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_modified_requirements",
-      "target": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_requirement_scroll_m\u00f3vil_sin_trabajo_por_frame_en_el_hilo_principal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "openspec/changes/mobile-optimization/specs/mobile-rendering-performance/spec.md",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_requirement_scroll_m\u00f3vil_sin_trabajo_por_frame_en_el_hilo_principal",
-      "target": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_scenario_scroll_vertical_de_la_home",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "openspec/changes/mobile-optimization/specs/mobile-rendering-performance/spec.md",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_requirement_scroll_m\u00f3vil_sin_trabajo_por_frame_en_el_hilo_principal",
-      "target": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_scenario_scroll_vertical_de_una_p\u00e1gina_interior",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "openspec/changes/mobile-optimization/specs/mobile-rendering-performance/spec.md",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_requirement_scroll_m\u00f3vil_sin_trabajo_por_frame_en_el_hilo_principal",
-      "target": "openspec_changes_mobile_optimization_specs_mobile_rendering_performance_spec_scenario_swipe_en_una_pista_horizontal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "openspec/changes/mobile-optimization/specs/site-shell-chrome/spec.md",
       "source_location": "L33",
       "weight": 1.0,
@@ -44969,7 +44858,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "openspec_changes_mobile_optimization_tasks",
-      "target": "openspec_changes_mobile_optimization_tasks_6_home_una_escena_por_swipe_a\u00f1adido_durante_la_implementaci\u00f3n",
+      "target": "openspec_changes_mobile_optimization_tasks_6_home_slider_a_pantalla_completa_a\u00f1adido_durante_la_implementaci\u00f3n",
       "confidence_score": 1.0
     },
     {
@@ -51882,5 +51771,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "23abb357da5389b6e98bb38ba1ef92cc0ab45991"
+  "built_at_commit": "e6793ea65fb8badcfb34502be6d8d506052df3f0"
 }
