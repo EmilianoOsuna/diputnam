@@ -9,6 +9,14 @@ export const SITE_NAME = 'Putnam';
 
 export const absolute = (path: string) => new URL(path, SITE).toString();
 
+// Origin the social cover is fetched from. Canonical URLs stay on SITE, but WhatsApp/
+// Facebook download og:image at share time, so it must be a host that resolves today:
+// Vercel's production URL (the *.vercel.app name until the custom domain is attached,
+// then the domain itself). `PUBLIC_ASSET_ORIGIN` overrides it; local builds use SITE.
+const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL && `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+export const ASSET_ORIGIN = (process.env.PUBLIC_ASSET_ORIGIN || productionHost || SITE).replace(/\/$/, '');
+export const asset = (path: string) => (/^https?:\/\//.test(path) ? path : new URL(path, ASSET_ORIGIN).toString());
+
 // Facebook's code for Latin American Spanish; X and LinkedIn ignore unknown locales.
 export const ogLocale = (lang: Lang) => (lang === 'es' ? 'es_LA' : 'en_US');
 

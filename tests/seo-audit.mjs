@@ -16,7 +16,9 @@ const walk = async (dir) => {
   return (await Promise.all(entries.map((entry) => (entry.isDirectory() ? walk(join(dir, entry.name)) : join(dir, entry.name))))).flat();
 };
 const exists = (path) => stat(path).then(() => true, () => false);
-const localPath = (url) => (url.startsWith(`${SITE}/`) ? join(dist, url.slice(SITE.length + 1)) : null);
+// og:image is served from the deploy host (see ASSET_ORIGIN in src/lib/seo.ts), not necessarily SITE.
+const assetOrigin = (process.env.PUBLIC_ASSET_ORIGIN || (process.env.VERCEL_PROJECT_PRODUCTION_URL && `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`) || SITE).replace(/\/$/, '');
+const localPath = (url) => (url.startsWith(`${assetOrigin}/`) ? join(dist, url.slice(assetOrigin.length + 1)) : null);
 const pngSize = async (path) => { const buf = await readFile(path); return buf.toString('ascii', 1, 4) === 'PNG' ? [buf.readUInt32BE(16), buf.readUInt32BE(20)] : null; };
 const meta = (html, attr, name) => html.match(new RegExp(`<meta ${attr}="${name}" content="([^"]*)"`))?.[1];
 const decode = (text) => text.replaceAll('&amp;', '&').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&quot;', '"').replaceAll('&#39;', "'");

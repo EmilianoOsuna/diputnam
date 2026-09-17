@@ -1,7 +1,7 @@
 ---
 import { pages, t, type Lang, type PageKey } from '../i18n';
 import type { Settings } from '../lib/content';
-import { absolute, jsonLd, jsonLdScript, ogLocale, pageTypeOf, SITE_NAME, type ArticleMeta, type PageType } from '../lib/seo';
+import { absolute, asset, jsonLd, jsonLdScript, ogLocale, pageTypeOf, SITE_NAME, type ArticleMeta, type PageType } from '../lib/seo';
 import { OG_HEIGHT, OG_WIDTH } from '../lib/images';
 
 // `page` resolves the hreflang pair from the route table; `alternate` overrides it for
@@ -28,7 +28,7 @@ const canonical = absolute(path);
 const xDefault = absolute(href('es') ?? pages[page].es);
 const pair = alternates.find((entry) => entry.target !== lang);
 
-const image = absolute(Astro.props.image ?? `/og/${page}-${lang}.png`);
+const image = asset(Astro.props.image ?? `/og/${page}-${lang}.png`);
 const imageAlt = Astro.props.imageAlt ?? ui.og.alt;
 const imageType = Astro.props.imageType ?? 'image/png';
 
