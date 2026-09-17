@@ -32,3 +32,8 @@
 - [x] 5.2 Capturas a 390 × 844 de: home (sin footer, flecha visible, menú abierto), footer en flujo de `/putnam/`, Tipologías de `/eredita/eredita-art/`, Proceso de `/putnam/`, Proceso de selección y CTA de `/unete/`, Canales/Ubicación/Formulario/CTA de `/contacto/`, hero de `/en/news/`; comparar con las capturas del reporte y confirmar que cada punto está resuelto.
 - [x] 5.3 Capturas a 1280 px de home, `/putnam/`, `/eredita/eredita-art/`, `/unete/` y `/contacto/` comparadas con `main` para confirmar que desktop no cambió.
 - [x] 5.4 `graphify update .` para refrescar el grafo.
+
+## 6. Home: una escena por swipe (añadido durante la implementación)
+
+- [x] 6.1 `motion.ts` `mountSwipe()`: `touch-action: pinch-zoom` en `body`, la escena sigue al dedo en `touchmove` y al soltar un tween rAF de 500 ms con curva `ease` (Swiper) aterriza en el marcador siguiente/anterior; flick < 300 ms siempre cambia, arrastre lento necesita media pantalla; clamp en los extremos; ignora el menú abierto. Verificado con toques sintéticos (flick → siguiente, arrastre corto → vuelve, tope sin rebote).
+- [x] 6.2 `tests/mobile-perf.mjs`: en `/` y `/en/` se admiten ≤ 36 rAF por gesto (el tween) y 0 en reposo; `test:perf`, `test:mobile` y `test:sweep` en verde.

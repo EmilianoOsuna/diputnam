@@ -41,11 +41,20 @@ const observeActive = (targets: HTMLElement[]) => {
   targets.forEach((target) => observer.observe(target));
 };
 
+// CSS `ease` (cubic-bezier(0.25, 0.1, 0.25, 1)), Swiper's default slide transition.
+const ease = (t: number) => {
+  const bx = (u: number) => 3 * 0.25 * (1 - u) ** 2 * u + 3 * 0.25 * (1 - u) * u ** 2 + u ** 3;
+  const by = (u: number) => 3 * 0.1 * (1 - u) ** 2 * u + 3 * (1 - u) * u ** 2 + u ** 3;
+  let lo = 0, hi = 1, u = t;
+  for (let i = 0; i < 12; i++) { u = (lo + hi) / 2; if (bx(u) < t) lo = u; else hi = u; }
+  return by(u);
+};
+
 // One swipe = one scene, Swiper-style: the page follows the finger 1:1 (native scrolling is
-// off via touch-action), and on release the document glides to the next/previous marker top
-// with the browser's smooth scroll, so the sweep lands without any fling or snap bounce.
-// A quick flick (< 300 ms) always changes scene; a slow drag needs half a screen. No rAF, no
-// scroll listener: the CSS scroll-driven animations do the drawing.
+// off via touch-action), and on release the document tweens to the next/previous marker top
+// over 500 ms with Swiper's ease, so the sweep lands without any fling or snap bounce.
+// A quick flick (< 300 ms) always changes scene; a slow drag needs half a screen. The only
+// per-frame work is the 500 ms landing tween; the CSS scroll-driven animations do the drawing.
 const mountSwipe = (targets: HTMLElement[]) => {
   document.body.classList.add('is-swipe');
   let startY = 0;
@@ -54,10 +63,27 @@ const mountSwipe = (targets: HTMLElement[]) => {
   let tops: number[] = [];
   let maxScroll = 0;
   let dragging = false;
+  let tween = 0;
+  const glide = (to: number) => {
+    const from = window.scrollY;
+    const start = performance.now();
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / 500);
+      const next = from + (to - from) * ease(t);
+      // Sub-pixel tail is invisible: land as soon as the remaining distance is under a pixel.
+      const done = t >= 1 || Math.abs(to - next) < 1;
+      window.scrollTo({ top: done ? to : next, behavior: 'auto' });
+      tween = done ? 0 : window.requestAnimationFrame(step);
+    };
+    window.cancelAnimationFrame(tween);
+    tween = window.requestAnimationFrame(step);
+  };
   const nearest = (y: number) => tops.reduce((best, top, index) => (Math.abs(top - y) < Math.abs(tops[best] - y) ? index : best), 0);
   const onStart = (event: TouchEvent) => {
     if (document.body.classList.contains('menu-open') || event.touches.length !== 1) return;
     dragging = true;
+    window.cancelAnimationFrame(tween);
+    tween = 0;
     startY = event.touches[0].clientY;
     startScroll = window.scrollY;
     startTime = event.timeStamp;
@@ -76,7 +102,7 @@ const mountSwipe = (targets: HTMLElement[]) => {
     const from = nearest(startScroll);
     let to = from;
     if (quick || Math.abs(delta) > window.innerHeight / 2) to = Math.min(targets.length - 1, Math.max(0, from + Math.sign(delta)));
-    window.scrollTo({ top: Math.min(maxScroll, tops[to]), behavior: 'smooth' });
+    glide(Math.min(maxScroll, tops[to]));
   };
   document.addEventListener('touchstart', onStart, { passive: true });
   document.addEventListener('touchmove', onMove, { passive: true });

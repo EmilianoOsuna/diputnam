@@ -179,5 +179,7 @@
   "177": "design.md",
   "178": "tasks.md",
   "179": "Requirement: Renglones de hero sin solaparse en móvil",
-  "180": "SocialLinks.astro"
+  "180": "SocialLinks.astro",
+  "181": "Requirement: Una escena por swipe en móvil",
+  "182": "Requirement: Scroll móvil sin trabajo por frame en el hilo principal"
 }

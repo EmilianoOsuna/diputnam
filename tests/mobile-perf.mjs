@@ -159,6 +159,8 @@ try {
       console.log(`  ${pass.label}: ${JSON.stringify(pass)}`);
       check(`${route} ${pass.label}: no site rAF/scroll callbacks during the gesture`, () => {
         if (!scrollTimeline && route === '/putnam/') assert.ok(pass.raf <= pass.frames, `raf ${pass.raf} > frames ${pass.frames} (fallback)`);
+        // Home: the swipe landing is a 500 ms rAF tween (≤ ~30 frames at 60 Hz); the drag itself adds none.
+        else if (route === '/' || route === '/en/') { assert.equal(pass.scroll, 0, `scroll ${pass.scroll}`); assert.ok(pass.raf <= 36, `raf ${pass.raf} > 36 (landing tween)`); }
         else assert.equal(pass.raf + pass.scroll, 0, `raf ${pass.raf}, scroll ${pass.scroll}`);
       });
       check(`${route} ${pass.label}: p95 frame interval ≤ 20ms`, () => { assert.ok(pass.frames > 20, `only ${pass.frames} frames sampled`); assert.ok(pass.p95 <= 20, `p95 ${pass.p95}ms`); });
