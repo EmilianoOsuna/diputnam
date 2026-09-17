@@ -57,6 +57,7 @@ if (!reducedMotion && home && panels.length > 1 && markers.length === panels.len
     });
     if (supportsScrollTimeline()) {
       home.classList.add('is-enhanced', 'is-css-sweep');
+      document.documentElement.classList.add('home-snap');
       observeActive(markers);
     } else {
       home.classList.add('is-stacked');

@@ -382,6 +382,10 @@ button { font: inherit; }
   .home.is-stacked .home-stage { position: relative; height: auto; overflow: visible; }
   .home.is-stacked .panel { position: relative; height: 100svh; min-height: 100svh; scroll-snap-align: start; }
   .home.is-stacked .scene-markers { display: none; }
+  /* One swipe = one scene: the document snaps to each marker's top (where the sweep settles)
+     and never skips a marker, in both the scroll-driven and the stacked mode. */
+  .home.is-css-sweep .scene-marker { scroll-snap-align: start; scroll-snap-stop: always; }
+  .home.is-stacked .panel { scroll-snap-stop: always; }
   html.home-snap { scroll-snap-type: y mandatory; }
 }
 
