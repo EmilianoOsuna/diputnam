@@ -34,31 +34,41 @@
 .ed-hero-sub { margin: 1.1rem 0 0; font-size: clamp(1rem, 1.3vw, 1.2rem); color: rgba(244, 238, 223, 0.82); }
 
 /* Intro */
-.ed-intro { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2rem; padding: clamp(5rem, 10vw, 9rem) clamp(1.25rem, 3vw, 3.5rem); background: var(--ed-paper); }
-.ed-intro-copy { grid-column: 1 / 8; }
-.ed-intro-copy h2 { width: min(38rem, 100%); margin: 1.6rem 0 2.2rem; font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 500; line-height: 1.12; letter-spacing: -0.03em; }
-.ed-lead { max-width: 34rem; margin: 0 0 2.2rem; font-size: 1.05rem; line-height: 1.65; }
-.ed-bullets { display: grid; gap: 0.9rem; max-width: 32rem; padding: 1.6rem 0 0; margin: 0; list-style: none; border-top: 1px solid rgba(0, 58, 54, 0.2); }
-.ed-bullets li { padding-left: 1.2rem; position: relative; font-size: 0.95rem; line-height: 1.5; color: rgba(0, 58, 54, 0.82); }
-.ed-bullets li::before { content: '—'; position: absolute; left: 0; opacity: 0.55; }
-.ed-facts { grid-column: 9 / 13; align-self: end; display: grid; gap: 1.2rem; margin: 0; padding-top: 1.6rem; border-top: 1px solid rgba(0, 58, 54, 0.2); }
+/* Same split as Contacto's location block: big map on the left, kicker + title + lead +
+   facts on the right. Facts replace the old bullets, which repeated the same data. */
+.ed-intro { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: center; gap: 2rem; min-height: 100dvh; padding: clamp(6rem, 10vw, 9rem) clamp(1.25rem, 3vw, 3.5rem); background: var(--ed-paper); }
+.ed-map { grid-column: 1 / 8; aspect-ratio: 5 / 4; margin: 0; overflow: hidden; background: #dccfb5; }
+.ed-map iframe { width: 100%; height: 100%; border: 0; filter: grayscale(1) sepia(0.15) contrast(0.9); }
+.ed-intro-copy { grid-column: 9 / 13; }
+.ed-intro-copy h2 { margin: 1.6rem 0 1.6rem; font-size: clamp(2.2rem, 3.4vw, 3.2rem); font-weight: 500; line-height: 1.05; letter-spacing: -0.03em; }
+.ed-lead { margin: 0 0 2.2rem; font-size: 0.98rem; line-height: 1.6; color: rgba(0, 58, 54, 0.72); }
+.ed-facts { display: grid; gap: 1.2rem; margin: 0; padding-top: 1.4rem; border-top: 1px solid rgba(0, 58, 54, 0.2); }
 .ed-fact dt { font-size: 0.66rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0, 58, 54, 0.6); }
-.ed-fact dd { margin: 0.35rem 0 0; font-size: 1rem; line-height: 1.4; }
+.ed-fact dd { margin: 0.35rem 0 0; font-size: 1.05rem; line-height: 1.4; }
 
 /* Gallery */
-.ed-gallery { padding: clamp(5rem, 10vw, 9rem) clamp(1.25rem, 3vw, 3.5rem); color: var(--ed-paper); background: var(--ed-dusk); }
+.ed-gallery { padding: clamp(5rem, 10vw, 9rem) clamp(1.25rem, 3vw, 3.5rem); color: var(--ed-paper); background: var(--ed-ink); }
 .ed-gallery .section-heading { margin-bottom: clamp(3rem, 6vw, 5rem); }
-.ed-masonry { column-count: 1; column-gap: 1.25rem; }
-.ed-masonry-item { position: relative; display: block; margin: 0 0 1.25rem; break-inside: avoid; overflow: hidden; }
-.ed-masonry-item img { display: block; width: 100%; height: auto; transition: transform 500ms ease; }
+/* Grid (not CSS columns) so `grid-auto-flow: dense` can fill gaps left by the wide items —
+   real masonry columns leave dead space once an item spans more than one column. */
+.ed-masonry { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 11rem; grid-auto-flow: dense; gap: 1.25rem; }
+.ed-masonry-item { position: relative; display: block; margin: 0; overflow: hidden; }
+.ed-masonry-item img { display: block; width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: transform 500ms ease; }
+.ed-lightbox { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 2rem; background: rgba(6, 10, 9, 0.92); }
+.ed-lightbox.is-open { display: flex; }
+.ed-lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.ed-lightbox-close { position: absolute; top: 1.5rem; right: 1.5rem; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border: 1px solid rgba(244, 238, 223, 0.5); border-radius: 50%; background: rgba(6, 10, 9, 0.6); color: var(--ed-paper); font-size: 1.1rem; cursor: pointer; }
 .ed-masonry-item:hover img { transform: scale(1.035); }
 .ed-masonry-item figcaption { position: absolute; left: 0.9rem; bottom: 0.8rem; padding: 0.3rem 0.6rem; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ed-paper); background: rgba(6, 10, 9, 0.55); opacity: 0; transform: translateY(0.4rem); transition: opacity 220ms ease, transform 220ms ease; }
 .ed-masonry-item:hover figcaption, .ed-masonry-item:focus-within figcaption { opacity: 1; transform: translateY(0); }
-@media (min-width: 640px) { .ed-masonry { column-count: 2; } }
-@media (min-width: 1100px) { .ed-masonry { column-count: 3; } }
+/* A varied rhythm of 1x1/2x1/1x2/2x2 items, dense-packed so nothing leaves a gap. */
+.ed-masonry-item:nth-child(6n+1) { grid-column: span 2; grid-row: span 2; }
+.ed-masonry-item:nth-child(6n+4) { grid-column: span 2; }
+.ed-masonry-item:nth-child(6n+3) { grid-row: span 2; }
+@media (min-width: 1100px) { .ed-masonry { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 13rem; } }
 
 /* Projects of the line (landing): one wide card per project, complete even when there is a single one. */
-.ed-projects { padding: clamp(5rem, 10vw, 9rem) clamp(1.25rem, 3vw, 3.5rem); color: var(--ed-paper); background: var(--ed-dusk); }
+.ed-projects { padding: clamp(5rem, 10vw, 9rem) clamp(1.25rem, 3vw, 3.5rem); color: var(--ed-paper); background: var(--ed-ink); }
 .ed-projects .section-heading { margin-bottom: clamp(3rem, 6vw, 5rem); }
 .ed-projects-lead { max-width: 34rem; margin: 1.6rem 0 0; font-size: 1.02rem; line-height: 1.6; color: rgba(244, 238, 223, 0.72); }
 .ed-project-list { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); margin: 0; padding: 0; list-style: none; }
@@ -72,19 +82,52 @@
 .ed-project-copy p { max-width: 26rem; margin: 0; font-size: 0.95rem; line-height: 1.6; color: rgba(244, 238, 223, 0.7); }
 .ed-project-link:focus-visible { outline: 2px solid var(--ed-paper); outline-offset: 4px; }
 
-/* Typologies — horizontal scroll */
-.ed-typologies { position: relative; height: 100dvh; overflow: hidden; background: var(--ed-paper); }
-.ed-h-head { display: none; }
-.ed-h-track { display: flex; height: 100%; width: max-content; }
-@media (min-width: 900px) {
-  .is-motion-ready .ed-h-track { will-change: transform; }
-}
-.ed-h-panel { position: relative; flex: 0 0 100vw; width: 100vw; height: 100%; display: grid; grid-template-columns: 1.15fr 1fr; }
-.ed-h-panel--intro { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.4rem; padding: 0 clamp(1.25rem, 3vw, 3.5rem); text-align: center; }
-.ed-h-panel--intro h2 { margin: 1.2rem 0 0; font-size: clamp(3rem, 6.4vw, 6rem); font-weight: 500; line-height: 0.96; letter-spacing: -0.045em; }
-.ed-h-intro-copy { max-width: 28rem; margin: 0; font-size: 1.05rem; line-height: 1.6; color: rgba(0, 58, 54, 0.75); }
-.ed-h-hint { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(0, 58, 54, 0.5); }
-.ed-h-media { position: relative; margin: 0; height: 100%; overflow: hidden; background: var(--ed-sand); }
+/* Typologies — same principle as Únete's culture section: the images/renders stay sticky
+   on the left (more width) while the typology data scrolls on the right, one `100dvh` step
+   per typology. No scroll-jacking (no wheel capture, no `lenis.stop()`): the pin is a plain
+   ScrollTrigger `pin` driven by normal scroll, exactly like `.un-culture`. Mobile drops the
+   sticky stage for a single vertical flow — see the max-width:899px block below. */
+.ed-typologies { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2rem; padding: 0 clamp(1.25rem, 3vw, 3.5rem); background: var(--ed-ink); }
+.ed-typ-stage { grid-column: 1 / 9; display: flex; height: 100dvh; padding: 7rem 0 3rem; flex-direction: column; justify-content: space-between; }
+.ed-typ-head .section-kicker { color: rgba(244, 238, 223, 0.6); }
+.ed-typ-head h2 { margin: 1.2rem 0 0; font-size: clamp(1.8rem, 2.6vw, 2.8rem); font-weight: 500; line-height: 0.96; letter-spacing: -0.045em; color: var(--ed-paper); }
+.ed-h-intro-copy { max-width: 46rem; margin: 1.2rem 0 0; font-size: 0.95rem; line-height: 1.6; color: rgba(244, 238, 223, 0.75); }
+.ed-typ-media-slot { position: relative; flex: 1; margin: 0.75rem 0 2rem; overflow: hidden; background: var(--ed-sand); }
+.ed-h-progress { display: flex; align-items: center; gap: 1rem; }
+.ed-h-counter { display: flex; align-items: baseline; gap: 0.4rem; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; color: rgba(244, 238, 223, 0.6); }
+.ed-h-counter b { font-size: 1.6rem; font-weight: 500; letter-spacing: -0.03em; color: var(--ed-paper); }
+.ed-h-counter i { font-style: normal; }
+.ed-h-rail { width: 100%; height: 1px; background: rgba(244, 238, 223, 0.3); }
+.ed-h-rail span { display: block; height: 2px; margin-top: -0.5px; background: var(--ed-paper); transform: scaleX(var(--progress, 0.2)); transform-origin: left center; transition: transform 260ms ease; }
+
+.ed-h-track { grid-column: 9 / 13; }
+.ed-h-panel { display: flex; align-items: center; min-height: 100dvh; padding: 4rem 0; border-bottom: 1px solid rgba(244, 238, 223, 0.14); }
+.ed-h-panel:last-child { border-bottom: 0; }
+.ed-h-copy { display: flex; flex-direction: column; align-items: flex-end; gap: 1.1rem; width: 100%; text-align: right; }
+.ed-h-copy-head, .ed-h-specs { justify-content: flex-end; }
+.ed-h-copy-head { display: flex; align-items: center; gap: 1rem; }
+.ed-h-index { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; color: rgba(244, 238, 223, 0.75); }
+.ed-h-index i { margin: 0 0.15em; font-style: normal; opacity: 0.7; }
+.ed-h-tag { padding: 0.35rem 0.75rem; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ed-paper); border: 1px solid rgba(244, 238, 223, 0.6); }
+.ed-h-copy.is-azul .ed-h-tag { background: rgba(84, 133, 171, 0.28); border-color: rgba(84, 133, 171, 0.55); }
+.ed-h-copy h3 { margin: 0.4rem 0 0; font-size: clamp(2.2rem, 3.6vw, 3.6rem); font-weight: 500; line-height: 1; letter-spacing: -0.03em; color: var(--ed-paper); }
+.ed-h-subtitle { max-width: 26rem; margin: 0; font-size: 1rem; color: rgba(244, 238, 223, 0.92); }
+.ed-h-desc { max-width: 27rem; margin: 0; font-size: 0.92rem; line-height: 1.6; color: rgba(244, 238, 223, 0.85); }
+.ed-h-specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem 2rem; max-width: 30rem; margin: 0.4rem 0 0; padding-top: 1.1rem; border-top: 1px solid rgba(244, 238, 223, 0.3); list-style: none; }
+.ed-h-specs li { display: flex; flex-direction: column; gap: 0.35rem; padding-bottom: 0.9rem; border-bottom: 1px solid rgba(244, 238, 223, 0.18); }
+.ed-h-specs li span { font-size: 0.64rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(244, 238, 223, 0.5); }
+.ed-h-specs li b { font-weight: 500; font-size: 0.95rem; text-align: left; color: var(--ed-paper); }
+.ed-cta-link { display: inline-flex; width: max-content; align-items: center; gap: 0.5rem; margin-top: 0.4rem; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ed-paper); }
+.ed-cta-link span { transition: transform 180ms ease; }
+.ed-cta-link:hover span { transform: translateX(0.2rem); }
+
+/* Media: on desktop, JS moves each panel's `.ed-h-media` into the sticky slot once and
+   crossfades which one is visible; on mobile (max-width:899px below) it is never moved, so
+   it stays a plain block inside its own panel. `min-height` is a safety net for the brief
+   moment before JS reparents it (or if JS never runs). */
+.ed-h-media { position: relative; min-height: 20rem; margin: 0; overflow: hidden; background: var(--ed-sand); }
+.ed-typ-media-slot > .ed-h-media { position: absolute; inset: 0; min-height: 0; opacity: 0; visibility: hidden; transition: opacity 500ms ease, visibility 500ms ease; }
+.ed-typ-media-slot > .ed-h-media.is-active { opacity: 1; visibility: visible; }
 .ed-h-media img, .ed-h-media video { width: 100%; height: 100%; object-fit: cover; }
 /* Every medium sits in the same box; `hidden` (not display on the class) picks the visible one. */
 .ed-h-medium { position: absolute; inset: 0; }
@@ -92,11 +135,11 @@
 .ed-h-play { position: absolute; top: 50%; left: 50%; display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.8rem 1.2rem; font: inherit; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ed-paper); background: rgba(6, 10, 9, 0.7); border: 1px solid rgba(244, 238, 223, 0.5); transform: translate(-50%, -50%); cursor: pointer; }
 .ed-h-play[hidden] { display: none; }
 /* Thumbnail strip: fixed-height overlay at the foot of the media box, so the number of
-   media never changes the card's height; scrolls on its own without moving the track. */
+   media never changes the card's height; scrolls on its own without moving anything else. */
 .ed-h-thumbs { --thumb: 4.5rem; position: absolute; right: 0; bottom: 0; left: 0; z-index: 1; display: flex; align-items: center; gap: 0.4rem; height: calc(var(--thumb) + 1.6rem); padding: 0.8rem 0.9rem; background: linear-gradient(0deg, rgba(6, 10, 9, 0.72), rgba(6, 10, 9, 0)); }
 .ed-h-thumb-strip { display: flex; gap: 0.5rem; height: var(--thumb); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; touch-action: pan-x; }
 .ed-h-thumb-strip::-webkit-scrollbar { display: none; }
-.ed-h-thumb { position: relative; flex: 0 0 auto; width: calc(var(--thumb) * 4 / 3); height: var(--thumb); padding: 0; border: 2px solid transparent; background: var(--ed-dusk); scroll-snap-align: start; cursor: pointer; transition: border-color 160ms ease, opacity 160ms ease; }
+.ed-h-thumb { position: relative; flex: 0 0 auto; width: calc(var(--thumb) * 4 / 3); height: var(--thumb); padding: 0; border: 2px solid transparent; background: var(--ed-ink); scroll-snap-align: start; cursor: pointer; transition: border-color 160ms ease, opacity 160ms ease; }
 .ed-h-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0.75; transition: opacity 160ms ease; }
 .ed-h-thumb:hover img, .ed-h-thumb[aria-selected="true"] img { opacity: 1; }
 .ed-h-thumb[aria-selected="true"] { border-color: var(--ed-paper); }
@@ -104,22 +147,6 @@
 .ed-h-thumb.is-video::after { content: '▶'; position: absolute; inset: 0; display: grid; place-items: center; font-size: 0.85rem; color: var(--ed-paper); text-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.7); }
 .ed-h-thumb-nav { flex: 0 0 auto; display: grid; place-items: center; width: 2rem; height: 2rem; padding: 0; font: inherit; color: var(--ed-paper); background: rgba(6, 10, 9, 0.6); border: 1px solid rgba(244, 238, 223, 0.35); border-radius: 50%; cursor: pointer; }
 .ed-h-thumb-nav[hidden] { display: none; }
-.ed-h-copy { display: flex; flex-direction: column; justify-content: center; gap: 1.1rem; padding: clamp(2rem, 4vw, 4.5rem); color: var(--ed-paper); background: var(--ed-ink); }
-.ed-h-copy-head { display: flex; align-items: center; justify-content: flex-start; gap: 1rem; max-width: 30rem; }
-.ed-h-index { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; color: rgba(244, 238, 223, 0.55); }
-.ed-h-index i { margin: 0 0.15em; font-style: normal; opacity: 0.6; }
-.ed-h-tag { padding: 0.35rem 0.75rem; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid rgba(244, 238, 223, 0.4); }
-.ed-h-copy.is-azul .ed-h-tag { background: rgba(84, 133, 171, 0.28); border-color: rgba(84, 133, 171, 0.55); }
-.ed-h-copy h3 { margin: 0.6rem 0 0; font-size: clamp(2.2rem, 3.6vw, 3.4rem); font-weight: 500; line-height: 1; letter-spacing: -0.03em; }
-.ed-h-subtitle { max-width: 26rem; margin: 0; font-size: 1rem; color: rgba(244, 238, 223, 0.78); }
-.ed-h-desc { max-width: 27rem; margin: 0; font-size: 0.92rem; line-height: 1.6; color: rgba(244, 238, 223, 0.66); }
-.ed-h-specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem 2rem; max-width: 30rem; margin: 0.4rem 0 0; padding-top: 1.1rem; border-top: 1px solid rgba(244, 238, 223, 0.25); list-style: none; }
-.ed-h-specs li { display: flex; flex-direction: column; gap: 0.35rem; padding-bottom: 0.9rem; border-bottom: 1px solid rgba(244, 238, 223, 0.14); }
-.ed-h-specs li span { font-size: 0.64rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(244, 238, 223, 0.5); }
-.ed-h-specs li b { font-weight: 500; font-size: 0.95rem; text-align: left; }
-.ed-cta-link { display: inline-flex; width: max-content; align-items: center; gap: 0.5rem; margin-top: 0.4rem; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ed-paper); }
-.ed-cta-link span { transition: transform 180ms ease; }
-.ed-cta-link:hover span { transform: translateX(0.2rem); }
 
 /* Legal docs */
 .ed-legal { padding: clamp(5rem, 10vw, 9rem) clamp(1.25rem, 3vw, 3.5rem); background: var(--ed-sand); }
@@ -146,43 +173,51 @@
 .cta-actions a { display: flex; justify-content: space-between; width: min(18rem, 100%); padding: 1rem 0; border-top: 1px solid currentColor; font-size: 0.83rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .cta-actions a span { transition: transform 180ms ease; }
 .cta-actions a:hover span { transform: translate(0.2rem, -0.2rem); }
-.cta-mark { grid-column: 7 / 13; align-self: center; justify-self: center; width: min(45%, 18rem); height: auto; object-fit: contain; opacity: 1; pointer-events: none; }
-.eredita-page .site-footer--flow { position: relative; z-index: 1; min-height: 14rem; padding: 4rem clamp(1.25rem, 3vw, 3.5rem); color: var(--ed-paper); background: var(--ed-ink); text-shadow: none; }
-.eredita-page .site-footer--flow::before { display: none; }
+/* The class goes on <picture> (the grid item), not the <img>: on the <img> the picture was
+   auto-placed into a single 1/12 column and the mark shrank to ~90px. */
+.cta-mark { grid-column: 7 / 13; display: block; align-self: center; justify-self: center; width: min(85%, 38rem); pointer-events: none; }
+.cta-mark img { display: block; width: 100%; height: auto; }
+.eredita-page .site-footer--flow { color: var(--ed-paper); background: var(--ed-ink); }
 
 @media (max-width: 899px) {
-  .ed-intro { display: block; }
-  .ed-facts { margin-top: 2.5rem; }
+  .ed-intro { display: block; min-height: 0; }
+  .ed-intro-copy { margin-top: 3rem; }
   .ed-legal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  /* Mobile: intro becomes a header; the cards become a native swipe track with scroll-snap. */
-  .ed-typologies { height: auto; overflow: visible; padding: clamp(4rem, 12vw, 6rem) 0 clamp(3rem, 10vw, 4.5rem); }
-  .ed-h-head { display: block; padding: 0 1.25rem 2rem; }
-  .ed-h-head h2 { margin: 1.2rem 0 1rem; font-size: clamp(2.6rem, 11vw, 4rem); font-weight: 500; line-height: 0.96; letter-spacing: -0.045em; }
-  .ed-h-head .ed-h-intro-copy { max-width: 28rem; margin: 0 0 1.6rem; }
-  .ed-h-progress { display: grid; gap: 0.9rem; }
-  .ed-h-counter { display: flex; align-items: baseline; gap: 0.4rem; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; color: rgba(0, 58, 54, 0.6); }
-  .ed-h-counter b { font-size: 2.6rem; font-weight: 500; line-height: 0.85; letter-spacing: -0.05em; color: var(--ed-ink); }
-  .ed-h-counter i { font-style: normal; }
-  .ed-h-rail { display: block; height: 1px; background: rgba(0, 58, 54, 0.22); }
-  .ed-h-rail span { display: block; height: 2px; margin-top: -0.5px; background: var(--ed-ink); transform: scaleX(var(--progress, 0.25)); transform-origin: left center; }
-  .ed-h-track .ed-h-panel--intro { display: none; }
-  .ed-h-track { --track-gutter: 1.25rem; --track-gap: 0.75rem; display: flex; gap: var(--track-gap); width: auto; height: auto; padding: 0 var(--track-gutter); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--track-gutter); scrollbar-width: none; -webkit-overflow-scrolling: touch; transform: none !important; }
-  .ed-h-track::-webkit-scrollbar { display: none; }
-  .ed-h-track::after { content: ''; flex: 0 0 0.01px; }
-  .ed-h-track:focus-visible { outline: 1px solid var(--ed-ink); outline-offset: 4px; }
-  /* One full card per screen (viewport minus gutters); equal heights with content pinned to the top. */
-  .ed-h-panel { display: grid; grid-template-columns: 1fr; grid-template-rows: auto 1fr; align-content: start; flex: 0 0 calc(100vw - 2 * var(--track-gutter)); width: auto; height: auto; scroll-snap-align: start; scroll-snap-stop: always; }
-  .ed-h-media { height: 46vw; max-height: 16rem; }
+  /* Mobile: no sticky stage, no swipe track — a single vertical flow, so nothing needs to
+     fit inside one screen and nothing floats over the fixed header. Each typology keeps its
+     own media (JS never reparents it below 900px), sized generously since it's the priority. */
+  .ed-typologies { display: block; padding: clamp(4rem, 12vw, 6rem) 1.25rem clamp(3rem, 10vw, 4.5rem); }
+  .ed-typ-stage { height: auto; padding: 0 0 2.5rem; }
+  .ed-typ-head h2 { margin: 1.2rem 0 1rem; font-size: clamp(2.6rem, 11vw, 4rem); font-weight: 500; line-height: 0.96; letter-spacing: -0.045em; }
+  .ed-h-intro-copy { max-width: 28rem; margin: 1.2rem 0 0; }
+  /* No single "active" typology in a normal-flow list, and it floated over the header —
+     each card already carries its own 0N/0N index (`.ed-h-index`), so this is redundant. */
+  .ed-h-progress { display: none; }
+  .ed-h-track { display: block; }
+  .ed-h-panel { display: block; min-height: 0; padding: 0 0 3rem; align-items: initial; }
+  .ed-h-panel:last-child { padding-bottom: 0; }
+  .ed-h-media { position: relative; min-height: 0; aspect-ratio: 4 / 3; margin: 0 0 1.5rem; }
   .ed-h-thumbs { --thumb: 3rem; padding: 0.5rem 0.6rem; height: calc(var(--thumb) + 1rem); }
   .ed-h-thumb-nav { display: none; }
   .ed-project-link { grid-template-columns: 1fr; }
-  .ed-h-copy { justify-content: flex-start; gap: 0.75rem; padding: 1.35rem 1.1rem 1.6rem; }
-  .ed-h-copy h3 { margin-top: 0.2rem; font-size: clamp(1.8rem, 7.4vw, 2.4rem); }
+  .ed-h-copy { gap: 0.75rem; }
+  .ed-h-copy h3 { font-size: clamp(1.8rem, 7.4vw, 2.4rem); }
   .ed-h-subtitle { font-size: 0.95rem; }
   .ed-h-desc { font-size: 0.88rem; line-height: 1.5; }
   .ed-h-specs { gap: 0.7rem 1.2rem; margin-top: 0.2rem; padding-top: 0.9rem; }
   .ed-h-specs li { gap: 0.25rem; padding-bottom: 0.6rem; }
   .ed-cta-link { margin-top: 0.2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) and (min-width: 900px) {
+  /* Without the desktop motion module, JS never reparents media into the sticky slot — fall
+     back to the same simple vertical flow as mobile, each typology showing its own media. */
+  .ed-typologies { display: block; padding: clamp(4rem, 8vw, 6rem) clamp(1.25rem, 3vw, 3.5rem); }
+  .ed-typ-stage { height: auto; padding: 0 0 3rem; }
+  .ed-h-progress { display: none; }
+  .ed-h-track { display: block; }
+  .ed-h-panel { display: grid; grid-template-columns: 1.3fr 1fr; min-height: 0; gap: 2rem; padding: 3rem 0; }
+  .ed-h-media { height: 24rem; min-height: 0; }
 }
 
 @media (max-width: 767px) {
@@ -200,15 +235,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .eredita-page [data-parallax], .eredita-page [data-reveal-group] { transform: none !important; opacity: 1 !important; }
-}
-/* Reduced motion on desktop stacks the pinned track; the mobile swipe track stays as is. */
-@media (prefers-reduced-motion: reduce) and (min-width: 900px) {
-  .ed-typologies { height: auto; overflow: visible; }
-  .ed-h-track { display: block; width: auto; transform: none !important; }
-  .ed-h-panel { display: block; width: auto; height: auto; }
-  .ed-h-panel--intro { padding: clamp(4rem, 8vw, 6rem) clamp(1.25rem, 3vw, 3.5rem); }
-  .ed-h-media { height: 70vh; }
-  .ed-h-copy { padding: clamp(2rem, 5vw, 3rem) clamp(1.25rem, 3vw, 3.5rem) clamp(3rem, 6vw, 4rem); }
 }
 
 /* Mobile hero entrance without a motion library (keyframes in global.css). */

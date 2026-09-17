@@ -1,4 +1,3 @@
-import { mountHorizontalTrack } from './horizontal-track';
 import { mountTypologyMedia } from './typology-media';
 import { mountAnchors, mountReveals, releaseTitles, settleLines, splitTitles } from './mobile-motion';
 
@@ -9,31 +8,30 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 const desktop = window.matchMedia('(min-width: 768px)').matches;
 let motion: { refresh: () => void } | null = null;
 
-// Typology media (video + renders) and, on phones, the native swipe track. Both are
-// independent of GSAP/reduced motion so they keep working even when every animation is off.
-if (root) {
-  mountTypologyMedia(root);
-  const track = root.querySelector<HTMLElement>('[data-h-track]');
-  const mobile = window.matchMedia('(max-width: 899px)');
-  let unmount: (() => void) | null = null;
-  const sync = () => {
-    if (mobile.matches && track && !unmount) {
-      unmount = mountHorizontalTrack({
-        track,
-        cards: Array.from(track.querySelectorAll<HTMLElement>('[data-h-panel]:not(.ed-h-panel--intro)')),
-        current: root.querySelector<HTMLElement>('[data-track-current]'),
-        rail: root.querySelector<HTMLElement>('[data-track-rail]'),
-        label: 'Tipología',
-        reducedMotion,
-      });
-    } else if (!mobile.matches && unmount) {
-      unmount();
-      unmount = null;
-    }
-    motion?.refresh();
-  };
-  sync();
-  mobile.addEventListener('change', sync);
+// Typology media (video + renders) within each panel: independent of GSAP/reduced motion,
+// so it keeps working even when every animation is off. The sticky media stage/pin is
+// desktop-only motion (see desktop/eredita.ts); mobile keeps each typology's media in place.
+if (root) mountTypologyMedia(root);
+
+// Gallery lightbox: click a photo to view it full-screen; close via the × button, the
+// backdrop or Escape.
+const gallery = root?.querySelector<HTMLElement>('.ed-masonry');
+if (gallery) {
+  const overlay = document.createElement('div');
+  overlay.className = 'ed-lightbox';
+  overlay.innerHTML = '<button class="ed-lightbox-close" type="button" aria-label="Cerrar">✕</button><img alt="" />';
+  root!.appendChild(overlay);
+  const img = overlay.querySelector('img') as HTMLImageElement;
+  const close = () => overlay.classList.remove('is-open');
+  overlay.addEventListener('click', (event) => { if (event.target === overlay) close(); });
+  overlay.querySelector('.ed-lightbox-close')?.addEventListener('click', close);
+  window.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
+  gallery.addEventListener('click', (event) => {
+    const clicked = (event.target as HTMLElement).closest<HTMLImageElement>('.ed-masonry-item img');
+    if (!clicked) return;
+    img.src = clicked.currentSrc || clicked.src;
+    overlay.classList.add('is-open');
+  });
 }
 
 if (root && !reducedMotion) {

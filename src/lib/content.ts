@@ -34,6 +34,18 @@ export const getSettings = async (lang: Lang): Promise<Settings> => {
   return { ...s, organization, whatsappNumber, whatsapp: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(s.whatsappMessage ?? '')}` };
 };
 
+export interface SocialLink { kind: 'whatsapp' | 'facebook' | 'instagram'; url: string }
+// WhatsApp always comes from `contact.whatsapp`; Facebook/Instagram are recognized by
+// domain from `organization.sameAs` (already an editable CMS field) — no new field needed.
+export const socialLinks = (contact: Settings): SocialLink[] => {
+  const links: SocialLink[] = [{ kind: 'whatsapp', url: contact.whatsapp }];
+  for (const url of contact.organization.sameAs) {
+    if (/(^|\.)facebook\.com$/.test(new URL(url).hostname)) links.push({ kind: 'facebook', url });
+    else if (/(^|\.)instagram\.com$/.test(new URL(url).hostname)) links.push({ kind: 'instagram', url });
+  }
+  return links;
+};
+
 // Last publish time of a singleton, for sitemap lastmod (a build date would be a lie).
 export const getUpdatedAt = (id: string) => sanityFetch<string | null>(`*[_id == $id][0]._updatedAt`, { id });
 

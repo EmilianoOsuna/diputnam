@@ -42,34 +42,34 @@ const pad = (n: number) => String(n).padStart(2, '0');
         </figure>
       </section>
 
-      <section class="process" id="enfoque" aria-labelledby="process-title" data-process data-header-theme="dark">
-        <div class="process-stage">
+      <section class="process" id="enfoque" aria-labelledby="process-title" data-process data-header-theme="light">
+        <div class="process-stage" data-pin-stage>
           <header class="process-heading">
             <p class="section-kicker">{process.kicker}</p>
             <h2 id="process-title" class="visually-hidden">{process.kicker}</h2>
           </header>
-          <div class="process-visual">
-            {process.steps.map((step, index) => (
-              <figure class:list={["process-media", { "is-active": index === 0 }]} data-process-media={index} aria-hidden={index === 0 ? 'false' : 'true'}>
-                {step.image ? <CmsImg image={step.image} base={960} widths={[640, 960, 1280]} quality={78} sat={SAT.process} sizes="(max-width: 767px) calc(100vw - 2rem), calc(100vw - 7rem)" width="1800" height="1200" loading="lazy" fetchpriority="low" /> : <div class="media-placeholder" role="img" aria-label={ui.putnam.imagePendingFor(step.title)}><span>{ui.putnam.imagePending}</span><b>{step.number}</b><small>{step.title}</small></div>}
-              </figure>
-            ))}
-            <div class="process-shade" aria-hidden="true"></div>
+          <div class="process-media-slot" data-media-slot></div>
+          <div class="process-progress">
+            <div class="process-counter"><span data-pin-current>01</span><span aria-hidden="true">/</span><span>{pad(process.steps.length)}</span></div>
+            <div class="process-rail" aria-hidden="true"><span data-pin-rail></span></div>
           </div>
-          <div class="process-overlays" aria-live="polite">
-            {process.steps.map((step, index) => (
-              <article class:list={["process-step", { "is-active": index === 0 }]} data-process-step={index} aria-hidden={index === 0 ? 'false' : 'true'}>
-                <span class="step-number">{step.number}</span><h3>{step.title}</h3><p>{step.text}</p>
-              </article>
-            ))}
-          </div>
-          <div class="process-counter"><span data-process-current>01</span><span aria-hidden="true">/</span><span>{pad(process.steps.length)}</span></div>
-          <div class="process-rail" aria-hidden="true"><span data-line-progress></span></div>
         </div>
-        <div class="process-markers" data-process-markers aria-hidden="true">{process.steps.map((_, index) => <div class="process-marker" data-process-marker={index}></div>)}</div>
+        <div class="process-track" data-h-track>
+          {process.steps.map((step) => (
+            <article class="process-panel" data-h-panel>
+              <figure class="process-media">
+                {step.image ? <CmsImg image={step.image} base={960} widths={[640, 960, 1280]} quality={78} sat={SAT.process} sizes="(max-width: 767px) 100vw, calc(100vw * 0.57)" width="1800" height="1200" loading="lazy" fetchpriority="low" /> : <div class="media-placeholder" role="img" aria-label={ui.putnam.imagePendingFor(step.title)}><span>{ui.putnam.imagePending}</span><b>{step.number}</b><small>{step.title}</small></div>}
+                <div class="process-shade" aria-hidden="true"></div>
+              </figure>
+              <div class="process-copy">
+                <span class="step-number">{step.number}</span><h3>{step.title}</h3><p>{step.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
       </section>
 
-      <section class="principles" aria-labelledby="principles-title" data-header-theme="light">
+      <section class="principles" aria-labelledby="principles-title" data-header-theme="dark">
         <p class="section-kicker">{principles.kicker}</p>
         <h2 id="principles-title" class="visually-hidden">{principles.title}</h2>
         <article class="principle principle--mission" data-reveal-group>

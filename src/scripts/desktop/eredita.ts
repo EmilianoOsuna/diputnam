@@ -1,6 +1,6 @@
 // Desktop motion for Ereditá (≥ 768px, no reduced motion): Lenis smooth scroll, GSAP
-// entrances/reveals, parallax and the pinned typologies track. Loaded with import()
-// so phones never download it.
+// entrances/reveals, parallax and the typologies sticky stage. Loaded with import() so
+// phones never download it.
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -62,79 +62,50 @@ export const mount = (root: HTMLElement) => {
     });
 
     media.add('(min-width: 900px)', () => {
-      const wrapper = root.querySelector<HTMLElement>('[data-h-wrapper]');
-      const track = wrapper?.querySelector<HTMLElement>('[data-h-track]');
-      if (!wrapper || !track) return;
+      // Same principle as Únete's culture section: the stage (images/renders) stays pinned
+      // while the typology data scrolls past — a plain ScrollTrigger pin driven by normal
+      // scroll, not a wheel-captured/discrete step. Each panel's own `.ed-h-media` is moved
+      // into the shared sticky slot once and crossfaded, so there is a single source of
+      // media per typology (no duplicated markup) and mobile — which never reparents it —
+      // keeps finding it inside its own panel.
+      const wrapper = root.querySelector<HTMLElement>('[data-typologies]');
+      const stage = root.querySelector<HTMLElement>('[data-pin-stage]');
+      const slot = root.querySelector<HTMLElement>('[data-media-slot]');
+      const panels = wrapper ? Array.from(wrapper.querySelectorAll<HTMLElement>('[data-h-panel]')) : [];
+      if (!wrapper || !stage || !slot || !panels.length) return;
 
-      const panels = Array.from(track.querySelectorAll<HTMLElement>('[data-h-panel]'));
-      const last = panels.length - 1;
-      let index = 0;
-      let locked = false;
-      let unlockTimer = 0;
+      const homes = panels.map((panel) => panel.querySelector<HTMLElement>(':scope > .ed-h-media'));
+      homes.forEach((el) => { if (el) slot.appendChild(el); });
 
-      const settle = () => {
-        // ignore any trailing wheel input from the very gesture that just carried the
-        // user into (or back into) this section, so they always get a clean look at the
-        // panel they landed on before a scroll can advance further.
-        locked = true;
-        window.clearTimeout(unlockTimer);
-        unlockTimer = window.setTimeout(() => { locked = false; }, 850);
+      const current = root.querySelector<HTMLElement>('[data-pin-current]');
+      const setActive = (index: number) => {
+        homes.forEach((el, i) => {
+          const active = i === index;
+          el?.classList.toggle('is-active', active);
+          // All stacked media sit in the same viewport position once slotted, so
+          // `typology-media.ts`'s own IntersectionObserver can't tell which is "visible" —
+          // pause every video except the active one explicitly instead.
+          const video = el?.querySelector<HTMLVideoElement>('video[data-video]');
+          if (!video) return;
+          const isSelectedMedium = !(video.closest('[role="tabpanel"]') as HTMLElement | null)?.hidden;
+          if (active && isSelectedMedium) video.play().catch(() => {});
+          else video.pause();
+        });
+        if (current) current.textContent = String(index + 1).padStart(2, '0');
       };
+      setActive(0);
 
-      const setIndexInstant = (next: number) => {
-        index = Math.max(0, Math.min(last, next));
-        gsap.set(track, { x: -index * window.innerWidth });
-      };
-
-      const goTo = (next: number) => {
-        index = Math.max(0, Math.min(last, next));
-        gsap.to(track, { x: () => -index * window.innerWidth, duration: 0.7, ease: 'power3.inOut' });
-        settle();
-      };
-
-      // Lenis owns wheel/touch scrolling and animates it regardless of preventDefault()
-      // on our own listener, so the only reliable way to hard-lock the page here is to
-      // stop Lenis itself while stepping through panels, and hand control back at the edges.
-      const trigger = ScrollTrigger.create({
-        trigger: wrapper,
-        start: 'top top',
-        end: '+=300',
-        pin: true,
-        onEnter: () => { setIndexInstant(0); lenis.stop(); settle(); },
-        onEnterBack: () => { setIndexInstant(last); lenis.stop(); settle(); },
-        onLeave: () => lenis.start(),
-        onLeaveBack: () => lenis.start(),
-      });
-      if (trigger.isActive) { setIndexInstant(0); lenis.stop(); settle(); }
-
-      // Discrete, one-gesture-per-panel navigation: a small wheel notch or trackpad
-      // swipe advances exactly one typology, like pressing a button — not a scrubbed drag.
-      const onWheel = (event: WheelEvent) => {
-        if (!trigger.isActive || Math.abs(event.deltaY) < 2) return;
-        const goingForward = event.deltaY > 0;
-        if (goingForward && index < last) {
-          event.preventDefault();
-          if (!locked) goTo(index + 1);
-        } else if (!goingForward && index > 0) {
-          event.preventDefault();
-          if (!locked) goTo(index - 1);
-        } else if (!locked) {
-          // settled on the first/last panel long enough to actually see it — only now
-          // release, so the native scroll can continue into the previous/next section.
-          lenis.start();
-        } else {
-          event.preventDefault();
-        }
-      };
-
-      window.addEventListener('wheel', onWheel, { passive: false });
+      const trigger = ScrollTrigger.create({ trigger: wrapper, start: 'top top', end: 'bottom bottom', pin: stage, pinSpacing: false, invalidateOnRefresh: true });
+      const steps = panels.map((panel, index) => ScrollTrigger.create({ trigger: panel, start: 'top 55%', end: 'bottom 45%', onEnter: () => setActive(index), onEnterBack: () => setActive(index) }));
+      const railTween = gsap.fromTo('[data-pin-rail]', { '--progress': 1 / panels.length }, { '--progress': 1, ease: 'none', scrollTrigger: { trigger: wrapper, start: 'top top', end: 'bottom bottom', scrub: 0.45 } });
 
       return () => {
-        window.removeEventListener('wheel', onWheel);
-        window.clearTimeout(unlockTimer);
         trigger.kill();
-        lenis.start();
-        gsap.set(track, { clearProps: 'transform' });
+        steps.forEach((step) => step.kill());
+        railTween.kill();
+        homes.forEach((el, i) => { if (el) { panels[i].prepend(el); el.classList.remove('is-active'); } });
+        if (current) current.textContent = '01';
+        gsap.set('[data-pin-rail]', { clearProps: '--progress' });
       };
     });
   }, root);

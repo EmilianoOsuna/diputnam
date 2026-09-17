@@ -49,19 +49,19 @@ const { hero, intro, cta } = page;
       </section>
 
       <section class="ed-intro" aria-labelledby="ed-intro-title" data-header-theme="dark">
+        <figure class="ed-map" data-reveal-group>
+          <iframe src={`https://www.google.com/maps?q=${contact.coordinates.lat},${contact.coordinates.lng}&output=embed`} title="Ubicación del proyecto" loading="lazy" />
+        </figure>
         <div class="ed-intro-copy" data-reveal-group>
           <p class="section-kicker">{intro.kicker}</p>
           <h2 id="ed-intro-title"><Lines text={intro.title} /></h2>
           <p class="ed-lead">{intro.lead}</p>
-          <ul class="ed-bullets">
-            {intro.bullets.map((bullet) => <li>{bullet}</li>)}
-          </ul>
+          <dl class="ed-facts">
+            {intro.facts.map((fact) => (
+              <div class="ed-fact"><dt>{fact.label}</dt><dd>{fact.value}</dd></div>
+            ))}
+          </dl>
         </div>
-        <dl class="ed-facts" data-reveal-group>
-          {intro.facts.map((fact) => (
-            <div class="ed-fact"><dt>{fact.label}</dt><dd>{fact.value}</dd></div>
-          ))}
-        </dl>
       </section>
 
       <section class="ed-projects" aria-labelledby="ed-projects-title" data-header-theme="light">
@@ -101,7 +101,7 @@ const { hero, intro, cta } = page;
             <a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <span aria-hidden="true">↗</span></a>
           </div>
         </div>
-        <Picture class="cta-mark" src={erediteMark} widths={[320, 640]} sizes="(max-width: 767px) min(50vw, 14rem), min(45%, 18rem)" formats={['webp']} fallbackFormat="png" alt="" aria-hidden="true" />
+        <Picture pictureAttributes={{ class: 'cta-mark' }} src={erediteMark} widths={[320, 640, 960]} sizes="(max-width: 767px) min(50vw, 14rem), min(45vw, 38rem)" formats={['webp']} fallbackFormat="png" alt="" aria-hidden="true" />
       </section>
     </main>
     <ContactFooter lang={lang} contact={contact} />

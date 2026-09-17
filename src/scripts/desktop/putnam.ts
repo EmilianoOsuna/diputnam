@@ -1,6 +1,7 @@
 // Desktop motion for Putnam (≥ 768px, no reduced motion): Lenis smooth scroll, GSAP hero
-// entrance, reveals, process steps/rail and parallax. Loaded with import() so phones
-// never download it.
+// entrance, reveals and parallax. Loaded with import() so phones never download it. The
+// process track itself is native scroll-snap (see putnam-motion.ts/putnam.css) at every
+// width, so it needs no desktop-only motion here.
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -9,11 +10,7 @@ import { groupTargets, revealHeroLines, revealTitles } from './lines';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const mount = (root: HTMLElement, setProcessStep: (index: number) => void, releaseHero: () => void) => {
-  const processMarkers = Array.from(root.querySelectorAll<HTMLElement>('[data-process-marker]'));
-  const processTrack = root.querySelector<HTMLElement>('[data-process-markers]');
-  const lineProgress = root.querySelector<HTMLElement>('[data-line-progress]');
-
+export const mount = (root: HTMLElement, releaseHero: () => void) => {
   document.body.classList.add('is-motion-ready');
   const lenis = new Lenis({ anchors: true, autoRaf: true, lerp: 0.09 });
   let scrollFrame = 0;
@@ -56,16 +53,6 @@ export const mount = (root: HTMLElement, setProcessStep: (index: number) => void
       });
     });
 
-    processMarkers.forEach((marker, index) => {
-      ScrollTrigger.create({
-        trigger: marker,
-        start: 'top 55%',
-        end: 'bottom 45%',
-        onEnter: () => setProcessStep(index),
-        onEnterBack: () => setProcessStep(index),
-      });
-    });
-
     const refreshLayout = () => {
       if (refreshFrame) return;
       refreshFrame = window.requestAnimationFrame(() => {
@@ -80,13 +67,6 @@ export const mount = (root: HTMLElement, setProcessStep: (index: number) => void
     }
     window.addEventListener('resize', refreshLayout, { passive: true });
 
-    gsap.to(lineProgress, {
-      scaleX: 1,
-      transformOrigin: 'left center',
-      ease: 'none',
-      scrollTrigger: { trigger: processTrack, start: 'top top', end: 'bottom bottom', scrub: 0.45 },
-    });
-
     gsap.utils.toArray<HTMLElement>('[data-parallax]').forEach((element) => {
       gsap.fromTo(element, { yPercent: -4 }, {
         yPercent: 4,
@@ -99,6 +79,31 @@ export const mount = (root: HTMLElement, setProcessStep: (index: number) => void
       ease: 'none',
       scrollTrigger: { trigger: '.institutional-cta', start: 'top bottom', end: 'bottom bottom', scrub: 0.8 },
     });
+
+    // Process: same principle as Únete's culture section — the step image stays pinned on
+    // the left while the step data scrolls on the right (plain ScrollTrigger pin, no wheel
+    // capture). Each panel's own `.process-media` moves into the shared sticky slot once and
+    // crossfades, so there is a single source of media per step and mobile — which never
+    // reparents it — keeps finding it inside its own panel.
+    const wrapper = root.querySelector<HTMLElement>('.process');
+    const stage = root.querySelector<HTMLElement>('[data-pin-stage]');
+    const slot = root.querySelector<HTMLElement>('[data-media-slot]');
+    const panels = wrapper ? Array.from(wrapper.querySelectorAll<HTMLElement>('[data-h-panel]')) : [];
+    if (wrapper && stage && slot && panels.length) {
+      const homes = panels.map((panel) => panel.querySelector<HTMLElement>(':scope > .process-media'));
+      homes.forEach((el) => { if (el) slot.appendChild(el); });
+
+      const current = root.querySelector<HTMLElement>('[data-pin-current]');
+      const setActive = (index: number) => {
+        homes.forEach((el, i) => el?.classList.toggle('is-active', i === index));
+        if (current) current.textContent = String(index + 1).padStart(2, '0');
+      };
+      setActive(0);
+
+      ScrollTrigger.create({ trigger: wrapper, start: 'top top', end: 'bottom bottom', pin: stage, pinSpacing: false, invalidateOnRefresh: true });
+      panels.forEach((panel, index) => ScrollTrigger.create({ trigger: panel, start: 'top 55%', end: 'bottom 45%', onEnter: () => setActive(index), onEnterBack: () => setActive(index) }));
+      gsap.fromTo('[data-pin-rail]', { '--progress': 1 / panels.length }, { '--progress': 1, ease: 'none', scrollTrigger: { trigger: wrapper, start: 'top top', end: 'bottom bottom', scrub: 0.45 } });
+    }
   }, root);
 
   window.addEventListener('pagehide', () => {

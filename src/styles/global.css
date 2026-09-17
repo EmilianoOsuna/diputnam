@@ -84,12 +84,16 @@ button { font: inherit; }
 
 .site-footer {
   bottom: 0;
-  align-items: flex-end;
   gap: 2rem;
-  padding: 0 5.5rem 1.45rem 1.6rem;
+  padding: 0 5.5rem 1.2rem 1.6rem;
   font-size: 0.9rem;
   line-height: 1.45;
 }
+/* One line on desktop: brand + nav + social + contact + credit side by side. */
+.site-footer { align-items: center; }
+.site-footer:not(.site-footer--flow) .footer-bottom { width: 100%; gap: 1.1rem; }
+.site-footer:not(.site-footer--flow) .footer-social { margin-left: auto; gap: 1.1rem; }
+.site-footer:not(.site-footer--flow) .footer-credit { margin-left: 0; }
 
 .brand {
   display: block;
@@ -100,13 +104,13 @@ button { font: inherit; }
 }
 
 .brand img { display: block; width: 100%; height: auto; }
-.brand--mark { display: inline-flex; width: auto; height: 3.25rem; padding: 0; align-items: center; gap: 0.8rem; background: transparent; box-shadow: none; }
+.brand--mark { display: inline-flex; width: auto; height: 4rem; padding: 0; align-items: center; gap: 0.9rem; background: transparent; box-shadow: none; }
 .brand--mark picture { display: block; }
 .brand--mark picture[hidden] { display: none; }
-.brand--mark img { width: 3.05rem; height: 3.45rem; object-fit: contain; transform: scale(1.08); transform-origin: center; }
-.brand-copy { display: grid; gap: 0.14rem; font-family: 'Josefin Sans', sans-serif; line-height: 1; transform: translateY(0.12rem); }
-.brand-copy strong { font-size: 1.42rem; font-weight: 600; letter-spacing: 0.045em; text-transform: uppercase; }
-.brand-copy small { font-size: 0.52rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+.brand--mark img { width: 3.75rem; height: 4.25rem; object-fit: contain; transform: scale(1.08); transform-origin: center; }
+.brand-copy { display: grid; gap: 0.16rem; font-family: 'Josefin Sans', sans-serif; line-height: 1; transform: translateY(0.12rem); }
+.brand-copy strong { font-size: 1.7rem; font-weight: 600; letter-spacing: 0.045em; text-transform: uppercase; }
+.brand-copy small { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
 .site-header--light { color: var(--putnam-cream); background: transparent; box-shadow: none; }
 .site-header--light::before { display: none; }
 .home-page .site-header, .home-page .site-header--light { background: transparent; box-shadow: none; backdrop-filter: none; }
@@ -172,9 +176,35 @@ button { font: inherit; }
   line-height: 0.91;
   letter-spacing: -0.035em;
 }
-.footer-contact, .footer-address { display: grid; gap: 0.1rem; }
-.footer-address { margin-left: 0.5rem; }
-.footer-contact a:hover, .footer-address a:hover, .footer-contact a:focus-visible, .footer-address a:focus-visible { text-decoration: underline; text-underline-offset: 0.2rem; }
+/* Two rows, Chobani-style: brand + nav + social on top, contact + credit below a divider. */
+.footer-top { display: flex; align-items: center; gap: 2rem; }
+.footer-brand { font-family: 'Josefin Sans', sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.footer-nav { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-right: auto; font-size: 0.78rem; }
+.footer-nav a:hover, .footer-nav a:focus-visible { text-decoration: underline; text-underline-offset: 0.2rem; }
+.footer-social { display: flex; gap: 0.7rem; }
+.footer-social a { display: grid; place-items: center; opacity: 0.78; transition: opacity 180ms ease; }
+.footer-social a:hover, .footer-social a:focus-visible { opacity: 1; }
+.footer-social svg { width: 1.15rem; height: 1.15rem; fill: currentColor; }
+.footer-bottom { display: flex; align-items: center; gap: 1.5rem; font-size: 0.78rem; opacity: 0.85; }
+.footer-contact { display: flex; gap: 1.25rem; }
+.footer-contact a:hover, .footer-contact a:focus-visible { text-decoration: underline; text-underline-offset: 0.2rem; }
+/* The mark is already a white glyph on transparent PNG, so it needs no filter to read on
+   the footer's dark backgrounds. */
+.footer-credit { display: grid; place-items: center; margin-left: auto; opacity: 0.85; transition: opacity 180ms ease; }
+.footer-credit:hover, .footer-credit:focus-visible { opacity: 1; }
+.footer-credit img { display: block; width: 1.4rem; height: 1.4rem; object-fit: contain; }
+
+/* Structural geometry shared by the in-flow footer on every inner page; each page CSS
+   only overrides color/background so the six pages stay in sync when this changes. */
+.site-footer--flow { position: relative; z-index: 1; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem 2.5rem; padding: 1.75rem clamp(1.25rem, 3vw, 3.5rem); font-size: 0.85rem; line-height: 1.3; text-shadow: none; }
+.site-footer--flow::before { display: none; }
+@media (max-width: 767px) {
+  .site-footer--flow { flex-direction: column; align-items: flex-start; padding: 1.5rem 1rem; font-size: 0.8rem; }
+  .footer-top { gap: 1rem; flex-wrap: wrap; }
+  .footer-nav { width: 100%; order: 3; margin-right: 0; gap: 1rem 1.25rem; }
+  .footer-bottom { flex-wrap: wrap; }
+  .footer-contact { flex-direction: column; gap: 0.2rem; }
+}
 .scroll-cue {
   position: fixed;
   z-index: 11;
@@ -262,11 +292,11 @@ button { font: inherit; }
   .site-header { padding: 0.9rem 1rem; }
   .site-footer { padding: 0 4.5rem 1rem 1rem; }
   .site-header { align-items: center; }
-  .brand { width: 5.6rem; }
-  .brand--mark { width: auto; height: 2.8rem; padding: 0; }
-  .brand--mark img { width: 2.55rem; height: 3rem; }
-  .brand-copy strong { font-size: 1.16rem; }
-  .brand-copy small { font-size: 0.43rem; letter-spacing: 0.12em; }
+  .brand { width: 6.4rem; }
+  .brand--mark { width: auto; height: 3.4rem; padding: 0; }
+  .brand--mark img { width: 3.1rem; height: 3.65rem; }
+  .brand-copy strong { font-size: 1.4rem; }
+  .brand-copy small { font-size: 0.5rem; letter-spacing: 0.12em; }
   .site-nav {
     position: fixed;
     z-index: 1;
@@ -311,7 +341,8 @@ button { font: inherit; }
   body.menu-open .menu-toggle span:last-child { transform: translateY(calc(-0.27rem - 1px)) rotate(-45deg); }
   .panel-content { padding: 6rem 1rem; }
   .panel h1, .panel h2 { max-width: 24rem; font-size: clamp(2.6rem, 12.5vw, 4.6rem); line-height: 0.94; }
-  .site-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; padding-bottom: 1rem; font-size: 0.8rem; }
+  .site-footer { display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem; padding-bottom: 1rem; font-size: 0.8rem; }
+  .site-footer .footer-credit { margin-left: 0; }
   .scroll-cue { right: 1rem; bottom: 1rem; }
 }
 

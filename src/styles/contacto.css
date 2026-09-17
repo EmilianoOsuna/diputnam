@@ -83,12 +83,27 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 .f-row { display: grid; grid-template-columns: 4rem 16rem 1fr; gap: 1.5rem; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid rgba(0, 58, 54, 0.35); }
 .f-row:has(.custom-select) { position: relative; z-index: 10; }
 .f-row > span { font-size: 0.68rem; letter-spacing: 0.12em; }
-.f-row label { color: rgba(0, 58, 54, 0.6); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+.f-row label { display: inline-block; color: rgba(0, 58, 54, 0.6); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; transform-origin: left center; transition: transform 220ms ease; }
+.f-row:hover label, .f-row:focus-within label { transform: scale(1.06); }
 .f-row input, .f-row select, .f-row textarea { width: 100%; padding: 0.3rem 0; border: 0; border-radius: 0; outline: none; color: var(--putnam-deep); background: transparent; font: inherit; font-size: clamp(1.3rem, 1.9vw, 1.9rem); font-weight: 500; line-height: 1.15; letter-spacing: -0.025em; }
 .f-row .custom-select { width: 100%; }
 .f-row .custom-select__trigger { border: 0; padding: 0.3rem 0; font: inherit; font-size: clamp(1.3rem, 1.9vw, 1.9rem); font-weight: 500; line-height: 1.15; letter-spacing: -0.025em; }
-.f-row .custom-select__trigger:focus-visible { outline: none; box-shadow: inset 0 -1px currentColor; }
-.f-row input::placeholder, .f-row textarea::placeholder { color: rgba(0, 58, 54, 0.32); }
+.f-row .custom-select__trigger:focus-visible { outline: none; }
+/* Placeholder ("example text") reads at the same opacity as the field label. */
+.f-row input::placeholder, .f-row textarea::placeholder { color: rgba(0, 58, 54, 0.6); }
+/* Hover/focus feedback: the placeholder sweeps to green left-to-right instead of a line
+   appearing under the field. `background-clip: text` needs literal colors, not `currentColor`
+   (the rule also sets `color: transparent`, which `currentColor` would otherwise resolve to);
+   browsers without the feature just keep the plain placeholder color set above. */
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .f-row input::placeholder, .f-row textarea::placeholder { background-image: linear-gradient(90deg, var(--putnam-green) 0 50%, rgba(0, 58, 54, 0.6) 50% 100%); background-size: 200% 100%; background-position: 100% 0; -webkit-background-clip: text; background-clip: text; color: transparent; transition: background-position 420ms ease; }
+  .f-row:hover input::placeholder, .f-row:focus-within input::placeholder, .f-row:hover textarea::placeholder, .f-row:focus-within textarea::placeholder { background-position: 0 0; }
+}
+/* The select trigger already has its own hover background tint (below) and inserts its
+   value as a plain text node, so it gets a simpler color-only sweep instead of the
+   background-clip trick, avoiding any conflict with that background shorthand. */
+.f-row .custom-select__trigger { transition: color 420ms ease; }
+.f-row:hover .custom-select__trigger, .f-row:focus-within .custom-select__trigger { color: var(--putnam-green); }
 .f-row select { appearance: none; padding-right: 2.5rem; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' stroke='%23003a36' stroke-width='1'><path d='M4 7l6 6 6-6'/></svg>") no-repeat right center; }
 .f-row textarea { min-height: 6rem; resize: vertical; }
 .f-row--text { align-items: start; }
@@ -107,8 +122,7 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 .contacto-page .cta-actions a span { transition: transform 180ms ease; }
 .contacto-page .cta-actions a:hover span, .contacto-page .cta-actions a:focus-visible span { transform: translate(0.2rem, -0.2rem); }
 .ct-cta .cta-mark { position: absolute; right: clamp(1rem, 4vw, 5rem); bottom: 9%; width: min(42vw, 42rem); height: auto; object-fit: contain; opacity: 0.32; pointer-events: none; }
-.contacto-page .site-footer--flow { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 2rem; min-height: 14rem; padding: 4rem var(--gutter); color: var(--putnam-paper); background: var(--putnam-deep); font-size: 0.9rem; line-height: 1.45; text-shadow: none; }
-.contacto-page .site-footer--flow::before { display: none; }
+.contacto-page .site-footer--flow { color: var(--putnam-paper); background: var(--putnam-deep); }
 
 .contacto-page :is(a, button):focus-visible { outline: 1px solid currentColor; outline-offset: 3px; }
 .contacto-page :is(input, select, textarea):focus-visible { outline: none; box-shadow: inset 0 -1px currentColor; }
@@ -148,7 +162,7 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
   .ct-channels, .ct-location, .ct-form { padding: 6rem 1rem; }
   .index-list, .kpis, .ct-form form { margin-left: 0; }
   .index-row { grid-template-columns: 2.5rem 1fr 2rem; gap: 0.8rem; }
-  .index-row strong { font-size: clamp(1.25rem, 5.6vw, 1.6rem); }
+  .index-row strong { overflow-wrap: anywhere; word-break: break-word; font-size: clamp(1.05rem, 4.6vw, 1.4rem); }
   .kpis { grid-template-columns: 1fr; gap: 1.4rem; }
   .pin-counter b { font-size: 4rem; }
   .f-row, .f-submit { grid-template-columns: 2.5rem 1fr; gap: 0.8rem; }
@@ -159,8 +173,6 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
   .ct-cta h2 { margin: 5rem 0 2rem; font-size: clamp(3rem, 15vw, 5.5rem); }
   .ct-cta .cta-mark { right: -4%; bottom: 8%; width: 72vw; }
   .contacto-page .cta-actions { flex-direction: column; }
-  .contacto-page .site-footer--flow { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; min-height: 18rem; padding: 4rem 1rem; font-size: 0.8rem; }
-  .contacto-page .footer-address { margin-left: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

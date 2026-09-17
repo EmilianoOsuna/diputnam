@@ -9,6 +9,7 @@ export const en: Dictionary = {
   },
   langSwitch: { aria: 'Language', es: 'ES', en: 'EN', toEs: 'Ver en español', toEn: 'View in English' },
   whatsapp: 'WhatsApp',
+  footer: { credit: 'Code and design', facebook: 'Facebook', instagram: 'Instagram', whatsapp: 'WhatsApp' },
   writeUs: 'Email us',
   goToContact: 'Go to contact',
   soon: 'Coming soon',

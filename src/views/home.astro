@@ -24,7 +24,7 @@ const sweep = (index: number, enter: string, exit: string) => {
   const parts = [index > 0 && [enter, scene(index)], index + 1 < scenes.length && [exit, scene(index + 1)]].filter(Boolean) as [string, string][];
   return `animation-name: ${parts.map(([name]) => name).join(', ')}; animation-timeline: ${parts.map(([, timeline]) => timeline).join(', ')}`;
 };
-const sceneHref = (id: string) => (id === 'putnam' || id === 'eredita' ? pages[id][lang] : `#${id}`);
+const sceneHref = (id: string) => (id === 'putnam' || id === 'eredita' || id === 'contacto' ? pages[id][lang] : `#${id}`);
 ---
 
 <html lang={lang}>

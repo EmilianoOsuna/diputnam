@@ -10,6 +10,7 @@ export const es = {
   },
   langSwitch: { aria: 'Idioma', es: 'ES', en: 'EN', toEs: 'Ver en español', toEn: 'View in English' },
   whatsapp: 'WhatsApp',
+  footer: { credit: 'Código y diseño', facebook: 'Facebook', instagram: 'Instagram', whatsapp: 'WhatsApp' },
   writeUs: 'Escríbenos',
   goToContact: 'Ir a contacto',
   soon: 'Próximamente',

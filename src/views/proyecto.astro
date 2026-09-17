@@ -61,19 +61,19 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
       </section>
 
       <section class="ed-intro" aria-labelledby="ed-intro-title" data-header-theme="dark">
+        <figure class="ed-map" data-reveal-group>
+          <iframe src={`https://www.google.com/maps?q=${contact.coordinates.lat},${contact.coordinates.lng}&output=embed`} title="Ubicación del proyecto" loading="lazy" />
+        </figure>
         <div class="ed-intro-copy" data-reveal-group>
           <p class="section-kicker">{intro.kicker}</p>
           <h2 id="ed-intro-title"><Lines text={intro.title} /></h2>
           <p class="ed-lead">{intro.lead}</p>
-          <ul class="ed-bullets">
-            {intro.bullets.map((bullet) => <li>{bullet}</li>)}
-          </ul>
+          <dl class="ed-facts">
+            {intro.facts.map((fact) => (
+              <div class="ed-fact"><dt>{fact.label}</dt><dd>{fact.value}</dd></div>
+            ))}
+          </dl>
         </div>
-        <dl class="ed-facts" data-reveal-group>
-          {intro.facts.map((fact) => (
-            <div class="ed-fact"><dt>{fact.label}</dt><dd>{fact.value}</dd></div>
-          ))}
-        </dl>
       </section>
 
       <section class="ed-gallery" aria-labelledby="ed-gallery-title" data-header-theme="light">
@@ -91,25 +91,22 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
         </div>
       </section>
 
-      <section class="ed-typologies" aria-labelledby="ed-typologies-title" data-header-theme="dark" data-h-wrapper>
-        <header class="ed-h-head">
-          <p class="section-kicker">{typologies.kicker}</p>
-          <h2 id="ed-typologies-title"><Lines text={typologies.title} mode="hard" /></h2>
-          <p class="ed-h-intro-copy">{typologies.intro}</p>
-          <div class="ed-h-progress">
-            <span class="ed-h-counter"><b data-track-current>01</b><i aria-hidden="true">/</i><span>0{typologies.items.length}</span></span>
-            <span class="ed-h-rail" aria-hidden="true"><span data-track-rail></span></span>
-          </div>
-        </header>
-        <div class="ed-h-track" data-h-track>
-          <div class="ed-h-panel ed-h-panel--intro" data-h-panel>
+      <section class="ed-typologies" aria-labelledby="ed-typologies-title" data-header-theme="light" data-typologies>
+        <div class="ed-typ-stage" data-pin-stage>
+          <header class="ed-typ-head">
             <p class="section-kicker">{typologies.kicker}</p>
-            <h2><Lines text={typologies.title} mode="hard" /></h2>
+            <h2 id="ed-typologies-title">{typologies.title.replace(/\n/g, ' ')}</h2>
             <p class="ed-h-intro-copy">{typologies.intro}</p>
-            <span class="ed-h-hint">{ui.eredita.keepScrolling} <span aria-hidden="true">↓</span></span>
+          </header>
+          <div class="ed-typ-media-slot" data-media-slot></div>
+          <div class="ed-h-progress">
+            <span class="ed-h-counter"><b data-pin-current>01</b><i aria-hidden="true">/</i><span>0{typologies.items.length}</span></span>
+            <span class="ed-h-rail" aria-hidden="true"><span data-pin-rail></span></span>
           </div>
+        </div>
+        <div class="ed-h-track" data-h-track data-traits>
           {typologies.items.map((item, index) => (
-            <article class="ed-h-panel" data-h-panel>
+            <article class="ed-h-panel" data-h-panel data-trait={index}>
               {/* Every medium is in the HTML; only the selected one is shown, so hidden images
                   stay lazy and the video is fetched only once its panel is on screen. */}
               <figure class="ed-h-media" data-media>
@@ -129,7 +126,6 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
                 ))}
                 {item.media.length > 1 && (
                   <div class="ed-h-thumbs" data-thumbs>
-                    <button class="ed-h-thumb-nav" type="button" data-thumbs-prev aria-label={ui.eredita.media.prev} hidden><span aria-hidden="true">←</span></button>
                     <div class="ed-h-thumb-strip" role="tablist" aria-label={ui.eredita.media.aria(item.title)}>
                       {item.media.map((medium, j) => {
                         const src = imageSrc(thumbImage(medium));
@@ -141,14 +137,13 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
                         );
                       })}
                     </div>
-                    <button class="ed-h-thumb-nav" type="button" data-thumbs-next aria-label={ui.eredita.media.next} hidden><span aria-hidden="true">→</span></button>
                   </div>
                 )}
               </figure>
               <div class:list={['ed-h-copy', `is-${item.tone}`]}>
                 <div class="ed-h-copy-head">
                   <span class="ed-h-index">0{index + 1}<i>/</i>0{typologies.items.length}</span>
-                  <span class="ed-h-tag">{item.tag}</span>
+                  {item.tag !== 'Tipología' && item.tag !== 'Typology' && <span class="ed-h-tag">{item.tag}</span>}
                 </div>
                 <h3>{item.title}</h3>
                 <p class="ed-h-subtitle">{item.subtitle}</p>
@@ -200,7 +195,7 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
             <a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <span aria-hidden="true">↗</span></a>
           </div>
         </div>
-        <Picture class="cta-mark" src={erediteMark} widths={[320, 640]} sizes="(max-width: 767px) min(50vw, 14rem), min(45%, 18rem)" formats={['webp']} fallbackFormat="png" alt="" aria-hidden="true" />
+        <Picture pictureAttributes={{ class: 'cta-mark' }} src={erediteMark} widths={[320, 640, 960]} sizes="(max-width: 767px) min(50vw, 14rem), min(45vw, 38rem)" formats={['webp']} fallbackFormat="png" alt="" aria-hidden="true" />
       </section>
     </main>
     <ContactFooter lang={lang} contact={contact} />

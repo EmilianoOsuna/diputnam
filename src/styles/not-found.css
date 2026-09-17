@@ -41,8 +41,7 @@
 .nf .cta-mark { position: absolute; z-index: 0; right: clamp(1rem, 4vw, 5rem); top: 9dvh; width: min(28vw, 28rem); height: auto; object-fit: contain; opacity: 0.16; pointer-events: none; }
 
 /* Footer in the flow (the shell's default is fixed over a full-height page). */
-.not-found-page .site-footer--flow { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 2rem; min-height: 14rem; padding: 4rem var(--gutter); color: var(--putnam-paper); background: var(--putnam-deep); font-size: 0.9rem; line-height: 1.45; text-shadow: none; }
-.not-found-page .site-footer--flow::before { display: none; }
+.not-found-page .site-footer--flow { color: var(--putnam-paper); background: var(--putnam-deep); }
 .not-found-page .menu-toggle { min-width: 44px; min-height: 44px; }
 
 /* Staggered entrance without JavaScript. */
