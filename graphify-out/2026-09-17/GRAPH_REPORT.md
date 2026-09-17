@@ -1,16 +1,16 @@
 # Graph Report - diputnam  (2026-09-17)
 
 ## Corpus Check
-- 246 files · ~2,326,126 words
+- 245 files · ~2,325,695 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2181 nodes · 2498 edges · 183 communities (180 shown, 3 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 10 edges (avg confidence: 0.65)
+- 2176 nodes · 2493 edges · 182 communities (179 shown, 3 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 9 edges (avg confidence: 0.63)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `23abb357`
+- Built from commit: `e6793ea6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -179,7 +179,6 @@
 - Requirement: Renglones de hero sin solaparse en móvil
 - SocialLinks.astro
 - Requirement: Una escena por swipe en móvil
-- Requirement: Scroll móvil sin trabajo por frame en el hilo principal
 
 ## God Nodes (most connected - your core abstractions)
 1. `../components/SiteHead.astro` - 34 edges
@@ -190,8 +189,8 @@
 6. `revealHeroLines()` - 17 edges
 7. `ADDED Requirements` - 17 edges
 8. `../components/ContactFooter.astro` - 16 edges
-9. `t()` - 15 edges
-10. `revealTitles()` - 15 edges
+9. `revealTitles()` - 15 edges
+10. `t()` - 14 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `alternatesOf()` --indirect_call--> `href()`  [INFERRED]
@@ -208,7 +207,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (183 total, 3 thin omitted)
+## Communities (182 total, 3 thin omitted)
 
 ### Community 0 - "ADDED Requirements"
 Cohesion: 0.05
@@ -312,7 +311,7 @@ Nodes (21): crawl-surface Specification, Purpose, Requirement: Cabeceras y redir
 
 ### Community 25 - "motion.ts"
 Cohesion: 0.09
-Nodes (34): root, gallery, root, mountHorizontalTrack(), pad(), TrackOptions, lineHost(), mountAnchors() (+26 more)
+Nodes (33): root, gallery, root, mountHorizontalTrack(), pad(), TrackOptions, lineHost(), mountAnchors() (+25 more)
 
 ### Community 26 - "proposal.md"
 Cohesion: 0.22
@@ -840,7 +839,7 @@ Nodes (5): Context, Decisions, Goals / Non-Goals, Migration Plan, Risks / Trade-
 
 ### Community 178 - "tasks.md"
 Cohesion: 0.29
-Nodes (6): 1. Reveals y espaciado (causa raíz de los huecos), 2. Footer y menú móvil, 3. Tipologías en pista horizontal (Ereditá), 4. Proceso Putnam en pista horizontal, 5. Verificación integrada, 6. Home: una escena por swipe (añadido durante la implementación)
+Nodes (6): 1. Reveals y espaciado (causa raíz de los huecos), 2. Footer y menú móvil, 3. Tipologías en pista horizontal (Ereditá), 4. Proceso Putnam en pista horizontal, 5. Verificación integrada, 6. Home: slider a pantalla completa (añadido durante la implementación)
 
 ### Community 179 - "Requirement: Renglones de hero sin solaparse en móvil"
 Cohesion: 0.40
@@ -851,27 +850,23 @@ Cohesion: 0.40
 Nodes (4): ICON_PATHS, socials, ui, socialLinks()
 
 ### Community 181 - "Requirement: Una escena por swipe en móvil"
-Cohesion: 0.33
-Nodes (5): ADDED Requirements, Requirement: Una escena por swipe en móvil, Scenario: Arrastre corto, Scenario: Flick, Scenario: Última escena
-
-### Community 182 - "Requirement: Scroll móvil sin trabajo por frame en el hilo principal"
-Cohesion: 0.33
-Nodes (5): MODIFIED Requirements, Requirement: Scroll móvil sin trabajo por frame en el hilo principal, Scenario: Scroll vertical de la home, Scenario: Scroll vertical de una página interior, Scenario: Swipe en una pista horizontal
+Cohesion: 0.29
+Nodes (6): ADDED Requirements, Requirement: Una escena por swipe en móvil, Scenario: Arrastre corto, Scenario: Flick, Scenario: Sin trabajo por frame, Scenario: Última escena
 
 ## Knowledge Gaps
-- **1267 isolated node(s):** `name`, `version`, `description`, `dev`, `build` (+1262 more)
+- **1265 isolated node(s):** `name`, `version`, `description`, `dev`, `build` (+1260 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `t()` connect `index.ts` to `eredita.astro`, `ADDED Requirements`, `sitemap.xml.ts`, `motion.ts`, `proposal.md`?**
-  _High betweenness centrality (0.009) - this node is a cross-community bridge._
-- **Why does `mountSwipe()` connect `motion.ts` to `index.ts`?**
-  _High betweenness centrality (0.009) - this node is a cross-community bridge._
+- **Why does `dependencies` connect `ADDED Requirements` to `package.json`?**
+  _High betweenness centrality (0.001) - this node is a cross-community bridge._
+- **Why does `../components/SiteHead.astro` connect `ADDED Requirements` to `eredita.astro`, `ADDED Requirements`, `sitemap.xml.ts`, `check-dist.mjs`, `proposal.md`?**
+  _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _1267 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1265 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ADDED Requirements` be split into smaller, more focused modules?**
   _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
 - **Should `Requirements` be split into smaller, more focused modules?**

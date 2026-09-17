@@ -100,7 +100,7 @@ export const buildDocs = async (uploadImage: UploadImage, uploadFile?: UploadFil
 
   // Legal documents: four placeholders without a file (cards read "Próximamente").
   erediteLegalDocs.docs.forEach((doc, i) => docs.push({
-    _id: `documentoLegal.${i + 1}`, _type: 'documentoLegal', order: i + 1,
+    _id: `documentoLegal-${i + 1}`, _type: 'documentoLegal', order: i + 1,
     title: loc(doc.title, en.eredita.legal.docs[i][0]), description: loc(doc.text, en.eredita.legal.docs[i][1]),
   }));
 
@@ -163,11 +163,11 @@ export const buildDocs = async (uploadImage: UploadImage, uploadFile?: UploadFil
     cta: { kicker: loc(noticiasPage.cta.kicker, en.noticias.cta.kicker), title: loc(noticiasPage.cta.title, en.noticias.cta.title), text: loc(noticiasPage.cta.text, en.noticias.cta.text) },
   });
   for (const nota of notas) {
-    const es = { _id: `nota.${nota.slug}`, _type: 'nota', language: 'es', title: nota.title, slug: { _type: 'slug', current: nota.slug }, date: isoDate(nota.date), category: nota.category, tags: nota.tags, excerpt: nota.excerpt, readTime: nota.readTime };
+    const es = { _id: `nota-${nota.slug}`, _type: 'nota', language: 'es', title: nota.title, slug: { _type: 'slug', current: nota.slug }, date: isoDate(nota.date), category: nota.category, tags: nota.tags, excerpt: nota.excerpt, readTime: nota.readTime };
     const tr = en.noticias.notas[nota.slug];
-    const enDoc = { _id: `nota.${nota.slug}.en`, _type: 'nota', language: 'en', title: tr.title, slug: { _type: 'slug', current: tr.slug }, date: isoDate(nota.date), category: tr.category, tags: tr.tags, excerpt: tr.excerpt, readTime: tr.readTime };
+    const enDoc = { _id: `nota-${nota.slug}-en`, _type: 'nota', language: 'en', title: tr.title, slug: { _type: 'slug', current: tr.slug }, date: isoDate(nota.date), category: tr.category, tags: tr.tags, excerpt: tr.excerpt, readTime: tr.readTime };
     docs.push(es, enDoc, {
-      _id: `translation.${nota.slug}`, _type: 'translation.metadata', schemaTypes: ['nota'],
+      _id: `translation-${nota.slug}`, _type: 'translation.metadata', schemaTypes: ['nota'],
       translations: [es, enDoc].map((doc) => ({ _key: doc.language, _type: 'internationalizedArrayReferenceValue', language: doc.language, value: { _type: 'reference', _ref: doc._id } })),
     });
   }

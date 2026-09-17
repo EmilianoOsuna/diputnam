@@ -20,7 +20,7 @@ const { lang, project } = Astro.props;
 const ui = t(lang);
 const [legalDocs, contact] = await Promise.all([getLegalDocs(lang, project.id), getSettings(lang)]);
 const { name, slug, hero, intro, gallery, typologies, legal, cta } = project;
-const megabytes = (bytes: number) => `${(bytes / 1048576).toFixed(1)} MB`;
+const megabytes = (bytes: number) => (bytes < 1048576 ? `${Math.max(1, Math.round(bytes / 1024))} KB` : `${(bytes / 1048576).toFixed(1)} MB`);
 const alternate = { es: projectPath('es', slug), en: projectPath('en', slug) };
 const TITLE_SUFFIX = ' · Ereditá | Putnam';
 const title = ui.eredita.projectTitle(truncate(name, 60 - TITLE_SUFFIX.length));

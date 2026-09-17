@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "src/scripts/motion.ts": {
-    "mtime": 1789629965.069985,
-    "ast_hash": "bb88919058f135166d35d3a9b9297f0f",
+    "mtime": 1789632058.2599866,
+    "ast_hash": "aff2be23de3d317550792ac1d752aa85",
     "semantic_hash": ""
   },
   "src/scripts/noticias-motion.ts": {
@@ -970,13 +970,13 @@
     "semantic_hash": ""
   },
   "tests/mobile-audit.mjs": {
-    "mtime": 1789623571.7174487,
-    "ast_hash": "798e90c29e2abf18fa4c0666977e41ea",
+    "mtime": 1789631792.760586,
+    "ast_hash": "994910fe922f1a5baea14cf068fa2663",
     "semantic_hash": ""
   },
   "tests/mobile-perf.mjs": {
-    "mtime": 1789629779.7365124,
-    "ast_hash": "b2164684142c7cf14341d40702309c2d",
+    "mtime": 1789632346.919571,
+    "ast_hash": "3c30df6f829e5906aab2a783078ee288",
     "semantic_hash": ""
   },
   "tests/routes.mjs": {
@@ -1680,18 +1680,13 @@
     "semantic_hash": ""
   },
   "openspec/changes/mobile-optimization/tasks.md": {
-    "mtime": 1789630414.4870734,
-    "ast_hash": "ec03f90fc7864fd5e0f2570318b9857b",
+    "mtime": 1789632346.9199414,
+    "ast_hash": "fd8bf0707a97771da8650addbb27508d",
     "semantic_hash": ""
   },
   "openspec/changes/mobile-optimization/specs/home-ui-motion-readability/spec.md": {
-    "mtime": 1789630413.339471,
-    "ast_hash": "4b91716983c0a3cea23f5ca62a4627c9",
-    "semantic_hash": ""
-  },
-  "openspec/changes/mobile-optimization/specs/mobile-rendering-performance/spec.md": {
-    "mtime": 1789630413.3381107,
-    "ast_hash": "0f6b663da62652ee7dbe5bc50808c77b",
+    "mtime": 1789632346.9198022,
+    "ast_hash": "3b8f88a4ae3f2e19fc7a41416c8e718d",
     "semantic_hash": ""
   }
 }

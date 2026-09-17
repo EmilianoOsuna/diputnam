@@ -65,7 +65,7 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 
 .ct-location { min-height: 100dvh; padding: clamp(6rem, 10vw, 9rem) var(--gutter); align-items: center; color: var(--putnam-deep); background: var(--putnam-sand); }
 .ct-map { grid-column: 1 / 8; aspect-ratio: 5 / 4; margin: 0; overflow: hidden; background: #dccfb5; }
-.ct-map iframe { width: 100%; height: 100%; border: 0; filter: grayscale(1) sepia(0.18) contrast(0.86); }
+.ct-map iframe { width: 100%; height: 100%; border: 0; filter: grayscale(1) sepia(0.15) contrast(0.9); }
 .ct-location-copy { display: flex; grid-column: 9 / 13; flex-direction: column; }
 .ct-location-copy h2 { margin: 2rem 0 1.6rem; font-size: clamp(2.2rem, 3.4vw, 3.2rem); font-weight: 500; line-height: 1.02; letter-spacing: -0.035em; }
 .ct-location-copy p { margin: 0 0 2.4rem; color: rgba(0, 58, 54, 0.72); font-size: 0.98rem; line-height: 1.6; }
@@ -151,8 +151,6 @@ a.index-row:hover i, a.index-row:focus-visible i { transform: translate(0.2rem, 
 }
 
 @media (max-width: 767px) {
-  /* A filtered iframe re-rasterises on every scroll frame on phones. */
-  .ct-map iframe { filter: none; }
   .ct-hero { padding: 6rem 1rem 2rem; }
   .ct-hero .hero-copy { width: auto; }
   .ct-hero h1 { font-size: clamp(3rem, 15vw, 5.2rem); line-height: 0.98; }

@@ -1,16 +1,16 @@
 # Graph Report - diputnam  (2026-09-17)
 
 ## Corpus Check
-- 245 files · ~2,325,695 words
+- 248 files · ~2,327,160 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2176 nodes · 2493 edges · 182 communities (179 shown, 3 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 9 edges (avg confidence: 0.63)
+- 2191 nodes · 2511 edges · 183 communities (179 shown, 4 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 10 edges (avg confidence: 0.65)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e6793ea6`
+- Built from commit: `372f1ca2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -179,6 +179,7 @@
 - Requirement: Renglones de hero sin solaparse en móvil
 - SocialLinks.astro
 - Requirement: Una escena por swipe en móvil
+- rename-dotted-ids.ts
 
 ## God Nodes (most connected - your core abstractions)
 1. `../components/SiteHead.astro` - 34 edges
@@ -193,6 +194,8 @@
 10. `t()` - 14 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `measure()` --indirect_call--> `page()`  [INFERRED]
+  tests/mobile-perf.mjs → scripts/mock-docs.mjs
 - `alternatesOf()` --indirect_call--> `href()`  [INFERRED]
   tests/check-dist.mjs → src/components/SiteHead.astro
 - `observeTheme()` --indirect_call--> `section()`  [INFERRED]
@@ -201,13 +204,11 @@
   src/scripts/desktop/contacto.ts → package.json
 - `mount()` --references--> `lenis`  [EXTRACTED]
   src/scripts/desktop/eredita.ts → package.json
-- `mount()` --references--> `lenis`  [EXTRACTED]
-  src/scripts/desktop/home.ts → package.json
 
 ## Import Cycles
 - None detected.
 
-## Communities (182 total, 3 thin omitted)
+## Communities (183 total, 4 thin omitted)
 
 ### Community 0 - "ADDED Requirements"
 Cohesion: 0.05
@@ -218,8 +219,8 @@ Cohesion: 0.04
 Nodes (48): contacto-page Specification, Decision needed: Cortes de línea de h2, Decision needed: Envío del formulario, Decision needed: URL embed de Google Maps, Purpose, Requirement: Accesibilidad y reducción de movimiento, Requirement: Aceptación visual, responsive y de movimiento, Requirement: Altura real del viewport, sin clamp del canvas (+40 more)
 
 ### Community 2 - "eredita.astro"
-Cohesion: 0.14
-Nodes (19): ../assets/putnam-dark.png, ../assets/putnam-light.png, ../i18n, ../lib/content, ../lib/images, ../styles/contacto.css, ../styles/global.css, ../styles/not-found.css (+11 more)
+Cohesion: 0.10
+Nodes (22): ../assets/putnam-dark.png, ../assets/putnam-light.png, ../i18n, ../lib/content, ../styles/contacto.css, ../styles/global.css, ../styles/not-found.css, ../styles/putnam.css (+14 more)
 
 ### Community 3 - "package.json"
 Cohesion: 0.06
@@ -227,7 +228,7 @@ Nodes (33): groq-js, author, bugs, url, description, devDependencies, groq-js, h
 
 ### Community 4 - "ADDED Requirements"
 Cohesion: 0.15
-Nodes (19): ../components/SiteHead.astro, alternates, canonical, graph, image, pair, path, ui (+11 more)
+Nodes (18): ../components/SiteHead.astro, alternates, canonical, graph, image, pair, path, ui (+10 more)
 
 ### Community 5 - "Requirements"
 Cohesion: 0.06
@@ -239,11 +240,11 @@ Nodes (25): home-ui-motion-readability Specification, Purpose, Requirement: Legi
 
 ### Community 7 - "Requirements"
 Cohesion: 0.08
-Nodes (27): locales, otherLang(), pages, routes, failures, failures, navKeys, check() (+19 more)
+Nodes (24): docs, page(), routes, failures, check(), failures, galleryChecks(), routes (+16 more)
 
 ### Community 8 - "ADDED Requirements"
 Cohesion: 0.09
-Nodes (34): CmsImage, Contacto, Eredita, erediteHero(), erediteIntro(), getContacto(), getEredita(), getHome() (+26 more)
+Nodes (29): Contacto, Eredita, erediteHero(), erediteIntro(), getContacto(), getEredita(), getHome(), getLegalDocs() (+21 more)
 
 ### Community 9 - "ADDED Requirements"
 Cohesion: 0.14
@@ -314,8 +315,8 @@ Cohesion: 0.09
 Nodes (33): root, gallery, root, mountHorizontalTrack(), pad(), TrackOptions, lineHost(), mountAnchors() (+25 more)
 
 ### Community 26 - "proposal.md"
-Cohesion: 0.22
-Nodes (14): ../assets/eredita-logo.png, ../styles/eredita.css, ../components/CmsImg.astro, position, src, altOf(), CARD_WIDTHS, imageSrc() (+6 more)
+Cohesion: 0.14
+Nodes (24): ../assets/eredita-logo.png, ../lib/images, ../lib/seo, ../styles/eredita.css, ../styles/noticias.css, ../components/BodyImage.astro, ../components/CmsImg.astro, position (+16 more)
 
 ### Community 27 - "proposal.md"
 Cohesion: 0.10
@@ -562,8 +563,8 @@ Cohesion: 0.22
 Nodes (8): Purpose, Requirement: Imágenes locales resueltas en build-time, Requirement: Paridad entre build local y build de producción, Requirements, Scenario: Build de producción en Cloudflare, Scenario: Comparación de artefactos, Scenario: Guard del build, static-image-pipeline Specification
 
 ### Community 92 - "index.ts"
-Cohesion: 0.18
-Nodes (14): en, Dictionary, es, dictionaries, reference, t(), Lang, notaPath() (+6 more)
+Cohesion: 0.19
+Nodes (19): Lang, locales, notaPath(), otherLang(), PageKey, pages, projectPath(), getNotas() (+11 more)
 
 ### Community 93 - "sanity.config.ts"
 Cohesion: 0.28
@@ -814,8 +815,8 @@ Cohesion: 0.50
 Nodes (3): 1. Marcado y estilos, 2. Auto-ocultado en desktop, 3. Verificación integrada
 
 ### Community 172 - "sitemap.xml.ts"
-Cohesion: 0.24
-Nodes (8): ../lib/seo, ../styles/noticias.css, ../components/BodyImage.astro, formatDate(), getNotas(), truncate(), getStaticPaths(), getStaticPaths()
+Cohesion: 0.36
+Nodes (5): en, Dictionary, es, dictionaries, reference
 
 ### Community 173 - "Requirement: Pista horizontal con swipe nativo en móvil"
 Cohesion: 0.08
@@ -846,32 +847,32 @@ Cohesion: 0.40
 Nodes (4): ADDED Requirements, Requirement: Renglones de hero sin solaparse en móvil, Scenario: Hero de Noticias en inglés, Scenario: Interlineado mínimo
 
 ### Community 180 - "SocialLinks.astro"
-Cohesion: 0.40
-Nodes (4): ICON_PATHS, socials, ui, socialLinks()
+Cohesion: 0.43
+Nodes (7): client, localeImage(), run(), seedData, unsplash(), upload(), uploaded
 
 ### Community 181 - "Requirement: Una escena por swipe en móvil"
 Cohesion: 0.29
 Nodes (6): ADDED Requirements, Requirement: Una escena por swipe en móvil, Scenario: Arrastre corto, Scenario: Flick, Scenario: Sin trabajo por frame, Scenario: Última escena
 
 ## Knowledge Gaps
-- **1265 isolated node(s):** `name`, `version`, `description`, `dev`, `build` (+1260 more)
+- **1271 isolated node(s):** `name`, `version`, `description`, `dev`, `build` (+1266 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `dependencies` connect `ADDED Requirements` to `package.json`?**
-  _High betweenness centrality (0.001) - this node is a cross-community bridge._
-- **Why does `../components/SiteHead.astro` connect `ADDED Requirements` to `eredita.astro`, `ADDED Requirements`, `sitemap.xml.ts`, `check-dist.mjs`, `proposal.md`?**
+- **Why does `../components/SiteHead.astro` connect `ADDED Requirements` to `eredita.astro`, `ADDED Requirements`, `check-dist.mjs`, `proposal.md`, `index.ts`?**
+  _High betweenness centrality (0.002) - this node is a cross-community bridge._
+- **Why does `href()` connect `check-dist.mjs` to `ADDED Requirements`?**
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `description` to the rest of the system?**
-  _1265 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1271 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ADDED Requirements` be split into smaller, more focused modules?**
   _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
 - **Should `Requirements` be split into smaller, more focused modules?**
   _Cohesion score 0.04081632653061224 - nodes in this community are weakly interconnected._
 - **Should `eredita.astro` be split into smaller, more focused modules?**
-  _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10241820768136557 - nodes in this community are weakly interconnected._
 - **Should `package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._

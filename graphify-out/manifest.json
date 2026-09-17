@@ -815,8 +815,8 @@
     "semantic_hash": ""
   },
   "src/views/proyecto.astro": {
-    "mtime": 1789623571.7174487,
-    "ast_hash": "045c3b23b78d0ec93674a92bf839ef2f",
+    "mtime": 1789649609.7416308,
+    "ast_hash": "af58f99bd7521f84e0b715291c66cc9a",
     "semantic_hash": ""
   },
   "src/views/putnam.astro": {
@@ -925,8 +925,8 @@
     "semantic_hash": ""
   },
   "studio/scripts/seed-docs.ts": {
-    "mtime": 1789573142.3340693,
-    "ast_hash": "640edecd52eb4cd0237f469c3282d7fe",
+    "mtime": 1789648600.1458554,
+    "ast_hash": "f41e0b3a2781426a54ac1070f62e2859",
     "semantic_hash": ""
   },
   "studio/scripts/seed-local.ts": {
@@ -1687,6 +1687,41 @@
   "openspec/changes/mobile-optimization/specs/home-ui-motion-readability/spec.md": {
     "mtime": 1789632346.9198022,
     "ast_hash": "3b8f88a4ae3f2e19fc7a41416c8e718d",
+    "semantic_hash": ""
+  },
+  "scripts/mock-docs.mjs": {
+    "mtime": 1789648330.443174,
+    "ast_hash": "556eb8c5c170cc79dbaa25bf99a06e75",
+    "semantic_hash": ""
+  },
+  "studio/scripts/patch-mocks.ts": {
+    "mtime": 1789648600.146062,
+    "ast_hash": "a9a2c004e654238dc52d7b0457ee19ea",
+    "semantic_hash": ""
+  },
+  "studio/scripts/rename-dotted-ids.ts": {
+    "mtime": 1789648570.9374034,
+    "ast_hash": "ddccbda2d345304fc334e3974f781432",
+    "semantic_hash": ""
+  },
+  "studio/scripts/seed-data/docs/fichas-politicas.pdf": {
+    "mtime": 1789648330.7831845,
+    "ast_hash": "ba535cad1b4bf77073fccfe5bb72233d",
+    "semantic_hash": ""
+  },
+  "studio/scripts/seed-data/docs/minuta-compraventa.pdf": {
+    "mtime": 1789648330.770184,
+    "ast_hash": "93c5e46364d127a56a516d5a693efe91",
+    "semantic_hash": ""
+  },
+  "studio/scripts/seed-data/docs/planos-aprobaciones.pdf": {
+    "mtime": 1789648330.7764742,
+    "ast_hash": "10baeb0e148880b009eca2151f4a66f5",
+    "semantic_hash": ""
+  },
+  "studio/scripts/seed-data/docs/reglamento-copropiedad.pdf": {
+    "mtime": 1789648330.7642863,
+    "ast_hash": "e8090a55364d74700bd56734613c25cb",
     "semantic_hash": ""
   }
 }
