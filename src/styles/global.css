@@ -397,6 +397,13 @@ body.menu-open .site-header { transform: none; }
   .home.is-slider .home-stage { display: flex; flex-direction: column; height: 100%; will-change: translate; transition: translate 500ms ease; }
   .home.is-slider .panel { flex: 0 0 100%; height: 100%; min-height: 0; }
   .home.is-slider :is(.panel-media, .panel-content, .panel h1, .panel h2) { will-change: translate; transition: translate 500ms ease; }
+  /* Positive z-order and a permanent layer for the shade: with the media at z-index -2
+     animating underneath, Safari promoted the (unlayered) shade only for the duration of the
+     transition, so the gradient between photo and title vanished during the sweep and popped
+     back on landing. */
+  .home.is-slider .panel-media { z-index: 0; }
+  .home.is-slider .panel-shade { z-index: 1; will-change: transform; transform: translateZ(0); }
+  .home.is-slider .panel-content { z-index: 2; }
   .home.is-slider .is-dragging, .home.is-slider .is-dragging :is(.panel-media, .panel-content, .panel h1, .panel h2) { transition: none; }
   .home.is-slider :is(.scene-markers, [data-scroll-end]) { display: none; }
   .home.is-slider .panel:not(.is-active) .panel-content { pointer-events: none; }
