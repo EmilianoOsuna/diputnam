@@ -265,9 +265,9 @@ try {
     await page.setViewportSize({ width: 390, height: 844 });
   }
 
-  // Safari's toolbar collapses mid-run: the active scene must still cover the viewport
-  // after a height change, and the resting position must be a percentage (a px value only
-  // survives thanks to the resize handler, which is not what iOS relies on).
+  // Safari's toolbar collapses mid-run: the active scene must still cover the viewport after
+  // a height change (the slider re-renders on `resize`/`visualViewport`). Positions stay in px
+  // on purpose: switching a layer between px and % makes Safari rebuild it and flicker.
   console.log('\n/ (home slider) scene after viewport height change');
   await page.setViewportSize({ width: 390, height: 844 - URL_BAR_DELTA });
   await page.goto(baseUrl + '/', { waitUntil: 'networkidle' });
@@ -281,7 +281,7 @@ try {
       return { id: active.id, top: r.top, bottom: r.bottom, vh: innerHeight, translate: stage.style.translate, scrollY, touchAction: getComputedStyle(stage.parentElement).touchAction, overscroll: getComputedStyle(document.documentElement).overscrollBehaviorY };
     });
     assert.ok(Math.abs(g.top) < 1 && Math.abs(g.bottom - g.vh) < 1, `${g.id} ${g.top}…${g.bottom} vs ${g.vh}`);
-    assert.match(g.translate, /%$/, `resting translate should be a percentage, got "${g.translate}"`);
+    assert.match(g.translate, /px$/, `positions must stay in px (Safari flickers on unit changes), got "${g.translate}"`);
     assert.equal(g.scrollY, 0);
     assert.equal(g.touchAction, 'none', 'experience must own the touch gesture');
     assert.equal(g.overscroll, 'none', 'no rubber-band on html');

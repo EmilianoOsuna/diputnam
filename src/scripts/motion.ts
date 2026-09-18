@@ -51,10 +51,9 @@ const observeActive = (targets: HTMLElement[]) => {
 //
 // The gesture belongs to the slider alone: `touch-action: none` on the experience plus
 // `preventDefault()` on every move of an active drag keep Safari iOS from panning or
-// rubber-banding the document (and from collapsing its toolbar mid-gesture). At rest the
-// positions are written as percentages of each layer's own box, so a viewport height
-// change (toolbar, rotation) is re-laid out by CSS with the active scene still covering
-// the screen even before any resize handler runs; pixels are only used while dragging.
+// rubber-banding the document (and from collapsing its toolbar mid-gesture). Positions are
+// always px; a viewport height change (toolbar, rotation) re-renders on `resize` and on
+// `visualViewport` resize with the transition off.
 const mountSlider = (wrapper: HTMLElement) => {
   home!.classList.add('is-slider');
   document.documentElement.classList.add('is-slider');
@@ -71,7 +70,10 @@ const mountSlider = (wrapper: HTMLElement) => {
   let startTime = 0;
   let dragging = false;
 
-  // Dragging and landing: everything in px from the measured size.
+  // Everything in px from the measured size — dragging, landing and rest. Never switch a
+  // layer between px and %: Safari resolves percentage translates at layout and rebuilds the
+  // compositing layer on the unit change, which blanks async-decoded images for a frame (a
+  // flicker on every swipe on iPhone). A viewport height change re-renders below.
   const render = (translate: number) => {
     position = translate;
     wrapper.style.translate = `0 ${translate}px`;
@@ -82,31 +84,14 @@ const mountSlider = (wrapper: HTMLElement) => {
       titles[i]?.style.setProperty('translate', `0 ${-60 * progress}px`);
     });
   };
-  // Resting: the stage and the media are one screen tall, so their position is written as
-  // a percentage of their own box and survives a viewport height change without JS. The
-  // copies keep px: the active one is at 0 and the neighbours sit off-screen inside their
-  // clipped panels, so a stale value is never visible. Written only once the landing has
-  // finished (same position, so nothing moves) — transitions always run px → px, which
-  // every engine interpolates.
-  const settle = () => {
-    position = -index * size;
-    wrapper.style.translate = `0 ${-index * 100}%`;
-    panels.forEach((_, i) => {
-      const progress = Math.max(-1, Math.min(1, index - i));
-      medias[i]?.style.setProperty('translate', `0 ${60 * progress}%`);
-      copies[i]?.style.setProperty('translate', `0 ${size * progress}px`);
-      titles[i]?.style.setProperty('translate', `0 ${-60 * progress}px`);
-    });
-  };
-  // Freeze wherever the stage is right now (mid-landing included) in px, transitions off,
-  // so the next movement starts from the rendered position whatever unit it was written in.
+  // Freeze wherever the stage is right now (mid-landing included), transitions off, so the
+  // next movement starts from the rendered position.
   const freeze = () => {
     const top = wrapper.getBoundingClientRect().top - wrapper.parentElement!.getBoundingClientRect().top;
     wrapper.classList.add('is-dragging');
     render(top);
     void wrapper.offsetHeight;
   };
-  let landing = 0;
   const slideTo = (next: number) => {
     index = Math.max(0, Math.min(last, next));
     freeze();
@@ -114,8 +99,6 @@ const mountSlider = (wrapper: HTMLElement) => {
     render(-index * size);
     setActive(index);
     setCue(index === last);
-    window.clearTimeout(landing);
-    landing = window.setTimeout(() => { if (!dragging) settle(); }, 560);
   };
 
   const onStart = (event: TouchEvent) => {
@@ -125,7 +108,6 @@ const mountSlider = (wrapper: HTMLElement) => {
     startY = event.touches[0].clientY;
     startTime = event.timeStamp;
     size = wrapper.clientHeight;
-    window.clearTimeout(landing);
     freeze();
     startPosition = position;
   };
@@ -141,7 +123,16 @@ const mountSlider = (wrapper: HTMLElement) => {
     const quick = event.timeStamp - startTime < 300 && Math.abs(delta) > 10;
     slideTo(quick || Math.abs(delta) > size / 2 ? index + Math.sign(delta) : index);
   };
-  const onResize = () => { size = wrapper.clientHeight; if (!dragging) { wrapper.classList.add('is-dragging'); settle(); void wrapper.offsetHeight; wrapper.classList.remove('is-dragging'); } };
+  // Address bar, rotation: re-measure and snap the active scene back over the viewport
+  // without a transition. `visualViewport` fires on iOS toolbar changes that `window` misses.
+  const onResize = () => {
+    size = wrapper.clientHeight;
+    if (dragging) return;
+    wrapper.classList.add('is-dragging');
+    render(-index * size);
+    void wrapper.offsetHeight;
+    wrapper.classList.remove('is-dragging');
+  };
   document.addEventListener('touchstart', onStart, { passive: true });
   document.addEventListener('touchmove', onMove, { passive: false });
   document.addEventListener('touchend', onEnd, { passive: true });
@@ -149,7 +140,7 @@ const mountSlider = (wrapper: HTMLElement) => {
   window.addEventListener('resize', onResize, { passive: true });
   window.visualViewport?.addEventListener('resize', onResize, { passive: true });
 
-  settle();
+  render(0);
   setCue(last === 0);
   return slideTo;
 };

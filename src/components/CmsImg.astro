@@ -7,8 +7,8 @@ import { altOf, imageSrc, objectPosition, remoteImage, remoteSrcset, saturation 
 
 // `base` is the width of the fallback `src`; `width`/`height` in rest are the HTML attributes.
 interface Props { image: CmsImage; widths: readonly number[]; base: number; quality: number; sat?: number; sizes: string; class?: string; [key: string]: unknown; }
-const { image, widths, base, quality, sat = 0, sizes, class: className, style, ...rest } = Astro.props;
+const { image, widths, base, quality, sat = 0, sizes, class: className, style, decoding = 'async', ...rest } = Astro.props;
 const src = imageSrc(image);
 const position = objectPosition(image);
 ---
-<img class={className} src={remoteImage(src, base, quality)} srcset={remoteSrcset(src, widths, quality)} sizes={sizes} alt={altOf(image)} style={[position, saturation(sat), style].filter(Boolean).join('; ') || undefined} decoding="async" {...rest} />
+<img class={className} src={remoteImage(src, base, quality)} srcset={remoteSrcset(src, widths, quality)} sizes={sizes} alt={altOf(image)} style={[position, saturation(sat), style].filter(Boolean).join('; ') || undefined} decoding={decoding} {...rest} />
