@@ -3,12 +3,21 @@
 // the <img> (see `saturation`): Sanity's CDN only accepts `sat=-100`, never partial values.
 import type { CmsImage } from './content';
 
+// On Vercel the image CDN is proxied through the site's own origin (`/cdn/images/*` rewrite
+// in vercel.json), so the hero image rides the connection already open for the HTML instead
+// of paying DNS + TCP + TLS to cdn.sanity.io first — the difference between 99 and 100 in
+// PageSpeed's mobile simulation, which ignores `preconnect`. Social previews (`ogUrl`) keep
+// the absolute CDN URL: bots need an absolute address. Local builds hit the CDN directly.
+const CDN_IMAGES = 'https://cdn.sanity.io/images/';
+export const proxiedCdn = process.env.VERCEL === '1';
+const viaProxy = (url: string) => (proxiedCdn && url.startsWith(CDN_IMAGES) ? `/cdn/images/${url.slice(CDN_IMAGES.length)}` : url);
+
 export const remoteImage = (src: string, width: number, quality: number) => {
   const url = new URL(src);
   url.searchParams.set('w', String(width));
   url.searchParams.set('q', String(quality));
   url.searchParams.set('auto', 'format');
-  return url.toString().replaceAll('%2C', ',');
+  return viaProxy(url.toString().replaceAll('%2C', ','));
 };
 
 export const remoteSrcset = (src: string, widths: readonly number[], quality: number) =>

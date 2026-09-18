@@ -2,7 +2,7 @@
 import { pages, t, type Lang, type PageKey } from '../i18n';
 import type { Settings } from '../lib/content';
 import { absolute, asset, jsonLd, jsonLdScript, ogLocale, pageTypeOf, SITE_NAME, type ArticleMeta, type PageType } from '../lib/seo';
-import { OG_HEIGHT, OG_WIDTH } from '../lib/images';
+import { OG_HEIGHT, OG_WIDTH, proxiedCdn } from '../lib/images';
 
 // `page` resolves the hreflang pair from the route table; `alternate` overrides it for
 // dynamic pages (a note's translation, or none when the note exists in one language).
@@ -49,7 +49,7 @@ const graph = jsonLd({ lang, page, url: canonical, title, description, pageType,
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
 <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preconnect" href="https://cdn.sanity.io" />
+{!proxiedCdn && <link rel="preconnect" href="https://cdn.sanity.io" />}
 <meta property="og:type" content={article ? 'article' : 'website'} />
 <meta property="og:site_name" content={SITE_NAME} />
 <meta property="og:locale" content={ogLocale(lang)} />
