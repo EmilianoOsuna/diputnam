@@ -4,6 +4,7 @@
 // script swaps in the English block and prints the requested path. Not indexable.
 import { Image } from 'astro:assets';
 import putnamMark from '../assets/putnam-light.png';
+import Arrow from '../components/Arrow.astro';
 import ContactFooter from '../components/ContactFooter.astro';
 import Lines from '../components/Lines.astro';
 import SiteHead from '../components/SiteHead.astro';
@@ -31,8 +32,8 @@ const sections = ['eredita', 'putnam', 'noticias', 'unete', 'contacto'] as const
             <h1 id={`nf-title-${lang}`}><Lines text={ui.notFound.title} /></h1>
             <p class="nf-lead">{ui.notFound.text}</p>
             <div class="nf-actions">
-              <a href={pages.home[lang]}>{ui.notFound.goHome} <span aria-hidden="true">→</span></a>
-              <a href={`mailto:${contact.email}`}>{ui.notFound.contact} <span aria-hidden="true">↗</span></a>
+              <a href={pages.home[lang]}>{ui.notFound.goHome} <Arrow /></a>
+              <a href={`mailto:${contact.email}`}>{ui.notFound.contact} <Arrow dir="up-right" /></a>
             </div>
           </div>
           <nav class="nf-index" aria-label={ui.notFound.sections}>

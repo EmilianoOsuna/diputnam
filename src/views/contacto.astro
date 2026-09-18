@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import putnamMark from '../assets/putnam-light.png';
+import Arrow from '../components/Arrow.astro';
 import CmsImg from '../components/CmsImg.astro';
 import ContactFooter from '../components/ContactFooter.astro';
 import Lines from '../components/Lines.astro';
@@ -52,8 +53,8 @@ const [emailUser, emailDomain] = contact.email.split('@');
           <p data-reveal-group>{channels.text}</p>
         </header>
         <div class="index-list" data-reveal-group>
-          <a class="index-row" href={contact.whatsapp} target="_blank" rel="noreferrer"><span>01</span><div><small>{ui.whatsapp}</small><strong>{contact.phone}</strong></div><i aria-hidden="true">↗</i></a>
-          <a class="index-row" href={`mailto:${contact.email}`}><span>02</span><div><small>{ui.contacto.email}</small><strong>{emailUser}<wbr />@{emailDomain}</strong></div><i aria-hidden="true">↗</i></a>
+          <a class="index-row" href={contact.whatsapp} target="_blank" rel="noreferrer"><span>01</span><div><small>{ui.whatsapp}</small><strong>{contact.phone}</strong></div><Arrow dir="up-right" as="i" /></a>
+          <a class="index-row" href={`mailto:${contact.email}`}><span>02</span><div><small>{ui.contacto.email}</small><strong>{emailUser}<wbr />@{emailDomain}</strong></div><Arrow dir="up-right" as="i" /></a>
           <div class="index-row"><span>03</span><div><small>{ui.contacto.office}</small><strong>{contact.address}</strong></div><i aria-hidden="true"></i></div>
           <div class="index-row"><span>04</span><div><small>{ui.contacto.hours}</small><strong>{contact.hours}</strong></div><i aria-hidden="true"></i></div>
         </div>
@@ -69,7 +70,7 @@ const [emailUser, emailDomain] = contact.email.split('@');
         </div>
         <div class="reasons" data-reasons-track>
           {reasons.items.map((reason, index) => (
-            <article class:list={["reason", { "is-active": index === 0 }]} data-reason={index}><span>{pad(index)} — {reason.tag}</span><h3>{reason.title}</h3><p>{reason.text}</p>{reason.target === 'whatsapp' ? <a href={contact.whatsapp} target="_blank" rel="noreferrer">{reason.cta} <span aria-hidden="true">→</span></a> : <a href="#formulario">{reason.cta} <span aria-hidden="true">→</span></a>}</article>
+            <article class:list={["reason", { "is-active": index === 0 }]} data-reason={index}><span>{pad(index)} — {reason.tag}</span><h3>{reason.title}</h3><p>{reason.text}</p>{reason.target === 'whatsapp' ? <a href={contact.whatsapp} target="_blank" rel="noreferrer">{reason.cta} <Arrow /></a> : <a href="#formulario">{reason.cta} <Arrow /></a>}</article>
           ))}
         </div>
       </section>
@@ -81,7 +82,7 @@ const [emailUser, emailDomain] = contact.email.split('@');
           <h2 id="ct-location-title"><Lines text={location.title} /></h2>
           <p data-reveal-group>{location.text}</p>
           <dl data-reveal-group><div><dt>{ui.contacto.address}</dt><dd>{contact.address} · {contact.city}</dd></div><div><dt>{ui.contacto.schedule}</dt><dd>{contact.hours}</dd></div></dl>
-          <div class="cta-actions"><a href={contact.mapsUrl} target="_blank" rel="noreferrer">{ui.contacto.openMaps} <span aria-hidden="true">↗</span></a></div>
+          <div class="cta-actions"><a href={contact.mapsUrl} target="_blank" rel="noreferrer">{ui.contacto.openMaps} <Arrow dir="up-right" /></a></div>
         </div>
       </section>
 
@@ -99,7 +100,7 @@ const [emailUser, emailDomain] = contact.email.split('@');
             <div class="f-row"><span>05</span><label for="ct-motivo">{form.reason}</label><select id="ct-motivo" name="motivo" data-custom-select>{form.reasons.map((reason) => <option>{reason}</option>)}</select></div>
             <div class="f-row f-row--text"><span>06</span><label for="ct-mensaje">{form.message}</label><textarea id="ct-mensaje" name="mensaje" placeholder={form.messagePlaceholder}></textarea></div>
           </div>
-          <div class="f-submit"><p>{form.consent}</p><button type="button">{form.submit} <span aria-hidden="true">→</span></button></div>
+          <div class="f-submit"><p>{form.consent}</p><button type="button">{form.submit} <Arrow /></button></div>
         </form>
       </section>
 
@@ -107,7 +108,7 @@ const [emailUser, emailDomain] = contact.email.split('@');
         <p class="section-kicker">{cta.kicker}</p>
         <h2 id="ct-cta-title"><Lines text={cta.title} /></h2>
         <p data-reveal-group>{cta.text}</p>
-        <div class="cta-actions" data-reveal-group><a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.contacto.openWhatsapp} <span aria-hidden="true">↗</span></a></div>
+        <div class="cta-actions" data-reveal-group><a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.contacto.openWhatsapp} <Arrow dir="up-right" /></a></div>
         <Image class="cta-mark" src={putnamMark} widths={[400, 800]} sizes="(max-width: 767px) 72vw, min(42vw, 42rem)" format="webp" alt="" aria-hidden="true" />
       </section>
     </main>

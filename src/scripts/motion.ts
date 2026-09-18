@@ -48,8 +48,16 @@ const observeActive = (targets: HTMLElement[]) => {
 // get their parallax from the panel's progress, exactly as Swiper's parallax module does.
 // Drags follow the finger with transitions off; releasing turns the 500 ms `ease` CSS
 // transition back on and sets the final position, so the landing runs in the compositor.
+//
+// The gesture belongs to the slider alone: `touch-action: none` on the experience plus
+// `preventDefault()` on every move of an active drag keep Safari iOS from panning or
+// rubber-banding the document (and from collapsing its toolbar mid-gesture). At rest the
+// positions are written as percentages of each layer's own box, so a viewport height
+// change (toolbar, rotation) is re-laid out by CSS with the active scene still covering
+// the screen even before any resize handler runs; pixels are only used while dragging.
 const mountSlider = (wrapper: HTMLElement) => {
   home!.classList.add('is-slider');
+  document.documentElement.classList.add('is-slider');
   document.body.classList.add('is-slider');
   const medias = panels.map((panel) => panel.querySelector<HTMLElement>('.panel-media'));
   const copies = panels.map((panel) => panel.querySelector<HTMLElement>('.panel-content'));
@@ -57,12 +65,13 @@ const mountSlider = (wrapper: HTMLElement) => {
   const last = panels.length - 1;
   let index = 0;
   let size = wrapper.clientHeight;
-  let position = 0; // wrapper translate, 0 … -last*size
+  let position = 0; // wrapper translate in px while dragging, 0 … -last*size
   let startY = 0;
   let startPosition = 0;
   let startTime = 0;
   let dragging = false;
 
+  // Dragging: everything in px from the measured size.
   const render = (translate: number) => {
     position = translate;
     wrapper.style.translate = `0 ${translate}px`;
@@ -73,19 +82,34 @@ const mountSlider = (wrapper: HTMLElement) => {
       titles[i]?.style.setProperty('translate', `0 ${-60 * progress}px`);
     });
   };
+  // Resting: percentages of each element's own box. The stage and each media are one
+  // screen tall (the panels overflow the stage); a neighbour's copy is off-screen (clipped
+  // by its panel), so its own height is close enough until the next drag re-renders it in px.
+  const settle = () => {
+    position = -index * size;
+    wrapper.style.translate = `0 ${-index * 100}%`;
+    panels.forEach((_, i) => {
+      const progress = Math.max(-1, Math.min(1, index - i));
+      medias[i]?.style.setProperty('translate', `0 ${60 * progress}%`);
+      copies[i]?.style.setProperty('translate', `0 ${100 * progress}%`);
+      titles[i]?.style.setProperty('translate', `0 ${-60 * progress}px`);
+    });
+  };
   const slideTo = (next: number) => {
     index = Math.max(0, Math.min(last, next));
     wrapper.classList.remove('is-dragging');
-    render(-index * size);
+    settle();
     setActive(index);
     setCue(index === last);
   };
 
   const onStart = (event: TouchEvent) => {
     if (document.body.classList.contains('menu-open') || event.touches.length !== 1) return;
+    if (!(event.target instanceof Node) || !wrapper.parentElement?.contains(event.target)) return;
     dragging = true;
     startY = event.touches[0].clientY;
     startTime = event.timeStamp;
+    size = wrapper.clientHeight;
     // Freeze wherever the landing transition currently is, then follow the finger from there.
     const current = getComputedStyle(wrapper).translate.split(' ')[1];
     wrapper.classList.add('is-dragging');
@@ -94,6 +118,7 @@ const mountSlider = (wrapper: HTMLElement) => {
   };
   const onMove = (event: TouchEvent) => {
     if (!dragging) return;
+    if (event.cancelable) event.preventDefault();
     render(Math.max(-last * size, Math.min(0, startPosition + event.touches[0].clientY - startY)));
   };
   const onEnd = (event: TouchEvent) => {
@@ -103,13 +128,15 @@ const mountSlider = (wrapper: HTMLElement) => {
     const quick = event.timeStamp - startTime < 300 && Math.abs(delta) > 10;
     slideTo(quick || Math.abs(delta) > size / 2 ? index + Math.sign(delta) : index);
   };
+  const onResize = () => { size = wrapper.clientHeight; if (!dragging) settle(); };
   document.addEventListener('touchstart', onStart, { passive: true });
-  document.addEventListener('touchmove', onMove, { passive: true });
+  document.addEventListener('touchmove', onMove, { passive: false });
   document.addEventListener('touchend', onEnd, { passive: true });
   document.addEventListener('touchcancel', onEnd, { passive: true });
-  window.addEventListener('resize', () => { size = wrapper.clientHeight; wrapper.classList.add('is-dragging'); render(-index * size); }, { passive: true });
+  window.addEventListener('resize', onResize, { passive: true });
+  window.visualViewport?.addEventListener('resize', onResize, { passive: true });
 
-  render(0);
+  settle();
   setCue(last === 0);
   return slideTo;
 };

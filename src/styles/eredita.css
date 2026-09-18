@@ -243,8 +243,11 @@
 @media (max-width: 767px) {
   .eredita-page .site-header { color: var(--ed-ink); }
   .eredita-page .site-header--light { color: var(--ed-paper); }
-  .ed-hero { padding: 0 1rem 3.5rem; }
-  .ed-hero-mark { top: 38vh; right: 1rem; width: 40vw; transform: translateY(-50%); }
+  /* The mark is the project's logo, never over the copy: in flow above the text block,
+     right-aligned, so long titles and short viewports push it up instead of under it. */
+  .ed-hero { flex-direction: column; justify-content: flex-end; align-items: stretch; padding: 0 1rem 3.5rem; }
+  .ed-hero > picture { position: relative; z-index: 1; display: block; align-self: flex-end; margin: 0 0 clamp(1.5rem, 5vh, 3rem); }
+  .ed-hero-mark { position: static; top: auto; right: auto; width: 40vw; transform: none; }
   .ed-legal-header > div, .ed-legal-header > p { grid-column: 1 / 13; }
   .ed-legal-header > p { max-width: none; }
   .ed-legal-grid { grid-template-columns: 1fr; }

@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { PortableText } from 'astro-portabletext';
 import putnamMark from '../assets/putnam-light.png';
+import Arrow from '../components/Arrow.astro';
 import BodyImage from '../components/BodyImage.astro';
 import CmsImg from '../components/CmsImg.astro';
 import ContactFooter from '../components/ContactFooter.astro';
@@ -65,7 +66,7 @@ const article = { headline: nota.title, published: nota.date, modified: nota.upd
           </div>
           <footer class="nw-article-foot" data-reveal-group>
             <a class="hero-index" href={pages.noticias[lang]}><span aria-hidden="true">←</span> {ui.noticias.backToIndex}</a>
-            {pair && <a class="hero-index" href={pair} hreflang={other} lang={other}>{other === 'es' ? ui.langSwitch.toEs : ui.langSwitch.toEn} <span aria-hidden="true">→</span></a>}
+            {pair && <a class="hero-index" href={pair} hreflang={other} lang={other}>{other === 'es' ? ui.langSwitch.toEs : ui.langSwitch.toEn} <Arrow /></a>}
           </footer>
         </section>
       </article>
@@ -74,7 +75,7 @@ const article = { headline: nota.title, published: nota.date, modified: nota.upd
         <p class="section-kicker"><span>{cta.kicker}</span></p>
         <h2 id="nw-cta-title">{cta.title.replaceAll('\n', ' ')}</h2>
         <p data-reveal-group>{cta.text}</p>
-        <div class="cta-actions" data-reveal-group><a href={`mailto:${contact.email}`}>{ui.writeUs} <span aria-hidden="true">↗</span></a><a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <span aria-hidden="true">↗</span></a></div>
+        <div class="cta-actions" data-reveal-group><a href={`mailto:${contact.email}`}>{ui.writeUs} <Arrow dir="up-right" /></a><a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <Arrow dir="up-right" /></a></div>
         <Image class="cta-mark" src={putnamMark} widths={[400, 800]} sizes="(max-width: 767px) 72vw, min(42vw, 42rem)" format="webp" alt="" aria-hidden="true" />
       </section>
     </main>

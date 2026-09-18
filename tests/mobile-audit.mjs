@@ -2,11 +2,15 @@
 // instead of stopping at the first one so a run shows the full picture.
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
-import { chromium } from 'playwright';
+import { chromium, webkit } from 'playwright';
 import { projectPairs, routes as siteRoutes } from './routes.mjs';
 
 const baseUrl = process.env.BASE_URL ?? 'http://127.0.0.1:4321';
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
+// `PLAYWRIGHT_BROWSER=webkit` runs the same audit on WebKit (`npm run test:mobile:webkit`,
+// after `npx playwright install webkit`). It does not emulate Safari's toolbar or Apple
+// Color Emoji, so it complements — never replaces — a real-device pass.
+const browserName = process.env.PLAYWRIGHT_BROWSER === 'webkit' ? 'webkit' : 'chromium';
 const shots = 'tests/.artifacts/mobile';
 const BROWN = 'rgb(89, 64, 55)';
 const URL_BAR_DELTA = 90; // px hidden/revealed by a phone's address bar
@@ -21,7 +25,15 @@ const check = async (label, fn) => {
 };
 
 await mkdir(shots, { recursive: true });
-const browser = await chromium.launch(executablePath ? { executablePath, args: ['--no-sandbox', '--disable-gpu'] } : {});
+let browser;
+try {
+  browser = browserName === 'webkit' ? await webkit.launch() : await chromium.launch(executablePath ? { executablePath, args: ['--no-sandbox', '--disable-gpu'] } : {});
+} catch (error) {
+  console.error(`mobile-audit: cannot launch ${browserName} — ${error.message.split('\n')[0]}`);
+  if (browserName === 'webkit') console.error('  install it with: npx playwright install webkit (add --with-deps if system libraries are missing)');
+  process.exit(1);
+}
+console.log(`mobile-audit on ${browserName}`);
 const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
 const page = await context.newPage();
 
@@ -42,6 +54,37 @@ const brownShare = async () => {
   }
   return (hits / (width * height)) * 100;
 };
+
+// Sections reveal on scroll; bring the target into view and let the reveal settle.
+const settleInView = async (selector) => {
+  await page.evaluate((sel) => document.querySelector(sel)?.scrollIntoView({ block: 'start' }), selector);
+  await page.waitForTimeout(1200);
+};
+// Ereditá hero: the mark is the project's logo, never over the hero copy.
+const heroMarkClear = async (route) => {
+  await page.goto(baseUrl + route, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(1600);
+  return page.evaluate(() => {
+    const overlaps = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    const mark = document.querySelector('.ed-hero-mark').getBoundingClientRect();
+    const hits = [...document.querySelectorAll('.ed-hero-content > *')].filter((el) => overlaps(mark, el.getBoundingClientRect())).map((el) => el.className || el.tagName);
+    return { hits, mark: { left: mark.left, right: mark.right, width: mark.width }, vw: document.documentElement.clientWidth };
+  });
+};
+// CTA watermark on phones: in flow, below the last action link, never on the copy.
+const ctaMarkBelowLinks = async (route, section) => {
+  await page.goto(baseUrl + route, { waitUntil: 'networkidle' });
+  await settleInView(section);
+  return page.evaluate((section) => {
+    const overlaps = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    const s = document.querySelector(section);
+    const mark = s.querySelector('.cta-mark').getBoundingClientRect();
+    const links = [...s.querySelectorAll('.cta-actions a')].map((a) => a.getBoundingClientRect());
+    const texts = [...s.querySelectorAll('h2, p, a')].map((el) => el.getBoundingClientRect());
+    return { mark: { top: mark.top, bottom: mark.bottom }, lastLinkBottom: Math.max(...links.map((r) => r.bottom)), sectionBottom: s.getBoundingClientRect().bottom, overlapsText: texts.some((t) => overlaps(t, mark)) };
+  }, section);
+};
+const ctaSections = { '/putnam/': '.institutional-cta', '/unete/': '.un-cta', '/contacto/': '.ct-cta', '/noticias/': '.nw-cta' };
 
 const trackChecks = async (route, trackSelector, total) => {
   await page.goto(baseUrl + route, { waitUntil: 'networkidle' });
@@ -222,6 +265,48 @@ try {
     await page.setViewportSize({ width: 390, height: 844 });
   }
 
+  // Safari's toolbar collapses mid-run: the active scene must still cover the viewport
+  // after a height change, and the resting position must be a percentage (a px value only
+  // survives thanks to the resize handler, which is not what iOS relies on).
+  console.log('\n/ (home slider) scene after viewport height change');
+  await page.setViewportSize({ width: 390, height: 844 - URL_BAR_DELTA });
+  await page.goto(baseUrl + '/', { waitUntil: 'networkidle' });
+  await page.waitForTimeout(1600);
+  await page.click('[data-scroll-cue]'); await page.waitForTimeout(700);
+  await page.setViewportSize({ width: 390, height: 844 }); await page.waitForTimeout(200);
+  await check('home scene 2 covers the viewport after the address bar retracts', async () => {
+    const g = await page.evaluate(() => {
+      const active = document.querySelector('[data-panel].is-active'); const r = active.getBoundingClientRect();
+      const stage = document.querySelector('[data-stage]');
+      return { id: active.id, top: r.top, bottom: r.bottom, vh: innerHeight, translate: stage.style.translate, scrollY, touchAction: getComputedStyle(stage.parentElement).touchAction, overscroll: getComputedStyle(document.documentElement).overscrollBehaviorY };
+    });
+    assert.ok(Math.abs(g.top) < 1 && Math.abs(g.bottom - g.vh) < 1, `${g.id} ${g.top}…${g.bottom} vs ${g.vh}`);
+    assert.match(g.translate, /%$/, `resting translate should be a percentage, got "${g.translate}"`);
+    assert.equal(g.scrollY, 0);
+    assert.equal(g.touchAction, 'none', 'experience must own the touch gesture');
+    assert.equal(g.overscroll, 'none', 'no rubber-band on html');
+  });
+
+  // Action arrows are inline SVG (`Arrow.astro`), never `→`/`↗` characters that iOS may
+  // draw as emoji; links keep their accessible name without the arrow.
+  console.log('\naction arrows');
+  for (const route of ['/contacto/', '/unete/', '/en/news/']) {
+    await page.goto(baseUrl + route, { waitUntil: 'domcontentloaded' });
+    const arrows = await page.evaluate(() => {
+      const chars = [...document.querySelectorAll('a, button')].filter((el) => /[→↗]/.test(el.textContent)).map((el) => el.textContent.trim().slice(0, 30));
+      const icons = [...document.querySelectorAll('.arrow')];
+      const bad = icons.filter((el) => !el.querySelector('svg') || getComputedStyle(el.querySelector('svg')).stroke !== getComputedStyle(el).color).length;
+      const name = document.querySelector('.cta-actions a')?.textContent.trim();
+      return { chars, icons: icons.length, bad, name };
+    });
+    await check(`${route} action links use vector arrows (${arrows.icons})`, () => {
+      assert.deepEqual(arrows.chars, [], 'arrow characters left in links/buttons');
+      assert.ok(arrows.icons > 0, 'no Arrow icons found');
+      assert.equal(arrows.bad, 0, 'icon without svg or stroke ≠ text colour');
+      assert.doesNotMatch(arrows.name ?? '', /[→↗]/, 'accessible name carries the arrow');
+    });
+  }
+
   console.log('\n/putnam/ hero entrance animation');
   await page.goto(baseUrl + '/putnam/', { waitUntil: 'commit' });
   await page.waitForTimeout(120);
@@ -317,18 +402,39 @@ try {
     assert.deepEqual(backOnHero, { light: true, logo: 'light' }, 'back on hero');
   });
 
-  console.log('\n/eredita/ hero mark placement');
-  await page.goto(baseUrl + '/eredita/', { waitUntil: 'networkidle' });
-  await check('eredita hero mark fully inside viewport with ≥16px side margin', async () => {
-    const box = await page.evaluate(() => {
-      const el = document.querySelector('.ed-hero-mark');
-      const r = el.getBoundingClientRect();
-      return { left: r.left, right: r.right, width: r.width, vw: document.documentElement.clientWidth };
-    });
-    assert.ok(box.width > 0, 'mark has no size');
-    assert.ok(box.left >= 16, `left ${box.left}`);
-    assert.ok(box.right <= box.vw - 16, `right ${box.right} of ${box.vw}`);
-  });
+  // Short phones (an iPhone with Safari's toolbar out, a small Android): the Ereditá hero
+  // mark never sits on the hero copy, the CTA watermark stays below its links, and no
+  // route overflows horizontally.
+  const heroRoutes = ['/eredita/', project].filter(Boolean);
+  for (const vp of [{ width: 390, height: 844 }, { width: 375, height: 635 }, { width: 360, height: 640 }]) {
+    console.log(`\nshort viewport ${vp.width}×${vp.height}`);
+    await page.setViewportSize(vp);
+    for (const route of heroRoutes) {
+      const hero = await heroMarkClear(route);
+      await check(`${route} hero mark inside the viewport (≥16px) and clear of the copy at ${vp.width}×${vp.height}`, () => {
+        assert.ok(hero.mark.width > 0, 'mark has no size');
+        assert.ok(hero.mark.left >= 16, `left ${hero.mark.left}`);
+        assert.ok(hero.mark.right <= hero.vw - 16, `right ${hero.mark.right} of ${hero.vw}`);
+        assert.deepEqual(hero.hits, [], 'mark overlaps hero copy');
+      });
+    }
+    for (const [route, section] of Object.entries(ctaSections)) {
+      const cta = await ctaMarkBelowLinks(route, section);
+      await check(`${route} CTA mark below the action links at ${vp.width}×${vp.height}`, () => {
+        assert.ok(cta.mark.top >= cta.lastLinkBottom, `mark top ${cta.mark.top} above last link bottom ${cta.lastLinkBottom}`);
+        assert.equal(cta.overlapsText, false, 'mark overlaps CTA text');
+        assert.ok(cta.mark.bottom > cta.mark.top && cta.mark.top < cta.sectionBottom, 'mark not visible inside the section');
+      });
+    }
+    if (vp.width !== 390) {
+      for (const route of routes) {
+        await page.goto(baseUrl + route, { waitUntil: 'domcontentloaded' });
+        const extra = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+        await check(`${route} no horizontal overflow at ${vp.width}px`, () => assert.equal(extra, 0));
+      }
+    }
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
 
   console.log('\nhorizontal tracks');
   if (project) {

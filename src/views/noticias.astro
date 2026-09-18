@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import putnamMark from '../assets/putnam-light.png';
+import Arrow from '../components/Arrow.astro';
 import CmsImg from '../components/CmsImg.astro';
 import ContactFooter from '../components/ContactFooter.astro';
 import Lines from '../components/Lines.astro';
@@ -57,7 +58,7 @@ const categorias = [ui.noticias.all, ...new Set(notas.map((n) => n.category))].m
             <h2 id="nw-featured-title" data-reveal-group>{destacada.title}</h2>
             <p data-reveal-group>{destacada.excerpt}</p>
             <dl data-reveal-group><div><dt>{ui.noticias.category}</dt><dd>{destacada.category}</dd></div><div><dt>{ui.noticias.readTime}</dt><dd>{destacada.readTime}</dd></div></dl>
-            <div class="cta-actions" data-reveal-group><a href={notaPath(lang, destacada.slug)}>{ui.noticias.readNote} <span aria-hidden="true">→</span></a></div>
+            <div class="cta-actions" data-reveal-group><a href={notaPath(lang, destacada.slug)}>{ui.noticias.readNote} <Arrow /></a></div>
           </div>
         </section>
       ) : (
@@ -77,7 +78,7 @@ const categorias = [ui.noticias.all, ...new Set(notas.map((n) => n.category))].m
         </header>
         <div class="index-list" data-reveal-group>
           {notas.map((nota, i) => (
-            <a class="index-row" id={`nota-${nota.slug}`} href={notaPath(lang, nota.slug)}><span>{pad(i + 1)}</span><time datetime={nota.date}>{formatDate(lang, nota.date)}</time><div><small>{nota.tags.map((tag) => <span>{tag}</span>)}</small><strong>{nota.title}</strong><p>{nota.excerpt}</p></div><i aria-hidden="true">→</i></a>
+            <a class="index-row" id={`nota-${nota.slug}`} href={notaPath(lang, nota.slug)}><span>{pad(i + 1)}</span><time datetime={nota.date}>{formatDate(lang, nota.date)}</time><div><small>{nota.tags.map((tag) => <span>{tag}</span>)}</small><strong>{nota.title}</strong><p>{nota.excerpt}</p></div><Arrow as="i" /></a>
           ))}
         </div>
         <div class="index-foot"><span>{ui.noticias.count(pad(notas.length), pad(notas.length))}</span><span>{ui.noticias.archive} · {index.archive}</span></div>
@@ -87,7 +88,7 @@ const categorias = [ui.noticias.all, ...new Set(notas.map((n) => n.category))].m
         <p class="section-kicker"><span>{cta.kicker}</span></p>
         <h2 id="nw-cta-title"><Lines text={cta.title} /></h2>
         <p data-reveal-group>{cta.text}</p>
-        <div class="cta-actions" data-reveal-group><a href={`mailto:${contact.email}`}>{ui.writeUs} <span aria-hidden="true">↗</span></a><a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <span aria-hidden="true">↗</span></a></div>
+        <div class="cta-actions" data-reveal-group><a href={`mailto:${contact.email}`}>{ui.writeUs} <Arrow dir="up-right" /></a><a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <Arrow dir="up-right" /></a></div>
         <Image class="cta-mark" src={putnamMark} widths={[400, 800]} sizes="(max-width: 767px) 72vw, min(42vw, 42rem)" format="webp" alt="" aria-hidden="true" />
       </section>
     </main>

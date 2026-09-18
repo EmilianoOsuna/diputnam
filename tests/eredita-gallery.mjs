@@ -89,6 +89,24 @@ try {
     assert.equal(await rVideo.evaluate((el) => el.paused), false, 'plays after the click');
     assert.equal(await play.isHidden(), true, 'button hidden');
   });
+
+  // The hero mark is the project's logo, never over the hero copy: checked at the two
+  // common 14" laptop viewports on the line page and the project page.
+  for (const viewport of [{ width: 1366, height: 768 }, { width: 1512, height: 982 }]) {
+    const laptop = await browser.newPage({ viewport });
+    for (const heroRoute of ['/eredita/', route]) {
+      await laptop.goto(`${baseUrl}${heroRoute}`, { waitUntil: 'networkidle' });
+      await laptop.waitForTimeout(1600);
+      const hits = await laptop.evaluate(() => {
+        const mark = document.querySelector('.ed-hero-mark').getBoundingClientRect();
+        return [...document.querySelectorAll('.ed-hero-content > *')]
+          .filter((el) => { const r = el.getBoundingClientRect(); return r.left < mark.right && r.right > mark.left && r.top < mark.bottom && r.bottom > mark.top; })
+          .map((el) => el.className || el.tagName);
+      });
+      await check(`${heroRoute} hero mark never over the copy at ${viewport.width}×${viewport.height}`, () => assert.deepEqual(hits, []));
+    }
+    await laptop.close();
+  }
 } finally {
   await browser.close();
 }

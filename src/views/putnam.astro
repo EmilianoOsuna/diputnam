@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import putnamMark from '../assets/putnam-light.png';
+import Arrow from '../components/Arrow.astro';
 import CmsImg from '../components/CmsImg.astro';
 import ContactFooter from '../components/ContactFooter.astro';
 import Lines from '../components/Lines.astro';
@@ -35,7 +36,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
         </div>
         <div class="hero-details" data-reveal-group>
           <p class="hero-lead">{hero.lead}</p>
-          <a class="hero-index" href="#enfoque">{ui.putnam.seeApproach} <span aria-hidden="true">→</span></a>
+          <a class="hero-index" href="#enfoque">{ui.putnam.seeApproach} <Arrow /></a>
         </div>
         <figure class="hero-frame">
           <CmsImg image={hero.image} base={1280} widths={[640, 960, 1280]} quality={72} sat={SAT.hero} sizes="100vw" width="1800" height="1200" loading="eager" fetchpriority="high" />
@@ -105,8 +106,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
         <p class="section-kicker">{cta.kicker}</p>
         <h2 id="cta-title"><Lines text={cta.title} /></h2>
         <div class="cta-actions">
-          <a href={`mailto:${contact.email}`}>{ui.writeUs} <span aria-hidden="true">↗</span></a>
-          <a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <span aria-hidden="true">↗</span></a>
+          <a href={`mailto:${contact.email}`}>{ui.writeUs} <Arrow dir="up-right" /></a>
+          <a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <Arrow dir="up-right" /></a>
         </div>
         <Image class="cta-mark" src={putnamMark} widths={[400, 800]} sizes="(max-width: 767px) 72vw, min(42vw, 42rem)" format="webp" alt="" aria-hidden="true" />
       </section>

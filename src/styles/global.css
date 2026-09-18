@@ -34,6 +34,12 @@ a, button, input, select, textarea, summary, [role='button'], [tabindex] { -webk
 html { background: var(--putnam-cream); }
 body { margin: 0; min-width: 320px; background: var(--putnam-cream); }
 a { color: inherit; text-decoration: none; }
+/* `Arrow.astro`: the wrapper stays a plain inline box so it keeps a text baseline (the
+   `.index-row` grids align on baseline) and the same line box the arrow character had; the
+   1em icon is centred on the x-height so it never grows a line-height: 1 box. Sites that scale the wrapper's font-size
+   (`.index-row i`, `.panel-button span`) scale the icon with it. */
+.arrow { font-style: normal; }
+.arrow svg { display: inline-block; vertical-align: middle; }
 button { font: inherit; }
 
 .site-header,
@@ -326,8 +332,9 @@ body.menu-open .site-header { transform: none; }
     overflow-y: auto;
     padding: 7.5rem 2rem 2rem;
     color: var(--putnam-ink);
-    /* Near-opaque instead of blurred: a full-screen backdrop-filter re-blurs every frame of the open/close transition. */
-    background: rgba(244, 238, 223, 0.97);
+    /* Opaque, not blurred: a full-screen backdrop-filter re-blurs every frame of the open/close
+       transition, and any alpha lets the hero title show through on high-contrast screens. */
+    background: var(--putnam-cream);
     box-shadow: 0 0 3rem rgba(0, 0, 0, 0.12);
     opacity: 0;
     visibility: hidden;
@@ -373,10 +380,14 @@ body.menu-open .site-header { transform: none; }
    document never scrolls, so the address bar stays put and the stage is exactly one
    screen. The wrapper and the parallax layers (media, copy, title) move with `translate`;
    the 500 ms `ease` transition is Swiper's default slide speed/curve and is switched off
-   while a finger drags. */
+   while a finger drags. `html` and `body` are both locked (Safari iOS ignores `overflow`
+   on `body` alone) with no overscroll, and the experience takes the whole touch gesture
+   (`touch-action: none`) so Safari never pans, rubber-bands or collapses its toolbar
+   under the swipe; `body` keeps pinch-zoom for the menu. */
 @media (max-width: 767px) {
-  body.is-slider { height: 100dvh; overflow: hidden; touch-action: pinch-zoom; }
-  .home.is-slider .home-experience { position: fixed; inset: 0; overflow: hidden; background: #0d1116; }
+  html.is-slider, body.is-slider { height: 100%; overflow: hidden; overscroll-behavior: none; }
+  body.is-slider { touch-action: pinch-zoom; }
+  .home.is-slider .home-experience { position: fixed; inset: 0; overflow: hidden; background: #0d1116; touch-action: none; }
   .home.is-slider .home-stage { display: flex; flex-direction: column; height: 100%; will-change: translate; transition: translate 500ms ease; }
   .home.is-slider .panel { flex: 0 0 100%; height: 100%; min-height: 0; }
   .home.is-slider :is(.panel-media, .panel-content, .panel h1, .panel h2) { will-change: translate; transition: translate 500ms ease; }

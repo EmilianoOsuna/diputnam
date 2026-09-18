@@ -3,6 +3,7 @@
 // buyer documents) at /eredita/<slug>/ in both languages.
 import { Picture } from 'astro:assets';
 import erediteMark from '../assets/eredita-logo.png';
+import Arrow from '../components/Arrow.astro';
 import CmsImg from '../components/CmsImg.astro';
 import ContactFooter from '../components/ContactFooter.astro';
 import Lines from '../components/Lines.astro';
@@ -159,7 +160,7 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
                     ))}
                   </ul>
                 </details>
-                <a class="ed-cta-link" href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.eredita.requestInfo} <span aria-hidden="true">→</span></a>
+                <a class="ed-cta-link" href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.eredita.requestInfo} <Arrow /></a>
               </div>
             </article>
           ))}
@@ -181,7 +182,7 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
               <p>{doc.description}</p>
               {doc.file ? (
                 <a href={doc.file.url} type="application/pdf" target="_blank" rel="noreferrer">
-                  <span>{ui.eredita.openPdf} <i aria-hidden="true">↗</i></span>
+                  <span>{ui.eredita.openPdf} <Arrow dir="up-right" as="i" /></span>
                   <small>{[doc.version, doc.validFrom && formatDate(lang, doc.validFrom), megabytes(doc.file.size)].filter(Boolean).join(' · ')}</small>
                 </a>
               ) : (
@@ -197,8 +198,8 @@ const thumbName = (medium: TypologyMedia) => (medium.kind === 'video' ? ui.eredi
           <p class="section-kicker">{cta.kicker}</p>
           <h2 id="ed-cta-title"><Lines text={cta.title} /></h2>
           <div class="cta-actions">
-            <a href={`mailto:${contact.email}`}>{ui.writeUs} <span aria-hidden="true">↗</span></a>
-            <a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <span aria-hidden="true">↗</span></a>
+            <a href={`mailto:${contact.email}`}>{ui.writeUs} <Arrow dir="up-right" /></a>
+            <a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <Arrow dir="up-right" /></a>
           </div>
         </div>
         <Picture pictureAttributes={{ class: 'cta-mark' }} src={erediteMark} widths={[320, 640, 960]} sizes="(max-width: 767px) min(50vw, 14rem), min(45vw, 38rem)" formats={['webp']} fallbackFormat="png" alt="" aria-hidden="true" />

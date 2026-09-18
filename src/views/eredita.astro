@@ -3,6 +3,7 @@
 // per published project, each linking to its own page (see proyecto.astro).
 import { Picture } from 'astro:assets';
 import erediteMark from '../assets/eredita-logo.png';
+import Arrow from '../components/Arrow.astro';
 import CmsImg from '../components/CmsImg.astro';
 import ContactFooter from '../components/ContactFooter.astro';
 import Lines from '../components/Lines.astro';
@@ -85,7 +86,7 @@ const { hero, intro, cta } = page;
                   </div>
                   <h3>{project.name}</h3>
                   <p>{project.card.text}</p>
-                  <span class="ed-cta-link">{ui.eredita.viewProject} <span aria-hidden="true">→</span></span>
+                  <span class="ed-cta-link">{ui.eredita.viewProject} <Arrow /></span>
                 </div>
               </a>
             </li>
@@ -98,8 +99,8 @@ const { hero, intro, cta } = page;
           <p class="section-kicker">{cta.kicker}</p>
           <h2 id="ed-cta-title"><Lines text={cta.title} /></h2>
           <div class="cta-actions">
-            <a href={`mailto:${contact.email}`}>{ui.writeUs} <span aria-hidden="true">↗</span></a>
-            <a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <span aria-hidden="true">↗</span></a>
+            <a href={`mailto:${contact.email}`}>{ui.writeUs} <Arrow dir="up-right" /></a>
+            <a href={contact.whatsapp} target="_blank" rel="noreferrer">{ui.whatsapp} <Arrow dir="up-right" /></a>
           </div>
         </div>
         <Picture pictureAttributes={{ class: 'cta-mark' }} src={erediteMark} widths={[320, 640, 960]} sizes="(max-width: 767px) min(50vw, 14rem), min(45vw, 38rem)" formats={['webp']} fallbackFormat="png" alt="" aria-hidden="true" />
