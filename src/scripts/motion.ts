@@ -71,7 +71,7 @@ const mountSlider = (wrapper: HTMLElement) => {
   let startTime = 0;
   let dragging = false;
 
-  // Dragging: everything in px from the measured size.
+  // Dragging and landing: everything in px from the measured size.
   const render = (translate: number) => {
     position = translate;
     wrapper.style.translate = `0 ${translate}px`;
@@ -82,25 +82,40 @@ const mountSlider = (wrapper: HTMLElement) => {
       titles[i]?.style.setProperty('translate', `0 ${-60 * progress}px`);
     });
   };
-  // Resting: percentages of each element's own box. The stage and each media are one
-  // screen tall (the panels overflow the stage); a neighbour's copy is off-screen (clipped
-  // by its panel), so its own height is close enough until the next drag re-renders it in px.
+  // Resting: the stage and the media are one screen tall, so their position is written as
+  // a percentage of their own box and survives a viewport height change without JS. The
+  // copies keep px: the active one is at 0 and the neighbours sit off-screen inside their
+  // clipped panels, so a stale value is never visible. Written only once the landing has
+  // finished (same position, so nothing moves) — transitions always run px → px, which
+  // every engine interpolates.
   const settle = () => {
     position = -index * size;
     wrapper.style.translate = `0 ${-index * 100}%`;
     panels.forEach((_, i) => {
       const progress = Math.max(-1, Math.min(1, index - i));
       medias[i]?.style.setProperty('translate', `0 ${60 * progress}%`);
-      copies[i]?.style.setProperty('translate', `0 ${100 * progress}%`);
+      copies[i]?.style.setProperty('translate', `0 ${size * progress}px`);
       titles[i]?.style.setProperty('translate', `0 ${-60 * progress}px`);
     });
   };
+  // Freeze wherever the stage is right now (mid-landing included) in px, transitions off,
+  // so the next movement starts from the rendered position whatever unit it was written in.
+  const freeze = () => {
+    const top = wrapper.getBoundingClientRect().top - wrapper.parentElement!.getBoundingClientRect().top;
+    wrapper.classList.add('is-dragging');
+    render(top);
+    void wrapper.offsetHeight;
+  };
+  let landing = 0;
   const slideTo = (next: number) => {
     index = Math.max(0, Math.min(last, next));
+    freeze();
     wrapper.classList.remove('is-dragging');
-    settle();
+    render(-index * size);
     setActive(index);
     setCue(index === last);
+    window.clearTimeout(landing);
+    landing = window.setTimeout(() => { if (!dragging) settle(); }, 560);
   };
 
   const onStart = (event: TouchEvent) => {
@@ -110,10 +125,8 @@ const mountSlider = (wrapper: HTMLElement) => {
     startY = event.touches[0].clientY;
     startTime = event.timeStamp;
     size = wrapper.clientHeight;
-    // Freeze wherever the landing transition currently is, then follow the finger from there.
-    const current = getComputedStyle(wrapper).translate.split(' ')[1];
-    wrapper.classList.add('is-dragging');
-    render(current ? parseFloat(current) : position);
+    window.clearTimeout(landing);
+    freeze();
     startPosition = position;
   };
   const onMove = (event: TouchEvent) => {
@@ -128,7 +141,7 @@ const mountSlider = (wrapper: HTMLElement) => {
     const quick = event.timeStamp - startTime < 300 && Math.abs(delta) > 10;
     slideTo(quick || Math.abs(delta) > size / 2 ? index + Math.sign(delta) : index);
   };
-  const onResize = () => { size = wrapper.clientHeight; if (!dragging) settle(); };
+  const onResize = () => { size = wrapper.clientHeight; if (!dragging) { wrapper.classList.add('is-dragging'); settle(); void wrapper.offsetHeight; wrapper.classList.remove('is-dragging'); } };
   document.addEventListener('touchstart', onStart, { passive: true });
   document.addEventListener('touchmove', onMove, { passive: false });
   document.addEventListener('touchend', onEnd, { passive: true });
